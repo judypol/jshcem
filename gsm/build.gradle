@@ -1,0 +1,21 @@
+group 'com.shcem'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(':common')
+    compile group: 'org.springframework', name: 'spring-web', version: '4.3.10.RELEASE'
+    testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.10.RELEASE'
+    compile('com.caucho:hessian:4.0.38')
+    compile('io.netty:netty-all:4.0.30.Final')
+    compile group: 'net.sf.oval', name: 'oval', version: '1.87'
+    compile group: 'org.mybatis', name: 'mybatis', version: '3.4.5'
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JShcem.Trade.dao.CityDao">
+  <resultMap id="BaseResultMap" type="JShcem.Trade.dao.model.City">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, province_id, city_name, description
+  </sql>
+  <select id="selectCity" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    Select * FROM city
+     where id=#{id}
+  </select>
+</mapper>

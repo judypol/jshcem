@@ -1,0 +1,11 @@
+
+#平台名
+common:
+  #工程名
+  p:
+    url: http://www.shcem.com
+    age: 45
+---
+tradeservice:
+  url: http://www.tradeservice.shcem.com
+  name: tradeservice
