@@ -34,9 +34,9 @@ import java.lang.reflect.Method;
 public class DistributionLockAop {
     public static int ERROR_COUNT  = 0;
     /**
-     * 定义拦截规则：DistributionLock。
+     * 定义拦截规则：CacheLock。
      */
-    @Pointcut("@annotation(com.shcem.annotation.DistributionLock)")
+    @Pointcut("@annotation(com.shcem.annotation.CacheLock)")
     public void distributionLockPointcut(){
 
     }

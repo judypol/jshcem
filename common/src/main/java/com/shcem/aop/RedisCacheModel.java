@@ -17,7 +17,7 @@ package com.shcem.aop;
  * @author lizhihua
  * @version 1.0
  */
-public class RedisCacheModel {
+class RedisCacheModel {
     String cls;
     String val;
 

@@ -16,6 +16,7 @@ package com.shcem.annotation;
 import java.lang.annotation.*;
 
 /**
+ * 日志处理
  * @author lizhihua
  * @version 1.0
  */

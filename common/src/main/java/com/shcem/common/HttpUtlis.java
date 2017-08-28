@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 使用OkHttp来对http进行基本的操作，包括get，post，uploadfile
  * Created by judysen on 2017/8/12.
  */
 public class HttpUtlis {

@@ -25,11 +25,19 @@ public class HelloServiceTest {
     public void before(){
 
     }
-//    @Test
+    @Test
     public void HelloServiceHelloTest() throws Exception{
         HessianProxyFactory factory = new HessianProxyFactory();
         IHelloService exampleInterface = (IHelloService) factory.create(IHelloService.class, "http://localhost:8080/tradeservice/IHelloService");
         String hello =exampleInterface.sayHello();
+
+        System.out.println(hello);
+    }
+    @Test
+    public void HelloServiceListTest() throws Exception{
+        HessianProxyFactory factory = new HessianProxyFactory();
+        IHelloService exampleInterface = (IHelloService) factory.create(IHelloService.class, "http://localhost:8080/tradeservice/IHelloService");
+        String hello =exampleInterface.sayAllHello();
 
         System.out.println(hello);
     }

@@ -45,6 +45,8 @@ public class SystemDefine {
     public final static String REQUEST_REFERER = "Referer";
     public final static String REQUEST_USERAGENT = "UserAgent";
     public final static String REQUEST_REQUESTID = "RequestId";
+    public final static String REQUEST_AUTHKEY="Authkeyid";
+    public final static String REQUEST_AUTH_APP="AuthApp";
 
     public final static String LogUrl ="logUrl";
     public final static String LogBuffer="logBuffer";

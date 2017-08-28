@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 /**
+ * 日志拦截器
  * @author lizhihua
  * @version 1.0
  */

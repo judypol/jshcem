@@ -3,11 +3,11 @@
  * SubSystem Name ：化交服务核心工具集
  * File Name: PageInfo
  * ----------------------------------------
- * Create Date/Change History 
+ * Create Date/Change History
  * ----------------------------------------
  * 04/29/16 　池 永   Create
- * 
- * 
+ *
+ *
  * ----------------------------------------
  * Copyright (c) SCEM . All rights reserved.
  */

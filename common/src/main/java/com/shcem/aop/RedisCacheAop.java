@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 /**
+ * Redis缓存拦截器
  * @author lizhihua
  * @version 1.0
  */

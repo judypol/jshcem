@@ -5,4 +5,5 @@ package JShcem.Trade.service;
  */
 public interface IHelloService {
     String sayHello();
+    String sayAllHello();
 }

@@ -5,4 +5,5 @@ package JSchem.tradeservice.test.serviceContract;
  */
 public interface IHelloService {
     String sayHello();
+    String sayAllHello();
 }

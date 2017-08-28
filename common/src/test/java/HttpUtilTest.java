@@ -5,28 +5,25 @@
  * ----------------------------------------
  * Create Date/Change History
  * ----------------------------------------
- * 2017/6/6 　lizhihua   Create
+ * 2017/8/28 　lizhihua   Create
  *
  *
  * ----------------------------------------
  * Copyright (c) SCEM . All rights reserved.
  */
-package com.shcem.annotation;
 
-import java.lang.annotation.*;
+import com.shcem.common.HttpUtlis;
+import org.junit.Test;
 
 /**
- * 清除缓存
  * @author lizhihua
  * @version 1.0
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
-@Documented
-public @interface CacheClearHandler {
-    /**
-     * 需要清除的key值
-     * @return
-     */
-    String key() default "";
+public class HttpUtilTest {
+    @Test
+    public void getTest() throws Exception{
+        String response = HttpUtlis.Instance().get("http://baidu.com");
+
+        System.out.println(response);
+    }
 }

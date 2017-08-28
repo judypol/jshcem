@@ -110,20 +110,20 @@ public class MidTierRequest {
             }
 
             String authKey = YamlConfiguration.instance().getString(SystemDefine.AuthPrefix);//AppConfiguration.AppConfig().getProperty("auth.prefix");
-            String userCode = (String) request.getAttribute(HeaderConstants.REQUEST_LOGIN_NAME);
+            String userCode = (String) request.getAttribute(SystemDefine.REQUEST_LOGIN_NAME);
             if (!StringUtils.isEmpty(userCode)) {
                 authKey = authKey + userCode;
             }
 
-            String clientIp = (String) request.getAttribute(HeaderConstants.HEADER_CLIENT_IP);
-            method.addHeader(HeaderConstants.HEADER_CLIENT_IP, clientIp);
-            method.addHeader(HeaderConstants.AUTH_KEY, authKey);
+            String clientIp = (String) request.getAttribute(SystemDefine.REQUEST_CLIENT_IP);
+            method.addHeader(SystemDefine.REQUEST_CLIENT_IP, clientIp);
+            method.addHeader(SystemDefine.REQUEST_AUTHKEY, authKey);
 
-            method.addHeader(HeaderConstants.HEADER_MEM_ID, userCode);
-            method.addHeader(HeaderConstants.HEADER_MEM_NAME, userCode);
+            method.addHeader(SystemDefine.REQUEST_MEM_ID, userCode);
+            method.addHeader(SystemDefine.REQUEST_MEM_NAME, userCode);
         }
-        method.addHeader(HeaderConstants.HEADER_APP_NAME,YamlConfiguration.instance().getString(SystemDefine.AppName));
-        method.addHeader(HeaderConstants.AUTH_APP,YamlConfiguration.instance().getString(SystemDefine.AuthApp));
+        method.addHeader(SystemDefine.REQUEST_APP_NAME,YamlConfiguration.instance().getString(SystemDefine.AppName));
+        method.addHeader(SystemDefine.REQUEST_AUTH_APP,YamlConfiguration.instance().getString(SystemDefine.AuthApp));
     }
     /**
      * 取得开发模式

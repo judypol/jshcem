@@ -14,10 +14,22 @@ package com.shcem.annotation;/* ========================================
 
 import java.lang.annotation.*;
 
+/**
+ * 设置缓存
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
 public @interface CachedHandler {
+    /**
+     * key值
+     * @return
+     */
     String key() default "";
+
+    /**
+     * 过期时间
+     * @return
+     */
     int expire() default 31536000;
 }

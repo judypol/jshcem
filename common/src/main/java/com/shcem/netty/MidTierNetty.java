@@ -15,7 +15,6 @@ package com.shcem.netty;
 
 import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
-import com.shcem.common.HeaderConstants;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -113,11 +112,11 @@ public class MidTierNetty {
                 }
             }
 
-            headers.set(HeaderConstants.HEADER_CLIENT_IP, getClientIp());
-            headers.set(HeaderConstants.AUTH_KEY, authKey == null ? "" : authKey);
+            headers.set(SystemDefine.REQUEST_CLIENT_IP, getClientIp());
+            headers.set(SystemDefine.REQUEST_AUTHKEY, authKey == null ? "" : authKey);
         }
-        headers.set(HeaderConstants.HEADER_APP_NAME,YamlConfiguration.instance().getProjectName());
-        headers.set(HeaderConstants.AUTH_APP,YamlConfiguration.instance().getString(SystemDefine.AuthApp));
+        headers.set(SystemDefine.REQUEST_APP_NAME,YamlConfiguration.instance().getProjectName());
+        headers.set(SystemDefine.REQUEST_AUTH_APP,YamlConfiguration.instance().getString(SystemDefine.AuthApp));
     }
     public String getClientIp()
     {

@@ -11,6 +11,9 @@ import java.util.List;
 public class Pageable {
     private Integer pageSize = 10;//每页展示条数
     private Integer pageIndex; //第几页
+    private int totalPages;
+    private int totalRecords;
+
     String orderByStr=null;
 
     List<OrderField> orderFields = new ArrayList<OrderField>();
@@ -71,5 +74,21 @@ public class Pageable {
 
     public void setOrderFields(List<OrderField> orderFields) {
         this.orderFields = orderFields;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
     }
 }

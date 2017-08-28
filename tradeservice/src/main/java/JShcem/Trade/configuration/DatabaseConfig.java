@@ -1,14 +1,17 @@
 package JShcem.Trade.configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.shcem.mybatis.plugin.PagePlugin;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.plugin.Interceptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import java.util.Properties;
 
 /**
  * Created by judysen on 2017/8/20.
@@ -40,6 +43,14 @@ public class DatabaseConfig {
         sqlSessionFactoryBean.setDataSource(druidDataSource());
         sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath*:mapper/tradeservice/*.xml"));
         try{
+            PagePlugin pagePlugin=new PagePlugin();
+            pagePlugin.setDialect("mysql");
+            Interceptor[] interceptors={pagePlugin};
+            //interceptors[0]=pagePlugin();
+            sqlSessionFactoryBean.setPlugins(interceptors);
+//            Properties properties=new Properties();
+//            properties.setProperty("dialect","mysql");
+//            sqlSessionFactoryBean.setConfigurationProperties(properties);
             return sqlSessionFactoryBean.getObject();
         }catch (Exception ex){
             ex.printStackTrace();
@@ -47,9 +58,14 @@ public class DatabaseConfig {
         }
     }
     @Bean
+    public PagePlugin pagePlugin(){
+        return new PagePlugin();
+    }
+    @Bean
     public MapperScannerConfigurer mapperScannerConfigurer(){
         MapperScannerConfigurer mapperScannerConfigurer=new MapperScannerConfigurer();
         mapperScannerConfigurer.setBasePackage("JShcem.**.dao");
+
         return mapperScannerConfigurer;
     }
     @Bean

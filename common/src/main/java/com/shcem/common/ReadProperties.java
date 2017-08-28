@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.*;
 
 /**
+ * 老的AppConfig使用此类
  * Created by judysen on 2017/2/25.
  */
 public class ReadProperties {
