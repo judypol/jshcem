@@ -46,8 +46,10 @@ public class SystemDefine {
     public final static String REQUEST_USERAGENT = "UserAgent";
     public final static String REQUEST_REQUESTID = "RequestId";
 
-    public final static String Log_Url="logUrl";
-    public final static String Log_Count="logCount";
+    public final static String LogUrl ="logUrl";
+    public final static String LogBuffer="logBuffer";
+    public final static String LogSys="logSys";
+    public final static String LogENV="logEnv";
     /**
      * 中央代理常量
      */

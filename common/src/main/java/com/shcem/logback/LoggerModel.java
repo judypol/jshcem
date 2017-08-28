@@ -16,6 +16,7 @@ package com.shcem.logback;
 import java.util.Date;
 
 /**
+ * 日志模型
  * @author lizhihua
  * @version 1.0
  */

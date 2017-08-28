@@ -1,5 +1,6 @@
 package com.shcem.webcore.freemarker;
 
+import com.shcem.common.PropertyUtil;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.ext.beans.BeansWrapperConfiguration;
@@ -20,7 +21,8 @@ public class FreemarkerStaticModels extends HashMap<String,Object> {
      */
     private static final long serialVersionUID = 1L;
     private static FreemarkerStaticModels FREEMARKER_STATIC_MODELS;
-    private Properties staticModels;
+    private static String freemakerStaticPropertiesFile="classpath:freemarkerStaticModel.properties";
+    private static Properties staticModels;
 
     private FreemarkerStaticModels(){
 
@@ -30,22 +32,27 @@ public class FreemarkerStaticModels extends HashMap<String,Object> {
         if(FREEMARKER_STATIC_MODELS==null){
             FREEMARKER_STATIC_MODELS=new FreemarkerStaticModels();
         }
+        staticModels= PropertyUtil.create(freemakerStaticPropertiesFile).getProperties();
+        Set<String> keys=staticModels.stringPropertyNames();
+        for (String key : keys) {
+            FREEMARKER_STATIC_MODELS.put(key, useStaticPackage(staticModels.getProperty(key)));
+        }
         return FREEMARKER_STATIC_MODELS;
     }
 
-    public Properties getStaticModels() {
-        return staticModels;
-    }
-
-    public void setStaticModels(Properties staticModels) {
-        if(this.staticModels==null&&staticModels!=null){
-            this.staticModels = staticModels;
-            Set<String> keys=this.staticModels.stringPropertyNames();
-            for (String key : keys) {
-                FREEMARKER_STATIC_MODELS.put(key, useStaticPackage(this.staticModels.getProperty(key)));
-            }
-        }
-    }
+//    public Properties getStaticModels() {
+//        return staticModels;
+//    }
+//
+//    public void setStaticModels(Properties staticModels) {
+//        if(this.staticModels==null&&staticModels!=null){
+//            this.staticModels = staticModels;
+//            Set<String> keys=this.staticModels.stringPropertyNames();
+//            for (String key : keys) {
+//                FREEMARKER_STATIC_MODELS.put(key, useStaticPackage(this.staticModels.getProperty(key)));
+//            }
+//        }
+//    }
 
     public static TemplateHashModel useStaticPackage(String packageName){
         try

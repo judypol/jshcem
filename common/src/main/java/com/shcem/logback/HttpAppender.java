@@ -17,23 +17,31 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.shcem.common.HttpUtlis;
 import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
 import com.shcem.utils.DateUtils;
 import org.slf4j.MDC;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
+ * logback日appender，需要在配置文件中配置。
+ * 采用批量上传日志信息到服务器，默认是10条发送一次，可以在app.yaml文件中配置logCount数值
+ * 远程URL也需要在app.yaml文件中配置logUrl
  * @author lizhihua
  * @version 1.0
  */
 public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private final ConcurrentLinkedQueue<ILoggingEvent> queue=new ConcurrentLinkedQueue<>();
     private static int count=0;
-    private static int totalCount= YamlConfiguration.instance().getInt(SystemDefine.Log_Count,10);
-    private StringBuilder msgBuilder=new StringBuilder();
+    private static int totalCount= YamlConfiguration.instance().getInt(SystemDefine.LogBuffer,10);
+    private static List<HashMap<String,String>> msg=new ArrayList<>();
     @Override
     public void doAppend(ILoggingEvent eventObject) {
         //System.out.println(eventObject.getClass().getName());
@@ -45,16 +53,21 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         if(count==totalCount){
             count=0;
 
-            String msg=msgBuilder.toString();
-
-            msgBuilder=new StringBuilder();
+            String msgString=JSON.toJSONString(msg);
+            //---清空数组中的所有值--
+            msg.clear();
             //--发送给远程Http---
-            sendKafka(msg);
+            sendKafka(msgString);
         }
 
         if(eventObject instanceof ILoggingEvent){
             LoggerModel lm=getLoggerModel(eventObject);
-            msgBuilder.append(JSON.toJSONString(lm));
+            HashMap<String,String> map=new HashMap<>();
+            map.put("SYS",YamlConfiguration.instance().getString(SystemDefine.LogSys,"WEBFT"));
+            map.put("ENV",YamlConfiguration.instance().getString(SystemDefine.LogSys,"DEP"));
+            map.put("DATA",JSON.toJSONString(lm));
+            msg.add(map);
+
             count++;
         }
     }
@@ -65,7 +78,9 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      */
     private void sendKafka(String msg){
         try{
-            HttpUtlis.Instance().postByJson(YamlConfiguration.instance().getString(SystemDefine.Log_Url),msg);
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("log",msg);
+            HttpUtlis.Instance().postByJson(YamlConfiguration.instance().getString(SystemDefine.LogUrl),jsonObject.toJSONString());
         }catch (Exception ex){
             System.out.println(ex);
         }
