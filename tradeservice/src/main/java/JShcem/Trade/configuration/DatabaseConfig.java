@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
@@ -29,11 +30,15 @@ public class DatabaseConfig {
         //配置初始化大小、最小、最大
         dataSource.setInitialSize(2);
         dataSource.setMaxActive(300);
-        dataSource.setMinIdle(1);
+        dataSource.setMinIdle(2);
 
         //配置获取连接等待超时的时间
         dataSource.setMaxWait(60000);
-        //dataSource.setFilters("stat");
+        try{
+            dataSource.setFilters("stat");
+        }catch (SQLException ex){
+            System.out.println(ex);
+        }
 
         return dataSource;
     }

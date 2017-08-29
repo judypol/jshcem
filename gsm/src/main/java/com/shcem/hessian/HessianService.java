@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Documented
 @Service
 public @interface HessianService {
-    public abstract String value() default "";
+    String value() default "";
 }
