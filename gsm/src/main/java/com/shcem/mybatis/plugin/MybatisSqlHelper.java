@@ -1,11 +1,11 @@
 /* ========================================
- * System Nameã€€ã€€ï¼šåŒ–äº¤çº¿ä¸Šå¹³å°
- * SubSystem Name ï¼šåŒ–äº¤ç«™ç‚¹æ ¸å¿ƒå·¥å…·é›†
+ * System Name¡¡¡¡£º»¯½»ÏßÉÏÆ½Ì¨
+ * SubSystem Name £º»¯½»Õ¾µãºËĞÄ¹¤¾ß¼¯
  * File Name: Constants
  * ----------------------------------------
  * Create Date/Change History
  * ----------------------------------------
- * 2017/8/28 ã€€lizhihua   Create
+ * 2017/8/28 ¡¡lizhihua   Create
  *
  *
  * ----------------------------------------
@@ -30,15 +30,15 @@ public class MybatisSqlHelper {
      * (SELECT userName from ly_userinfo u where u.id=userId) userName,
      * sum(ddd) ss
      * from article
-     * å…¼å®¹ä»¥ä¸Šå­æŸ¥è¯¢
-     * //å»é™¤sql ..from å‰é¢çš„å­—ç¬¦ã€‚è€ƒè™‘ aafrom fromdd ç­‰ç­‰æƒ…å†µ
+     * ¼æÈİÒÔÉÏ×Ó²éÑ¯
+     * //È¥³ısql ..from Ç°ÃæµÄ×Ö·û¡£¿¼ÂÇ aafrom fromdd µÈµÈÇé¿ö
      */
     public static String suffixStr(String toSql) {
         toSql = toSql.toUpperCase();
         int sun = toSql.indexOf("FROM");
         String f1 = toSql.substring(sun - 1, sun);
         String f2 = toSql.substring(sun + 4, sun + 5);
-        if (f1.trim().isEmpty() && f2.trim().isEmpty()) {//åˆ¤æ–­ç¬¬ä¸€ä¸ªfromçš„å‰åæ˜¯å¦ä¸ºç©º
+        if (f1.trim().isEmpty() && f2.trim().isEmpty()) {//ÅĞ¶ÏµÚÒ»¸öfromµÄÇ°ºóÊÇ·ñÎª¿Õ
             String s1 = toSql.substring(0, sun);
             int s0 = s1.indexOf("(");
             if (s0 > -1) {
@@ -47,7 +47,7 @@ public class MybatisSqlHelper {
                     if (se1 > -1) {
                         String ss1 = s1.substring(se1 - 1, se1);
                         String ss2 = s1.substring(se1 + 6, se1 + 7);
-                        if (ss1.trim().isEmpty() && ss2.trim().isEmpty()) {//åˆ¤æ–­ç¬¬ä¸€ä¸ªfromçš„å‰åæ˜¯å¦ä¸ºç©º
+                        if (ss1.trim().isEmpty() && ss2.trim().isEmpty()) {//ÅĞ¶ÏµÚÒ»¸öfromµÄÇ°ºóÊÇ·ñÎª¿Õ
                             return suffixStr(toSql.substring(sun + 5));
                         }
                     }
@@ -55,7 +55,7 @@ public class MybatisSqlHelper {
                 int se2 = s1.indexOf("(SELECT");
                 if (se2 > -1) {
                     String ss2 = s1.substring(se2 + 7, se2 + 8);
-                    if (ss2.trim().isEmpty()) {//åˆ¤æ–­ç¬¬ä¸€ä¸ªfromçš„å‰åæ˜¯å¦ä¸ºç©º
+                    if (ss2.trim().isEmpty()) {//ÅĞ¶ÏµÚÒ»¸öfromµÄÇ°ºóÊÇ·ñÎª¿Õ
                         return suffixStr(toSql.substring(sun + 5));
                     }
                 }
@@ -72,7 +72,7 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * å»é™¤Sqlçš„orderByã€‚
+     * È¥³ıSqlµÄorderBy¡£
      *
      * @param toSql
      * @return String
@@ -83,10 +83,10 @@ public class MybatisSqlHelper {
         if (sun > -1) {
             String f1 = toSql.substring(sun - 1, sun);
             String f2 = toSql.substring(sun + 8, sun + 8);
-            if (f1.trim().isEmpty() && f2.trim().isEmpty()) {//åˆ¤æ–­ç¬¬ä¸€ä¸ªfromçš„å‰åæ˜¯å¦ä¸ºç©º
+            if (f1.trim().isEmpty() && f2.trim().isEmpty()) {//ÅĞ¶ÏµÚÒ»¸öfromµÄÇ°ºóÊÇ·ñÎª¿Õ
                 String zb = toSql.substring(sun);
                 int s0 = zb.indexOf(")");
-                if (s0 > -1) {//fromä¹‹å‰æ˜¯å¦æœ‰æ‹¬å·
+                if (s0 > -1) {//fromÖ®Ç°ÊÇ·ñÓĞÀ¨ºÅ
                     String s1 = toSql.substring(0, sun);
                     String s2 = zb.substring(s0);
                     return removeOrderBys(s1 + s2);
@@ -99,7 +99,7 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * æ ¹æ®æ•°æ®åº“æ–¹è¨€ï¼Œç”Ÿæˆç‰¹å®šçš„åˆ†é¡µsql
+     * ¸ù¾İÊı¾İ¿â·½ÑÔ£¬Éú³ÉÌØ¶¨µÄ·ÖÒ³sql
      *
      * @param sql
      * @param page
@@ -119,7 +119,7 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * mysqlçš„åˆ†é¡µè¯­å¥
+     * mysqlµÄ·ÖÒ³Óï¾ä
      *
      * @param sql
      * @param page
@@ -127,7 +127,7 @@ public class MybatisSqlHelper {
      */
     public static StringBuilder buildPageSqlForMysql(String sql, Pageable page) {
         StringBuilder pageSql = new StringBuilder();
-        String beginrow = String.valueOf((page.getPageIndex() - 1) * page.getPageSize()); //limit 0,10 ;ç¬¬ä¸€ä¸ªå‚æ•°ä¸ºèµ·å§‹ä½ç½®
+        String beginrow = String.valueOf((page.getPageIndex() - 1) * page.getPageSize()); //limit 0,10 ;µÚÒ»¸ö²ÎÊıÎªÆğÊ¼Î»ÖÃ
         //String beginrow=String.valueOf(page.getPageNo());
         pageSql.append(sql);
         pageSql.append(" limit " + beginrow + "," + page.getPageSize());
@@ -135,7 +135,7 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * å‚è€ƒhibernateçš„å®ç°å®Œæˆoracleçš„åˆ†é¡µ
+     * ²Î¿¼hibernateµÄÊµÏÖÍê³ÉoracleµÄ·ÖÒ³
      *
      * @param sql
      * @param page
@@ -154,7 +154,7 @@ public class MybatisSqlHelper {
     }
 
     /**
-     * å‚è€ƒhibernateçš„å®ç°å®ŒæˆSQLServer2008çš„åˆ†é¡µ
+     * ²Î¿¼hibernateµÄÊµÏÖÍê³ÉSQLServer2008µÄ·ÖÒ³
      *
      * @param sql
      * @param page

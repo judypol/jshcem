@@ -16,7 +16,6 @@ package com.shcem.annotation;
 import java.lang.annotation.*;
 
 /**
- * 清除缓存
  * @author lizhihua
  * @version 1.0
  */
