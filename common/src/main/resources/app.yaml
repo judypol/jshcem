@@ -1,11 +1,8 @@
-
 #平台名
 common:
-  #工程名
-  p:
-    url: http://www.shcem.com
-    age: 45
----
-tradeservice:
-  url: http://www.tradeservice.shcem.com
-  name: tradeservice
+   tradeservice:
+      url: http://www.tradeservice.shcem.com
+      name: tradeservice
+      logUrl: http://192.168.60.121:5454
+      logSys: WEBFT
+      logEnv: DEV

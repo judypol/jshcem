@@ -147,7 +147,6 @@ public class Encodes {
 	 * URL 解码, Encode默认为UTF-8.
 	 */
 	public static String UrlDecode(String part) {
-
 		try {
 			return URLDecoder.decode(part, DEFAULT_URL_ENCODING);
 		} catch (UnsupportedEncodingException e) {

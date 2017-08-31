@@ -12,4 +12,24 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     sourceCompatibility  = 1.7
+
+//    task rename(type: Copy) {
+//        from "$buildDir"+'/libs'
+//        into "$buildDir"+'/outputs'
+//        //使用闭包映射文件名
+//        rename { String fileName ->
+//            //File buildFile=fileName as File
+//
+////            println fileName+'1'
+//            fileName.replace('-'+"$project.version", '')
+//
+//            //println buildFile.name+'2'
+//        }
+////        doLast{
+////            File buildDir="$project.buildDir"+'/libs' as File
+////            buildDir.delete()
+////            println buildDir.listFiles()[0].name
+////        }
+//    }
+//    rename.dependsOn(assemble)
 }

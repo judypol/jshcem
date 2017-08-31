@@ -18,7 +18,7 @@ package com.shcem.webcore.constants;
  * @version 1.0
  */
 public class WebConstants {
-    public final static String SSOUrl="ssoUrl";     //统一登录验证
+    public final static String SSOUrl="ssoUrl";                 //统一登录验证
     public final static String SSOExpire="ssoCookie.expire";    //sso cookie 过期时间
     public final static String SSOModel="ssoMode";              //验证模式      1，允许多点登录，0-单点登录
     public final static String ssoScope="ssoScope";             //统一验证范围

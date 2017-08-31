@@ -64,8 +64,6 @@ public class HttpUtlis {
             throw new Exception("参数map不能为null");
         }
         FormBody.Builder formBodyBuilder=new FormBody.Builder();
-        List<String> names=new ArrayList<String>();
-        List<String> values=new ArrayList<>();
         Iterator<Map.Entry<String, String>> entries = map.entrySet().iterator();
         while (entries.hasNext()){
             Map.Entry<String, String> entry = entries.next();

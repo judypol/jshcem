@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder ?????PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="http" class="com.shcem.logback.HttpAppender">
+
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="http" />-->
+    </root>
+    <logger name="controller" level="INFO">
+        <appender-ref ref="http"/>
+    </logger>
+    <logger name="service" level="INFO">
+        <appender-ref ref="http"/>
+    </logger>
+</configuration>
