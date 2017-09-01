@@ -16,4 +16,6 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-web', version: '4.3.10.RELEASE'
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.10.RELEASE'
     compile('com.caucho:hessian:4.0.38')
+    compile('com.alibaba:fastjson:1.2.24')
+
 }
