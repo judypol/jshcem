@@ -14,4 +14,7 @@
     Select * FROM city
      where id=#{id}
   </select>
+  <select id="selectCities" resultMap="BaseResultMap" parameterType="com.shcem.mybatis.query.Pageable">
+    Select * FROM city
+  </select>
 </mapper>

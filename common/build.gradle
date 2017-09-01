@@ -1,8 +1,15 @@
 buildscript {
     repositories {
         mavenLocal()
+        maven{
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
         mavenCentral()
     }
+
+//    dependencies {
+//        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
+//    }
 }
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -10,10 +17,13 @@ tasks.withType(JavaCompile) {
 group 'com.shcem'
 version '2.0.0'
 
-apply plugin: 'java'
-//apply plugin: 'java-library'
+//apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'maven'
 
 sourceCompatibility = 1.7
+
+
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'

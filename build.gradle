@@ -2,17 +2,27 @@ allprojects {
     apply plugin: 'idea'
     repositories {
         mavenLocal()
-        //mavenCentral()
+        mavenCentral()
     }
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }
 }
-
+buildscript{
+    repositories{
+        maven{
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+    }
+    dependencies{
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
+    }
+}
 subprojects {
     apply plugin: 'java'
     sourceCompatibility  = 1.7
 
+    apply plugin:'com.github.johnrengelman.shadow'
 //    task rename(type: Copy) {
 //        from "$buildDir"+'/libs'
 //        into "$buildDir"+'/outputs'
@@ -32,4 +42,12 @@ subprojects {
 ////        }
 //    }
 //    rename.dependsOn(assemble)
+    shadowJar{
+        baseName="$project.name"
+        version=null
+        classifier=null
+        manifest {
+            attributes 'Description': 'This is an application JAR'
+        }
+    }
 }

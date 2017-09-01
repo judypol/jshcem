@@ -32,6 +32,7 @@ public class HelloService implements IHelloService {
         pageable.setPageSize(2);
         List<City> cityPage=cityDao.selectCities(pageable);
         Page<City> page=new Page<>();
+        page.setTotalPages(pageable.getTotalPages());
         page.setPageIndex(pageable.getPageIndex());
         page.setPageSize(pageable.getPageSize());
         page.setTotalRecords(pageable.getTotalRecords());

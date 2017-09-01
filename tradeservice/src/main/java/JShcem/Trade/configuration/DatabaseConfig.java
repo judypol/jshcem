@@ -1,6 +1,9 @@
 package JShcem.Trade.configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.shcem.mybatis.plugin.PagePlugin;
+import com.shcem.mybatis.query.Page;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -40,6 +43,10 @@ public class DatabaseConfig {
         sqlSessionFactoryBean.setDataSource(druidDataSource());
         sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath*:mapper/tradeservice/*.xml"));
         try{
+            PagePlugin plugin=new PagePlugin();
+            plugin.setDialect("mysql");
+            Interceptor[] plugins={plugin};
+            sqlSessionFactoryBean.setPlugins(plugins);
             return sqlSessionFactoryBean.getObject();
         }catch (Exception ex){
             ex.printStackTrace();
