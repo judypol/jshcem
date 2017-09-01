@@ -3,6 +3,3 @@ common:
    tradeservice:
       url: http://www.tradeservice.shcem.com
       name: tradeservice
-      logUrl: http://192.168.60.121:5454
-      logSys: WEBFT
-      logEnv: DEV

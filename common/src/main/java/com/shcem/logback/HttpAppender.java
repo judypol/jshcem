@@ -37,17 +37,21 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private final ConcurrentLinkedQueue<ILoggingEvent> queue=new ConcurrentLinkedQueue<>();
     private static int count=0;
-    private static int totalCount= YamlConfiguration.instance().getInt(SystemDefine.LogBuffer,10);
     private static List<HashMap<String,String>> msg=new ArrayList<>();
+
+    String logUrl;
+    int logBuffer=10;
+    String logSys="WEBFT";
+    String logEnv="DEP";
+
     @Override
     public void doAppend(ILoggingEvent eventObject) {
-        //System.out.println(eventObject.getClass().getName());
         super.doAppend(eventObject);
     }
 
     @Override
     protected void append(ILoggingEvent eventObject) {
-        if(count==totalCount){
+        if(count==this.logBuffer){
             count=0;
 
             //String msgString=JSON.toJSONString(msg);
@@ -64,8 +68,8 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         if(eventObject instanceof ILoggingEvent){
             LoggerModel lm=getLoggerModel(eventObject);
             HashMap<String,String> map=new HashMap<>();
-            map.put("SYS",YamlConfiguration.instance().getString(SystemDefine.LogSys,"WEBFT"));
-            map.put("ENV",YamlConfiguration.instance().getString(SystemDefine.LogENV,"DEP"));
+            map.put("SYS",this.logSys);
+            map.put("ENV",this.logEnv);
             map.put("DATA",JSON.toJSONString(lm));
             msg.add(map);
 
@@ -81,7 +85,7 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         try{
             Map<String,String> formMap=new HashMap<>();
             formMap.put("log",msg);
-            HttpUtlis.Instance().postByForm(YamlConfiguration.instance().getString(SystemDefine.LogUrl),formMap);
+            HttpUtlis.Instance().postByForm(this.logUrl,formMap);
         }catch (Exception ex){
             System.out.println(ex);
         }
@@ -119,5 +123,37 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             model.setException(sb.toString());
         }
         return model;
+    }
+
+    public String getLogUrl() {
+        return logUrl;
+    }
+
+    public void setLogUrl(String logUrl) {
+        this.logUrl = logUrl;
+    }
+
+    public int getLogBuffer() {
+        return logBuffer;
+    }
+
+    public void setLogBuffer(int logBuffer) {
+        this.logBuffer = logBuffer;
+    }
+
+    public String getLogSys() {
+        return logSys;
+    }
+
+    public void setLogSys(String logSys) {
+        this.logSys = logSys;
+    }
+
+    public String getLogEnv() {
+        return logEnv;
+    }
+
+    public void setLogEnv(String logEnv) {
+        this.logEnv = logEnv;
     }
 }

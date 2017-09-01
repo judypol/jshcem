@@ -74,7 +74,7 @@ public class HessianServiceExporter extends org.springframework.remoting.caucho.
 		MDC.put(SystemDefine.REQUEST_REQUESTID,request.getHeader(SystemDefine.REQUEST_REQUESTID));
 		MDC.put(SystemDefine.REQUEST_APP_NAME, request.getHeader(SystemDefine.REQUEST_APP_NAME));
 		MDC.put(SystemDefine.REQUEST_CLIENT_IP, request.getHeader(SystemDefine.REQUEST_CLIENT_IP));
-		MDC.put(SystemDefine.REQUEST_MODE, request.getHeader(SystemDefine.REQUEST_MODE));
+		//MDC.put(SystemDefine.REQUEST_MODE, request.getHeader(SystemDefine.REQUEST_MODE));
 		MDC.put(SystemDefine.REQUEST_REFERER, request.getHeader(SystemDefine.REQUEST_REFERER));
 		MDC.put(SystemDefine.REQUEST_USERAGENT, request.getHeader(SystemDefine.REQUEST_USERAGENT));
 		MDC.put(SystemDefine.REQUEST_LOGIN_NAME, request.getHeader(SystemDefine.REQUEST_LOGIN_NAME));
