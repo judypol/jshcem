@@ -3,3 +3,4 @@ common:
    tradeservice:
       url: http://www.tradeservice.shcem.com
       name: tradeservice
+      #logback: c:/mltp/logback.xml

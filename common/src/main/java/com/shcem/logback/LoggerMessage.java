@@ -17,7 +17,7 @@ package com.shcem.logback;
  * @author lizhihua
  * @version 1.0
  */
-public class LoggerContext {
+public class LoggerMessage {
     String requestId;
     String userCode;
     String userName;
@@ -64,12 +64,12 @@ public class LoggerContext {
         this.referUrl = referUrl;
     }
 
-    static ThreadLocal<LoggerContext> loggerContextThreadLocal=new ThreadLocal<>();
+    static ThreadLocal<LoggerMessage> loggerContextThreadLocal=new ThreadLocal<>();
 
-    public static LoggerContext getCurrentContext(){
+    public static LoggerMessage getCurrentContext(){
         return loggerContextThreadLocal.get();
     }
-    public static void setCurrentContext(LoggerContext loggerContext){
+    public static void setCurrentContext(LoggerMessage loggerContext){
         loggerContextThreadLocal.set(loggerContext);
     }
 

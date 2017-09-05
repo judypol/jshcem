@@ -38,7 +38,7 @@ public class HttpRequestUtils {
      */
     public static String httpPost(String url,String param, boolean noNeedResponse){
         //post请求返回结果
-        CloseableHttpClient httpClient= HttpClientBuilder.create().build();
+        CloseableHttpClient httpClient= HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
         String resultStr = null;
         HttpPost method = new HttpPost(url);
 
@@ -90,7 +90,7 @@ public class HttpRequestUtils {
     public static String httpGet(String url){
         String strResult=null;
         //get请求返回结果
-        CloseableHttpClient client=HttpClientBuilder.create().build();
+        CloseableHttpClient client=HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
         try {
             //发送get请求
             HttpGet request = new HttpGet(url);

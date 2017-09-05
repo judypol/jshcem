@@ -12,6 +12,9 @@
  * Copyright (c) SCEM . All rights reserved.
  */
 
+import com.shcem.common.YamlConfiguration;
+import com.shcem.logback.LogbackConfigLoader;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +24,22 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class HttpAppenderTest {
+    @Before
+    public void before(){
+        try{
+            String logback= YamlConfiguration.instance().getString("logback");
+            LogbackConfigLoader.load(logback);
+        }catch (Exception ex){
+            System.out.println(ex);
+        }
+    }
     @Test
-    public void logbackTest(){
-        for (int i=0;i<20;i++){
+    public void logbackTest() throws  Exception{
+
+        for (int i=0;i<60;i++){
             Logger logger= LoggerFactory.getLogger("controller");
             logger.info("base test");
         }
+        Thread.sleep(5000);
     }
 }

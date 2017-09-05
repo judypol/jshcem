@@ -18,9 +18,11 @@ import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.shcem.common.HttpRequestUtils;
 import com.shcem.common.HttpUtlis;
 import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
+import com.shcem.netty.NettyLogClient;
 import com.shcem.utils.DateUtils;
 import org.slf4j.MDC;
 
@@ -55,7 +57,6 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             count=0;
 
             //String msgString=JSON.toJSONString(msg);
-            //---清空数组中的所有值--
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("log",msg);
             String sendMsg=jsonObject.toJSONString();
@@ -84,8 +85,10 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private void sendKafka(String msg){
         try{
             Map<String,String> formMap=new HashMap<>();
-            formMap.put("log",msg);
-            HttpUtlis.Instance().postByForm(this.logUrl,formMap);
+            formMap.put("",msg);
+            //HttpUtlis.Instance().postByForm(this.logUrl,formMap);
+            //HttpRequestUtils.httpPost(this.logUrl,msg);
+            NettyLogClient.sendMsg(this.logUrl,msg);
         }catch (Exception ex){
             System.out.println(ex);
         }

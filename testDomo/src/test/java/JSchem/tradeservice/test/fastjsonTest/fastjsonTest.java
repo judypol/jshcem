@@ -15,6 +15,8 @@ package JSchem.tradeservice.test.fastjsonTest;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.util.TypeUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
@@ -24,10 +26,10 @@ import java.util.Date;
  * @version 1.0
  */
 public class fastjsonTest {
-    @Test
+    @Before
     public void WithFieldName(){
         String flag= com.alibaba.fastjson.util.IOUtils.getStringProperty("fastjson.compatibleWithFieldName");
-
+        TypeUtils.compatibleWithFieldName=true;
         System.out.println(flag);
     }
     @Test
