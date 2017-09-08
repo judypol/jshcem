@@ -76,7 +76,7 @@ public class DatabaseRegistrar implements ImportBeanDefinitionRegistrar, Resourc
             return false;
         }
         try{
-            Resource resource =new FileSystemResource("c:/mltp/datasource1.xml");
+            Resource resource =new FileSystemResource(dataSourceFile);
             xmlBeanDefinitionReader.loadBeanDefinitions(resource);
             return true;
         }catch (Exception ex){
