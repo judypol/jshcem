@@ -110,7 +110,7 @@ public class MybatisSqlHelper {
                 return buildPageSqlForMysql(sql, page).toString();
             } else if ("oracle".equals(dialect)) {
                 return buildPageSqlForOracle(sql, page).toString();
-            } else if ("SQLServer2008".equals(dialect)) {
+            } else if ("mssql".equals(dialect)) {
                 return buildPageSqlForSQLServer2008Dialect(sql, page).toString();
             }
         }

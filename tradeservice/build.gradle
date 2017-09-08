@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 repositories {
     mavenLocal()
@@ -37,6 +37,7 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-jdbc', version: '4.3.10.RELEASE'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.43+'
+    compile('com.microsoft.sqlserver:sqljdbc4:4.0+')
     compile project(':common')
     compile project(':gsm')
 }

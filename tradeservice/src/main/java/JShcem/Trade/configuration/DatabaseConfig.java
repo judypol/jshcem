@@ -22,9 +22,14 @@ public class DatabaseConfig {
     public DruidDataSource druidDataSource(){
         DruidDataSource dataSource=new DruidDataSource();
         //--基本属性--
-        dataSource.setUsername("root");
-        dataSource.setPassword("2345678");
-        dataSource.setUrl("jdbc:mysql://192.168.61.119:3306/test");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("2345678");
+//        dataSource.setUrl("jdbc:mysql://192.168.61.119:3306/test");
+        dataSource.setUsername("hjonline");
+        dataSource.setPassword("123456");
+        //dataSource.setUrl("jdbc:microsoft://192.168.60.107:1433;database=hjonline");
+        dataSource.setUrl("jdbc:sqlserver://192.168.60.107:1433;databaseName=HJOnline");
+        //dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
         //配置初始化大小、最小、最大
         dataSource.setInitialSize(2);
@@ -44,7 +49,7 @@ public class DatabaseConfig {
         sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath*:mapper/tradeservice/*.xml"));
         try{
             PagePlugin plugin=new PagePlugin();
-            plugin.setDialect("mysql");
+            plugin.setDialect("mssql");
             Interceptor[] plugins={plugin};
             sqlSessionFactoryBean.setPlugins(plugins);
             return sqlSessionFactoryBean.getObject();
