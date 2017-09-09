@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @MapperScan("**.dao")
 @EnableTransactionManagement
-@EnableDatabase(url= "",user="root",password = "1234")
+@EnableDatabase(url= "jdbc:sqlserver://192.168.60.107:1433;databaseName=HJOnline;user=HJOnline;password=123456",user="root",password = "1234")
 public class TradeserviceApplication {
 
 	public static void main(String[] args) {

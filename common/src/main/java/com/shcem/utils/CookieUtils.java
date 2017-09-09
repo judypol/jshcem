@@ -116,11 +116,14 @@ public class CookieUtils {
 	 */
 	public static Cookie getCookieByName(HttpServletRequest request,String name){
 		Cookie[] cookies=request.getCookies();
+		if(cookies==null){
+			return new Cookie("testCookie","");
+		}
 		for(Cookie cookie:cookies){
 			if(name.equals(cookie.getName())){
 				return cookie;
 			}
 		}
-		return null;
+		return new Cookie("","");
 	}
 }

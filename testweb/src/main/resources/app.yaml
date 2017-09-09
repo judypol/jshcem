@@ -1,0 +1,3 @@
+test:
+   testweb:
+      redis.model: 1

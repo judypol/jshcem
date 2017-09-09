@@ -6,6 +6,7 @@ import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.ext.beans.BeansWrapperConfiguration;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateHashModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class FreemarkerStaticModels extends HashMap<String,Object> {
     private FreemarkerStaticModels(){
 
     }
-
+    //@Autowired(required = false)
+    //private IStaticResource staticResource;
     public static FreemarkerStaticModels getInstance(){
         if(FREEMARKER_STATIC_MODELS==null){
             FREEMARKER_STATIC_MODELS=new FreemarkerStaticModels();
@@ -39,20 +41,6 @@ public class FreemarkerStaticModels extends HashMap<String,Object> {
         }
         return FREEMARKER_STATIC_MODELS;
     }
-
-//    public Properties getStaticModels() {
-//        return staticModels;
-//    }
-//
-//    public void setStaticModels(Properties staticModels) {
-//        if(this.staticModels==null&&staticModels!=null){
-//            this.staticModels = staticModels;
-//            Set<String> keys=this.staticModels.stringPropertyNames();
-//            for (String key : keys) {
-//                FREEMARKER_STATIC_MODELS.put(key, useStaticPackage(this.staticModels.getProperty(key)));
-//            }
-//        }
-//    }
 
     public static TemplateHashModel useStaticPackage(String packageName){
         try

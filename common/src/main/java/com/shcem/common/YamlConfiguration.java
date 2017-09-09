@@ -27,13 +27,20 @@ public class YamlConfiguration {
         try{
             yamlMap=getConfig();
         }catch (Exception ex){
-            logger.error("get the yaml configuration is error",ex);
+            logger.error("get the yaml configuration in classpath is error",ex);
             yamlMap=new HashMap();
         }
     }
-
+    private static YamlConfiguration yamlConfiguration=null;
     public static YamlConfiguration instance(){
-        return new YamlConfiguration();
+        if(yamlConfiguration==null){
+            synchronized (YamlConfiguration.class){
+                if(yamlConfiguration==null){
+                    yamlConfiguration=new YamlConfiguration();
+                }
+            }
+        }
+        return yamlConfiguration;
     }
     public String getPlatformName() {
         return platformName;

@@ -1,0 +1,3 @@
+rootProject.name = 'testweb'
+includeFlat('webcore')
+includeFlat('common')
