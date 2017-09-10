@@ -144,23 +144,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			ModelAndView modelAndView) throws Exception {
 
 		// TODO: 2017/2/20 日志记录
-//		 if(modelAndView!=null) {
-//			 BeansWrapper wrapper = new BeansWrapperBuilder(Configuration.VERSION_2_3_22).build();
-//			 //BeansWrapper wrapper=BeansWrapper.getDefaultInstance();
-//			 TemplateHashModel staticModels=wrapper.getStaticModels();
-//			 String staticfilePackage= AppConfiguration.AppConfig().getProperty("resourceFilePackage");
-//			 try{
-//				 TemplateHashModel hashModel=(TemplateHashModel) staticModels.get(staticfilePackage);
-//				 modelAndView.addObject("ResourceFile",hashModel);
-//			 }catch (Exception e) {
-//			 	System.out.println(e);
-//				//response.getWriter().println(e.toString());
-//			 }
-//
-//			 String token=getToken(request);
-//			 modelAndView.addObject("token",token);
-//			 modelAndView.addObject("loginCode",ShcemWebContext.GetCurrentContext().getCurrentUser().getUserCode());
-//		 }
 	}
 
 	/**

@@ -1,20 +1,6 @@
-/* ========================================
- * System Name　　：化交线上平台
- * SubSystem Name ：化交站点核心工具集
- * File Name: Constants
- * ----------------------------------------
- * Create Date/Change History
- * ----------------------------------------
- * 2017/6/27 　lizhihua   Create
- *
- *
- * ----------------------------------------
- * Copyright (c) SCEM . All rights reserved.
- */
-package com.shcem.config;
+package com.shcem.async;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -22,13 +8,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * @author lizhihua
- * @version 1.0
+ * Created by judysen on 2017/9/10.
  */
-@Configuration
 @EnableAsync
-public class ExecutorConfig {
-
+public class AsyncConfiguration {
     /** Set the ThreadPoolExecutor's core pool size. */
     private int corePoolSize = 10;
     /** Set the ThreadPoolExecutor's maximum pool size. */

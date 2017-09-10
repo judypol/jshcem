@@ -13,6 +13,9 @@
  */
 package com.shcem.annotation;
 
+import com.shcem.enums.LoggerLevel;
+import com.shcem.enums.LoggerName;
+
 import java.lang.annotation.*;
 
 /**
@@ -24,5 +27,15 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Documented
 public @interface LogHandler {
-    String level() default "Info";
+    /**
+     * 日志级别,默认Debug级别
+     * @return
+     */
+    LoggerLevel level() default LoggerLevel.Debug;
+
+    /**
+     * LoggerName，默认是Controller
+     * @return
+     */
+    LoggerName loggerName() default LoggerName.Controller;
 }

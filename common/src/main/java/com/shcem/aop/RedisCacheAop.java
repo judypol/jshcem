@@ -36,7 +36,6 @@ import java.lang.reflect.Method;
  * @version 1.0
  */
 @Aspect
-@Component
 public class RedisCacheAop {
     Logger logger= LoggerFactory.getLogger(RedisCacheAop.class);
     /**

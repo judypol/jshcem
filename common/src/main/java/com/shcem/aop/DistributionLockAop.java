@@ -30,7 +30,6 @@ import java.lang.reflect.Method;
  * @version 1.0
  */
 @Aspect
-@Component
 public class DistributionLockAop {
     public static int ERROR_COUNT  = 0;
     /**
@@ -54,7 +53,7 @@ public class DistributionLockAop {
 
         CacheLock cacheLock = method.getAnnotation(CacheLock.class);
         //RedisCacheKeyGenerator keyGenerator=new RedisCacheKeyGenerator();
-        String key="";//(String)keyGenerator.generate(signature.getDeclaringType(),method,pars);
+        String key="";          //(String)keyGenerator.generate(signature.getDeclaringType(),method,pars);
 
         DistributionRedisLock lock=new DistributionRedisLock(cacheLock.lockedPrefix(),key);
         //logger.debug();

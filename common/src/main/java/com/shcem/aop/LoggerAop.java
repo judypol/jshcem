@@ -13,6 +13,8 @@
  */
 package com.shcem.aop;
 
+import com.shcem.annotation.LogHandler;
+import com.shcem.enums.LoggerLevel;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -30,7 +32,6 @@ import java.lang.reflect.Method;
  * @version 1.0
  */
 @Aspect
-@Component
 public class LoggerAop {
     /**
      * 定义拦截规则：拦截LogHandler注解的方法。
@@ -48,27 +49,51 @@ public class LoggerAop {
     public Object Interceptor(ProceedingJoinPoint pjp) throws Throwable{
         long beginTime = System.currentTimeMillis();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
+
         Method method = signature.getMethod();          //获取被拦截的方法
+        LogHandler logHandler=method.getAnnotation(LogHandler.class);
+        if(logHandler==null){
+            return null;
+        }
+
         String clsName=signature.getDeclaringTypeName();
         Object[] pars=pjp.getArgs();
-        Logger logger= LoggerFactory.getLogger(signature.getDeclaringType());
+        Logger logger= LoggerFactory.getLogger(logHandler.loggerName().getStringValue());
 
         //logger.debug();
         Object result=null;
         try{
-            logger.debug("{}-{} Start",clsName,method);
+            setLog(logHandler.level(),logger,"{}-{} Start",clsName,method);
             if(pars==null){
                 result=pjp.proceed();
             }else {
                 result=pjp.proceed(pars);
             }
-            logger.debug("{}-{} End",clsName,method);
+            setLog(logHandler.level(),logger,"{}-{} End",clsName,method);
         }catch (Exception ex){
             logger.error("调用"+clsName+"-"+method+"方法出现了异常.",ex);
         }
 
         return result;
     }
-
-
+    private void debug(Logger logger,String format,Object args1,Object args2){
+        logger.debug(format,args1,args2);
+    }
+    private void info(Logger logger,String format,Object args1,Object args2){
+        logger.info(format,args1,args2);
+    }
+    private void warn(Logger logger,String format,Object args1,Object args2){
+        logger.warn(format,args1,args2);
+    }
+    private void setLog(LoggerLevel level,Logger logger,String format,Object args1,Object args2){
+        if(level.equals(LoggerLevel.Debug)){
+            debug(logger,format,args1,args2);
+        }else if(level.equals(LoggerLevel.Info)){
+            info(logger,format,args1,args2);
+        }else if(level.equals(LoggerLevel.Warn)){
+            warn(logger,format,args1,args2);
+        }else{
+            debug(logger,format,args1,args2);
+        }
+    }
 }
