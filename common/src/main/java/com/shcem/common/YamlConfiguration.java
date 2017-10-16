@@ -118,6 +118,10 @@ public class YamlConfiguration {
         try{
             HashMap<?,?> appMap= Yaml.loadType(new FileInputStream(file),HashMap.class);
             HashMap<?,?> platforMap=(HashMap<?,?>) appMap.get(this.getPlatformName());
+            if(platforMap==null){
+                throw new Exception("系统配置文件中不存在此平台的配置文件，请确认！");
+            }
+
             HashMap<?,?> projectMap=(HashMap<?,?>)platforMap.get(this.getProjectName());
 
             HashMap map=new HashMap<>();
@@ -126,9 +130,11 @@ public class YamlConfiguration {
                     map.put(entry.getKey(),entry.getValue());
                 }
             }
-            for(Map.Entry<?,?> entry:projectMap.entrySet()){
-                if(!(entry.getValue() instanceof HashMap || entry.getValue() instanceof ArrayList)){
-                    map.put(entry.getKey(),entry.getValue());
+            if(projectMap!=null){
+                for(Map.Entry<?,?> entry:projectMap.entrySet()){
+                    if(!(entry.getValue() instanceof HashMap || entry.getValue() instanceof ArrayList)){
+                        map.put(entry.getKey(),entry.getValue());
+                    }
                 }
             }
 

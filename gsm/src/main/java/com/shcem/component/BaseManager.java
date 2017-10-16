@@ -14,6 +14,7 @@
 package com.shcem.component;
 
 import com.shcem.constants.SystemDefine;
+import com.shcem.enums.LoggerName;
 import com.shcem.server.model.ServerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class BaseManager {
-    protected Logger log= LoggerFactory.getLogger(this.getClass());
+    protected Logger log= LoggerFactory.getLogger(LoggerName.Service.getStringValue());
     protected String getMode() {
         String mode = SystemDefine.MODE_LOCAL;
         String sysMode = System.getProperty(SystemDefine.REQUEST_MODE);

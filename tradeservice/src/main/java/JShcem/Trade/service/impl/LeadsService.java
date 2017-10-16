@@ -17,9 +17,13 @@ import JShcem.Trade.dao.TLeadsMapper;
 import JShcem.Trade.dao.model.TLeads;
 import JShcem.Trade.service.ILeadsService;
 import com.alibaba.fastjson.JSON;
+import com.shcem.annotation.LogHandler;
+import com.shcem.common.ResponseData;
+import com.shcem.enums.LoggerName;
 import com.shcem.hessian.HessianService;
 import com.shcem.mybatis.query.Page;
 import com.shcem.mybatis.query.Pageable;
+import com.shcem.service.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,7 +35,7 @@ import java.util.List;
  */
 @HessianService
 @Service
-public class LeadsService implements ILeadsService {
+public class LeadsService extends BaseServiceImpl implements ILeadsService {
     @Resource()
     TLeadsMapper tLeadsMapper;
     @Override
@@ -40,6 +44,7 @@ public class LeadsService implements ILeadsService {
         return JSON.toJSONStringWithDateFormat(tLeads,"yyyy-MM-dd HH:mm:ss");
     }
     @Override
+    @LogHandler(loggerName = LoggerName.Service)
     public String getLeadsList(){
         Pageable pageable=new Pageable();
         pageable.setPageSize(10);
@@ -54,7 +59,8 @@ public class LeadsService implements ILeadsService {
         tLeadsPage.setPageSize(pageable.getPageSize());
         tLeadsPage.setPageIndex(pageable.getPageIndex());
 
-        String page=JSON.toJSONStringWithDateFormat(tLeadsPage,"yyyy-MM-dd HH:mm:ss");
-        return page;
+        //String page=JSON.toJSONStringWithDateFormat(tLeadsPage,"yyyy-MM-dd HH:mm:ss");
+        ResponseData rtnData= setResultData("00000",tLeadsList);
+        return rtnData.toString();
     }
 }

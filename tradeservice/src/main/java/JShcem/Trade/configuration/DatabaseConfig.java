@@ -43,25 +43,25 @@ public class DatabaseConfig {
 //
 //        return dataSource;
 //    }
-    @Autowired
-    DruidDataSource druidDataSource;
-    @Bean()
-    public SqlSessionFactory sqlSessionFactoryBean(ApplicationContext context) throws Exception{
-        SqlSessionFactoryBean sqlSessionFactoryBean=new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(druidDataSource);
-        sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath*:mapper/**/*.xml"));
-        try{
-            PagePlugin plugin=new PagePlugin();
-            //plugin.setDialect("mysql");
-            plugin.setDialect("mssql");
-            Interceptor[] plugins={plugin};
-            sqlSessionFactoryBean.setPlugins(plugins);
-            return sqlSessionFactoryBean.getObject();
-        }catch (Exception ex){
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-    }
+//    @Autowired
+//    DruidDataSource druidDataSource;
+//    @Bean()
+//    public SqlSessionFactory sqlSessionFactoryBean(ApplicationContext context) throws Exception{
+//        SqlSessionFactoryBean sqlSessionFactoryBean=new SqlSessionFactoryBean();
+//        sqlSessionFactoryBean.setDataSource(druidDataSource);
+//        sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath*:mapper/**/*.xml"));
+//        try{
+//            PagePlugin plugin=new PagePlugin();
+//            //plugin.setDialect("mysql");
+//            plugin.setDialect("mssql");
+//            Interceptor[] plugins={plugin};
+//            sqlSessionFactoryBean.setPlugins(plugins);
+//            return sqlSessionFactoryBean.getObject();
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//            throw new RuntimeException(ex);
+//        }
+//    }
 //    @Bean
 //    public MapperScannerConfigurer mapperScannerConfigurer(){
 //        MapperScannerConfigurer mapperScannerConfigurer=new MapperScannerConfigurer();

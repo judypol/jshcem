@@ -22,6 +22,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -36,7 +37,7 @@ public class LoggerAop {
     /**
      * 定义拦截规则：拦截LogHandler注解的方法。
      */
-    @Pointcut("@annotation(com.shcem.annotation.LogHandler)")
+    @Pointcut("execution(* *(..)) && @annotation(com.shcem.annotation.LogHandler)")
     public void logMethodPointcut(){
 
     }
@@ -47,7 +48,7 @@ public class LoggerAop {
      */
     @Around("logMethodPointcut()")                      //指定拦截器规则；
     public Object Interceptor(ProceedingJoinPoint pjp) throws Throwable{
-        long beginTime = System.currentTimeMillis();
+
         MethodSignature signature = (MethodSignature) pjp.getSignature();
 
         Method method = signature.getMethod();          //获取被拦截的方法
@@ -63,37 +64,39 @@ public class LoggerAop {
         //logger.debug();
         Object result=null;
         try{
-            setLog(logHandler.level(),logger,"{}-{} Start",clsName,method);
+            setLog(logHandler.level(),logger,clsName+"-"+method.getName()+" Start",clsName,method);
+            long beginTime = System.currentTimeMillis();
             if(pars==null){
                 result=pjp.proceed();
             }else {
                 result=pjp.proceed(pars);
             }
-            setLog(logHandler.level(),logger,"{}-{} End",clsName,method);
+            long endTime=System.currentTimeMillis();
+            setLog(logHandler.level(),logger,clsName+"-"+method.getName()+" End and cost "+(endTime-beginTime)+"s",clsName,method.getName());
         }catch (Exception ex){
             logger.error("调用"+clsName+"-"+method+"方法出现了异常.",ex);
         }
 
         return result;
     }
-    private void debug(Logger logger,String format,Object args1,Object args2){
-        logger.debug(format,args1,args2);
+    private void debug(Logger logger,String format){
+        logger.debug(format);
     }
-    private void info(Logger logger,String format,Object args1,Object args2){
-        logger.info(format,args1,args2);
+    private void info(Logger logger,String format){
+        logger.info(format);
     }
-    private void warn(Logger logger,String format,Object args1,Object args2){
-        logger.warn(format,args1,args2);
+    private void warn(Logger logger,String format){
+        logger.warn(format);
     }
     private void setLog(LoggerLevel level,Logger logger,String format,Object args1,Object args2){
         if(level.equals(LoggerLevel.Debug)){
-            debug(logger,format,args1,args2);
+            debug(logger,format);
         }else if(level.equals(LoggerLevel.Info)){
-            info(logger,format,args1,args2);
+            info(logger,format);
         }else if(level.equals(LoggerLevel.Warn)){
-            warn(logger,format,args1,args2);
+            warn(logger,format);
         }else{
-            debug(logger,format,args1,args2);
+            debug(logger,format);
         }
     }
 }

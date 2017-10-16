@@ -21,103 +21,103 @@ import java.util.Date;
  * @version 1.0
  */
 public class LoggerModel {
-    String appName;
-    String logDate;
-    String exception;
-    String ipAddress;
-    String level;
-    String message;
-    String refer;
-    String requestId;
-    String requestData;
-    String userAgent;
-    String userId;
+    String AppName;
+    String LogDate;
+    String Exception;
+    String IpAddress;
+    String Level;
+    String Message;
+    String Refer;
+    String RequestId;
+    String RequestData;
+    String UserAgent;
+    String UserId;
 
     public String getAppName() {
-        return appName;
+        return AppName;
     }
 
     public void setAppName(String appName) {
-        this.appName = appName;
+        AppName = appName;
     }
 
     public String getLogDate() {
-        return logDate;
+        return LogDate;
     }
 
     public void setLogDate(String logDate) {
-        this.logDate = logDate;
+        LogDate = logDate;
     }
 
     public String getException() {
-        return exception;
+        return Exception;
     }
 
     public void setException(String exception) {
-        this.exception = exception;
+        Exception = exception;
     }
 
     public String getIpAddress() {
-        return ipAddress;
+        return IpAddress;
     }
 
     public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+        IpAddress = ipAddress;
     }
 
     public String getLevel() {
-        return level;
+        return Level;
     }
 
     public void setLevel(String level) {
-        this.level = level;
+        Level = level;
     }
 
     public String getMessage() {
-        return message;
+        return Message;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        Message = message;
     }
 
     public String getRefer() {
-        return refer;
+        return Refer;
     }
 
     public void setRefer(String refer) {
-        this.refer = refer;
+        Refer = refer;
     }
 
     public String getRequestId() {
-        return requestId;
+        return RequestId;
     }
 
     public void setRequestId(String requestId) {
-        this.requestId = requestId;
+        RequestId = requestId;
     }
 
     public String getRequestData() {
-        return requestData;
+        return RequestData;
     }
 
     public void setRequestData(String requestData) {
-        this.requestData = requestData;
+        RequestData = requestData;
     }
 
     public String getUserAgent() {
-        return userAgent;
+        return UserAgent;
     }
 
     public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
+        UserAgent = userAgent;
     }
 
     public String getUserId() {
-        return userId;
+        return UserId;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        UserId = userId;
     }
 }

@@ -1,6 +1,7 @@
 package com.shcem.aop;
 
 import com.shcem.async.AsyncConfiguration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -12,6 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
+@EnableAspectJAutoProxy
 @Import({AsyncConfiguration.class,AopDefaultConfiguration.class})
 public @interface EnableCommon {
 }

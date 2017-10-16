@@ -9,7 +9,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface CacheLock {
-    String lockedPrefix() default "lock";   //redis 锁key的前缀
+    //String lockedPrefix() default "lock";   //redis 锁key的前缀
+    String lockedKey() default "";      //锁key值
     long timeout() default 2000;        //锁时间
     int expireTime() default 100000;    //key在redis里存在的时间，10S
 }

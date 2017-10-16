@@ -13,6 +13,7 @@
  */
 
 import com.shcem.common.YamlConfiguration;
+import com.shcem.logback.EnableLogbackFile;
 import com.shcem.logback.LogbackConfigLoader;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,18 +25,16 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class HttpAppenderTest {
-    @Before
-    public void before(){
-        try{
-            String logback= YamlConfiguration.instance().getString("logback");
-            LogbackConfigLoader.load(logback);
-        }catch (Exception ex){
-            System.out.println(ex);
-        }
-    }
+//    @Before
+//    public void before(){
+//        try{
+//            LogbackConfigLoader.load();
+//        }catch (Exception ex){
+//            System.out.println(ex);
+//        }
+//    }
     @Test
     public void logbackTest() throws  Exception{
-
         for (int i=0;i<60;i++){
             Logger logger= LoggerFactory.getLogger("controller");
             logger.info("base test");

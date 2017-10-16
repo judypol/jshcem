@@ -58,10 +58,10 @@ public class HessianServiceExporter extends org.springframework.remoting.caucho.
 		serverContext.setRequest(request);
 		serverContext.setAppName(request.getHeader(SystemDefine.REQUEST_APP_NAME));
 		serverContext.setClientIP(request.getHeader(SystemDefine.REQUEST_CLIENT_IP));
-		serverContext.setMemberID(SystemDefine.REQUEST_MEM_ID);
-		serverContext.setMemberName(SystemDefine.REQUEST_MEM_NAME);
-		serverContext.setMode(SystemDefine.REQUEST_MODE);
-		serverContext.setRequestId(SystemDefine.REQUEST_REQUESTID);
+		serverContext.setMemberID(request.getHeader(SystemDefine.REQUEST_MEM_ID));
+		serverContext.setMemberName(request.getHeader(SystemDefine.REQUEST_MEM_NAME));
+		serverContext.setMode(request.getHeader(SystemDefine.REQUEST_MODE));
+		serverContext.setRequestId(request.getHeader(SystemDefine.REQUEST_REQUESTID));
 
 	}
 
@@ -71,14 +71,21 @@ public class HessianServiceExporter extends org.springframework.remoting.caucho.
 	 */
 	protected void handleMDC(HttpServletRequest request){
 		/**Log日志记录*/
-		MDC.put(SystemDefine.REQUEST_REQUESTID,request.getHeader(SystemDefine.REQUEST_REQUESTID));
-		MDC.put(SystemDefine.REQUEST_APP_NAME, request.getHeader(SystemDefine.REQUEST_APP_NAME));
-		MDC.put(SystemDefine.REQUEST_CLIENT_IP, request.getHeader(SystemDefine.REQUEST_CLIENT_IP));
+		MDC.put(SystemDefine.REQUEST_REQUESTID,request.getHeader(SystemDefine.REQUEST_REQUESTID)==null?"":
+				request.getHeader(SystemDefine.REQUEST_REQUESTID));
+		MDC.put(SystemDefine.REQUEST_APP_NAME, request.getHeader(SystemDefine.REQUEST_APP_NAME)==null?"":
+				request.getHeader(SystemDefine.REQUEST_APP_NAME));
+		MDC.put(SystemDefine.REQUEST_CLIENT_IP, request.getHeader(SystemDefine.REQUEST_CLIENT_IP)==null?"":
+				request.getHeader(SystemDefine.REQUEST_CLIENT_IP));
 		//MDC.put(SystemDefine.REQUEST_MODE, request.getHeader(SystemDefine.REQUEST_MODE));
-		MDC.put(SystemDefine.REQUEST_REFERER, request.getHeader(SystemDefine.REQUEST_REFERER));
-		MDC.put(SystemDefine.REQUEST_USERAGENT, request.getHeader(SystemDefine.REQUEST_USERAGENT));
-		MDC.put(SystemDefine.REQUEST_LOGIN_NAME, request.getHeader(SystemDefine.REQUEST_LOGIN_NAME));
-		MDC.put(SystemDefine.REQUEST_MEM_ID, request.getHeader(SystemDefine.REQUEST_MEM_ID)); //全局使用ID
-		MDC.put(SystemDefine.REQUEST_MEM_NAME, request.getHeader(SystemDefine.REQUEST_MEM_NAME)); //全局
+		MDC.put(SystemDefine.REQUEST_REFERER, request.getHeader(SystemDefine.REQUEST_REFERER)==null?"":
+				request.getHeader(SystemDefine.REQUEST_REFERER));
+		MDC.put(SystemDefine.REQUEST_USERAGENT, request.getHeader(SystemDefine.REQUEST_USERAGENT)==null?"":
+				request.getHeader(SystemDefine.REQUEST_USERAGENT));
+		//MDC.put(SystemDefine.REQUEST_LOGIN_NAME, request.getHeader(SystemDefine.REQUEST_LOGIN_NAME));
+		MDC.put(SystemDefine.REQUEST_MEM_ID, request.getHeader(SystemDefine.REQUEST_MEM_ID)==null?"":
+				request.getHeader(SystemDefine.REQUEST_MEM_ID)); //全局使用ID
+		MDC.put(SystemDefine.REQUEST_MEM_NAME, request.getHeader(SystemDefine.REQUEST_MEM_NAME)==null?"":
+				request.getHeader(SystemDefine.REQUEST_MEM_NAME)); //全局
 	}
 }

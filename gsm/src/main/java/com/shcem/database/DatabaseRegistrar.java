@@ -31,13 +31,9 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
-import java.util.*;
 
 /**
  * @author lizhihua
@@ -53,10 +49,10 @@ public class DatabaseRegistrar implements ImportBeanDefinitionRegistrar, Resourc
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
-        AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(
-                annotationMetadata.getAnnotationAttributes(EnableDatabase.class.getName()));
+//        AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(
+//                annotationMetadata.getAnnotationAttributes(EnableDatabase.class.getName()));
         try{
-            if(!this.registerBean(registry)){
+            if(!this.registerBean(registry)){               //--加载app.yaml配置文件下的数据库地址
                 this.registerBeanInClassPath(registry);     //--加载默认路径下的配置文件--config/datasource.xml
             }
         }catch (Exception ex){

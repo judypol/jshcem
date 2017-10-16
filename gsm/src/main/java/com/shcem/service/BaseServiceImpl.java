@@ -35,14 +35,15 @@ import java.util.Map;
  * @version 1.0
  */
 public class BaseServiceImpl {
-    protected ThreadLocalCustomized<ResponseData> rtnData = new ThreadLocalCustomized<ResponseData>(){
-        @Override
-        protected ResponseData initialValue() {
-            return new ResponseData();
-        }
-    };
+//    protected ThreadLocalCustomized<ResponseData> rtnData = new ThreadLocalCustomized<ResponseData>(){
+//        @Override
+//        protected ResponseData initialValue() {
+//            return new ResponseData();
+//        }
+//    };
+    //protected ResponseData rtnData=new ResponseData();
 
-    protected final Logger log = LoggerFactory.getLogger("Servicelog");
+    protected final Logger log = LoggerFactory.getLogger("service");
 //    private String logdif = "";
 //    private Header header = null;
 
@@ -56,8 +57,15 @@ public class BaseServiceImpl {
      * @param args
      *            可变追加信息
      */
-    protected void setResultData(String code, Object data, String... args) {
+    protected ResponseData setResultData(String code, Object data, String... args) {
+        ResponseData rtnData=new ResponseData();
+        return setResultData(rtnData,code,data,args);
+    }
+    protected ResponseData setResultData(ResponseData rtnData,String code, Object data, String... args) {
 
+        if(rtnData==null){
+            return new ResponseData();
+        }
         // 业务类型返回结果由枚举改为从配置文件中获取
         String value = PropertyUtil.create("classpath:message.properties").getProperty(code);// PropertyConfigurer.getMessage(code);
         StringBuffer sbInfo = new StringBuffer(args.length + 1);
@@ -66,49 +74,24 @@ public class BaseServiceImpl {
         for (int i = 0; i < args.length; i++) {
             sbInfo.append(args[i]);
         }
-        this.rtnData.get().CODE=code;
-        this.rtnData.get().INFO=sbInfo.toString();
+        rtnData.setCODE(code);
+        rtnData.setINFO(sbInfo.toString());
         if (data == null) {
-            this.rtnData.get().DATA=null;
-        } else if (data instanceof JSONObject || data instanceof JSONArray) {
-            this.rtnData.get().DATA=data.toString();
-        } else if (data instanceof List) {
-            String retData;
-            try {
-                retData = JSON.toJSONString(data);           //JsonUtil.coverModelToJSONArray((List) data);
-                this.rtnData.get().DATA=retData;
-            } catch (Exception e) {
-                this.log.error("数据转换失败：" + e.getMessage());
-                this.rtnData.get().CODE=code;
-                this.rtnData.get().INFO=value;
-            }
+            rtnData.setDATA(null);
         } else if (data instanceof String) {
-            this.rtnData.get().DATA=(String) data;
-        } else if (data instanceof Map) {
-            JSONObject retData;
-            try {
-                retData = new JSONObject((Map) data);
-                this.rtnData.get().DATA=retData.toString();
-            } catch (Exception e) {
-                this.log.error("数据转换失败：" + e.getMessage());
-                this.rtnData.get().CODE=code;
-                this.rtnData.get().INFO=value;
-            }
-        } else if (data instanceof Object) {
+            rtnData.setDATA((String) data);
+        } else {
             String retData;
             try {
-//				retData = JsonUtil.coverModelToJSONObject(data);
-                retData = JSON.toJSONString(data);//new JSONObject(JSON.toJSONString(data));
-                this.rtnData.get().DATA=retData;
+                retData = JSON.toJSONStringWithDateFormat(data,"yyyy-MM-dd HH:mm:ss sss");//new JSONObject(JSON.toJSONString(data));
+                rtnData.setDATA(retData);
             } catch (Exception e) {
                 this.log.error("数据转换失败：" + e.getMessage());
-                this.rtnData.get().CODE=code;
-                this.rtnData.get().INFO=value;
+                rtnData.setCODE(code);
+                rtnData.setINFO(value);
             }
         }
-    }
-    protected void setResultData(ResponseData responseData,String code, Object data, String... args) {
-
+        return rtnData;
     }
 
     public static void main(String[] args) {
@@ -290,7 +273,7 @@ public class BaseServiceImpl {
      * @param obj
      * @return ResponseData
      */
-    protected ThreadLocalCustomized<ResponseData> validate(Object obj) {
+    protected ResponseData validate(Object obj) {
 
         Validator validator = new Validator();
         List<String> errors = new ArrayList<String>();
@@ -299,13 +282,14 @@ public class BaseServiceImpl {
             errors.add(violation.getMessage());
         }
 
+        ResponseData responseData=new ResponseData();
         if (errors.size() > 0) {
 //			this.rtnData.get().setCODE(Constants.MSG_CODE_0027);
 //			this.rtnData.get().setINFO(errors.get(0));
-            setResultData("对象验证失败", null, JSON.toJSONString(errors));
+            responseData=setResultData("对象验证失败", null, JSON.toJSONString(errors));
         }
 
-        return this.rtnData;
+        return responseData;
     }
     /**
      * 校验入参

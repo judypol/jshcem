@@ -16,6 +16,7 @@ package com.shcem.aop;
 import com.shcem.DistributionLock.CacheLockException;
 import com.shcem.DistributionLock.DistributionRedisLock;
 import com.shcem.annotation.CacheLock;
+import com.shcem.utils.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -53,9 +54,12 @@ public class DistributionLockAop {
 
         CacheLock cacheLock = method.getAnnotation(CacheLock.class);
         //RedisCacheKeyGenerator keyGenerator=new RedisCacheKeyGenerator();
-        String key="";          //(String)keyGenerator.generate(signature.getDeclaringType(),method,pars);
-
-        DistributionRedisLock lock=new DistributionRedisLock(cacheLock.lockedPrefix(),key);
+        String key=cacheLock.lockedKey();          //(String)keyGenerator.generate(signature.getDeclaringType(),method,pars);
+        if(StringUtils.isEmpty(key)){
+            throw new Exception("key is empty");
+        }
+        String purpose="lock";
+        DistributionRedisLock lock=new DistributionRedisLock(purpose,key);
         //logger.debug();
 
         boolean flag = lock.lock(cacheLock.timeout(), cacheLock.expireTime());

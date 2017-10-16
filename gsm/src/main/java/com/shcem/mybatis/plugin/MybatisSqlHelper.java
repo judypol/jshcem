@@ -30,8 +30,6 @@ public class MybatisSqlHelper {
      * (SELECT userName from ly_userinfo u where u.id=userId) userName,
      * sum(ddd) ss
      * from article
-     * ���������Ӳ�ѯ
-     * //ȥ��sql ..from ǰ����ַ������� aafrom fromdd �ȵ����
      */
     public static String suffixStr(String toSql) {
         toSql = toSql.toUpperCase();
