@@ -26,16 +26,10 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
-    /**权限角色
-     * */
-    String[] Roles() default {""};
-    /**权限之间的关系 And/Or
-     * */
-    RelationEnum Relation() default RelationEnum.Or;
-    /**权限
-     * */
-    String LimitCode() default "";
-    /**check类型
-     * */
-    int CheckType() default 0;
+//    /**权限角色
+//     * */
+//    String[] roles() default {""};
+//    /**权限之间的关系 And/Or
+//     * */
+//    RelationEnum relation() default RelationEnum.Or;
 }

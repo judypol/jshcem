@@ -1,8 +1,7 @@
 package com.shcem.webcore.permission;
 
-import com.shcem.webcore.interceptor.AuthInterceptor;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import java.lang.annotation.*;
 
@@ -13,6 +12,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Documented
 @Import(AuthorizationConfiguration.class)
+@ComponentScan("com.shcem.webcore")
 public @interface EnableAuthorization  {
 
 }

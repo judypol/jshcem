@@ -2,6 +2,7 @@ package com.shcem.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
@@ -132,7 +133,24 @@ public class ClusterRedisCache implements IRedisCache {
     public <T> T Get(String key, Class<T> cls) {
         try{
             String val=jedisCluster.get(key);
-            return JSON.parseObject(key,cls);
+            return JSON.parseObject(val,cls);
+        }finally {
+            OfferJedisPool();
+        }
+    }
+
+    /**
+     * 泛型转换
+     *
+     * @param key
+     * @param type
+     * @return
+     */
+    @Override
+    public <T> T Get(String key, TypeReference<T> type) {
+        try{
+            String val=jedisCluster.get(key);
+            return JSON.parseObject(val,type);
         }finally {
             OfferJedisPool();
         }

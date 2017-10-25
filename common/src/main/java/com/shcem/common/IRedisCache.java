@@ -2,6 +2,7 @@ package com.shcem.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 
 import java.util.Set;
 
@@ -52,6 +53,15 @@ public interface IRedisCache {
      * @param key
      * */
     <T> T Get(String key, Class<T> cls);
+
+    /**
+     * 泛型转换
+     * @param key
+     * @param type
+     * @param <T>
+     * @return
+     */
+    <T> T Get(String key,TypeReference<T> type);
     /**获取redis中的所有key
      * @param pattern 正则表达式
      * */

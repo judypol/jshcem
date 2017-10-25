@@ -17,6 +17,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,14 +25,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
 import com.shcem.utils.CookieUtils;
-import com.shcem.webcore.permission.Anonymous;
-import com.shcem.webcore.permission.Permission;
-import com.shcem.webcore.permission.PermissionCheck;
-import com.shcem.webcore.permission.WebContext;
+import com.shcem.webcore.permission.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -42,9 +42,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author lizhihua
  * @version 1.0
  */
-public class AuthInterceptor extends HandlerInterceptorAdapter {
-	Logger logger= LoggerFactory.getLogger(AuthInterceptor.class);
-	@Autowired(required=false)
+@Component
+public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
+	Logger logger= LoggerFactory.getLogger("controller");
+	@Autowired
 	private PermissionCheck permissionCheck;
 	/**
 	 * 在业务处理器处理请求之前被调用 如果返回false 从当前的拦截器往回执行所有拦截器的afterCompletion(),再退出拦截器链
@@ -55,8 +56,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 
-
-		WebContext.Clear();			//清空当前的数据
 		if(isStaticFile(request)){
 			return true;
 		}
@@ -86,18 +85,23 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				if (auth != null&&permissionCheck!=null) // 需要认证权限
 				{
 					request.setAttribute("isAnonymous","false");
-
-					flag= permissionCheck.process(auth, request, response);
+					String className=hm.getMethod().getDeclaringClass().getName();
+					String methodName=hm.getMethod().getName();
+					flag= permissionCheck.process(className,methodName);
 				} else {
-					flag=false;
+					flag=true;
 				}
 			}
 		} else {
 			flag=true;
 		}
-		request.setAttribute(SystemDefine.REQUEST_LOGIN_NAME, WebContext.GetCurrentContext().getCurrentUser().getLoginName());
-		request.setAttribute(SystemDefine.REQUEST_MEM_ID, WebContext.GetCurrentContext().getCurrentUser().getUserCode()); //全局使用ID
-		request.setAttribute(SystemDefine.REQUEST_MEM_NAME, WebContext.GetCurrentContext().getCurrentUser().getUserName()); //全局
+		LoginInfo loginInfo=SecurityUtils.buildSubject().getLoginInfo();
+		if(loginInfo!=null){
+			request.setAttribute(SystemDefine.REQUEST_LOGIN_NAME, loginInfo.getLoginName());
+			request.setAttribute(SystemDefine.REQUEST_MEM_ID, loginInfo.getUserCode()); //全局使用ID
+			request.setAttribute(SystemDefine.REQUEST_MEM_NAME, loginInfo.getUserName()); //全局
+		}
+
 		try{
 			setMDC(request);
 		}catch (Exception ex){
@@ -110,16 +114,19 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	 * 记录日志用到
 	 * @param request
 	 */
-	private void setMDC(HttpServletRequest request){
+	private void setMDC(HttpServletRequest request) throws Exception{
 		MDC.put(SystemDefine.REQUEST_REQUESTID, request.getAttribute(SystemDefine.REQUEST_REQUESTID).toString()); // 设置唯一请求ID
 		MDC.put(SystemDefine.REQUEST_APP_NAME, YamlConfiguration.instance().getProjectName());
 		MDC.put(SystemDefine.REQUEST_CLIENT_IP, getIpAddress(request));
 		MDC.put(SystemDefine.REQUEST_MODE, getMode());
 		MDC.put(SystemDefine.REQUEST_REFERER, request.getHeader("Referer"));
 		MDC.put(SystemDefine.REQUEST_USERAGENT, request.getHeader("User-Agent"));
-		MDC.put(SystemDefine.REQUEST_LOGIN_NAME, WebContext.GetCurrentContext().getCurrentUser().getLoginName());
-		MDC.put(SystemDefine.REQUEST_MEM_ID, WebContext.GetCurrentContext().getCurrentUser().getUserCode()); //全局使用ID
-		MDC.put(SystemDefine.REQUEST_MEM_NAME, WebContext.GetCurrentContext().getCurrentUser().getUserName()); //全局
+		LoginInfo loginInfo=SecurityUtils.buildSubject().getLoginInfo();
+		if(loginInfo!=null){
+			MDC.put(SystemDefine.REQUEST_LOGIN_NAME, loginInfo.getLoginName());
+			MDC.put(SystemDefine.REQUEST_MEM_ID, loginInfo.getUserCode()); //全局使用ID
+			MDC.put(SystemDefine.REQUEST_MEM_NAME, loginInfo.getUserName()); //全局
+		}
 	}
 
 	/**
@@ -155,7 +162,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		WebContext.Clear();		//清空所有的当前上下文
+		SecurityUtils.removeSubject();		//清空所有的当前上下文
 		// log.info("==============执行顺序: 3、afterCompletion================");
 	}
 
@@ -219,21 +226,5 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			ip="localhost";
 		}
 		return ip;
-	}
-
-	/**
-	 * 获取Token
-	 * @param request
-	 * @return
-	 */
-	private String getToken(HttpServletRequest request){
-		String cookieKey=getMode()+"_authKey";
-		Cookie cookie= CookieUtils.getCookieByName(request,cookieKey);
-		if(cookie==null){
-			return "";
-		}else {
-			String cookieValue=cookie.getValue();
-			return cookieValue;
-		}
 	}
 }

@@ -3,11 +3,13 @@ package com.shcem.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -262,6 +264,26 @@ public class SingleRedisCache implements IRedisCache {
         try {
             String val = jedis.get(key);
             T obj = JSON.parseObject(val, cls);
+            return obj;
+        } catch (Exception e) {
+            return null;
+        }finally {
+            jedis.close();
+        }
+    }
+
+    /**
+     * 泛型转换
+     * @param key
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public <T> T Get(String key,TypeReference<T> type){
+        Jedis jedis=jedisPool.getResource();
+        try {
+            String val = jedis.get(key);
+            T obj = JSON.parseObject(val,type);
             return obj;
         } catch (Exception e) {
             return null;

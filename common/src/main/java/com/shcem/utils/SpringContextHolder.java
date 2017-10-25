@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
  * @author
  * @date
  */
-@Service
 @Lazy(false)
 public class SpringContextHolder implements ApplicationContextAware, DisposableBean {
 
@@ -81,6 +80,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 //		} catch (Exception e) {
 //			new RuntimeException(e);
 //		}
+
 		SpringContextHolder.applicationContext = applicationContext;
 	}
 
