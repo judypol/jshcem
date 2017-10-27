@@ -57,26 +57,5 @@ public class FreemarkerConfiguration  {
         return configurer;
     }
 
-    /**
-     * 跨越配置
-     * @return
-     */
-    private CorsConfiguration buildConfig() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        return corsConfiguration;
-    }
 
-    /**
-     * 跨域过滤器
-     * @return
-     */
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", buildConfig()); // 4
-        return new CorsFilter(source);
-    }
 }
