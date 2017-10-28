@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.shcem.constants.SystemDefine;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.rmi.server.ExportException;
 
 /**
  * Created by lizhihua on 2017/2/16.
@@ -36,7 +38,7 @@ public class MidTierRequest {
     }
 
     /**
-     *
+     *发生一个post请求
      * @param requestData
      * @return
      */
@@ -58,31 +60,29 @@ public class MidTierRequest {
             entity.setContentEncoding("UTF-8");
             entity.setContentType("multipart/form-data");
             method.setEntity(entity);
+
             setHeaders(method);
+            CloseableHttpResponse result = client.execute(method);
+            try{
+                /**请求发送成功，并得到响应**/
+                if (result.getStatusLine().getStatusCode() == 200) {
+                    try {
+                        /**读取服务器返回过来的json字符串数据**/
+                        resultStr = EntityUtils.toString(result.getEntity());
 
-            HttpResponse result = client.execute(method);
-            /**请求发送成功，并得到响应**/
-            if (result.getStatusLine().getStatusCode() == 200) {
-                try {
-                    /**读取服务器返回过来的json字符串数据**/
-                    resultStr = EntityUtils.toString(result.getEntity());
-
-                } catch (Exception e) {
-                    logger.error("post请求提交失败:" + url, e);
+                    } catch (Exception e) {
+                        logger.error("post请求提交失败:" + url, e);
+                    }
                 }
+            }catch (Exception ex) {
+                logger.error("post请求提交失败:" + url, ex);
+            }finally {
+                result.close();
             }
         } catch (IOException e) {
             logger.error("post请求提交失败:" + url, e);
         }
-        finally {
-            try{
-                client.close();
-            }
-            catch (Exception e)
-            {
-                logger.error("post请求Close()提交失败:" + url, e);
-            }
-        }
+
         if(resultStr==null)
             return null;
         long endTime=System.currentTimeMillis();
