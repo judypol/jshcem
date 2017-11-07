@@ -1,0 +1,22 @@
+13:46:11.712 [main] WARN  o.s.c.a.ConfigurationClassEnhancer - @Bean method HessianConfig.hessianServiceScanner is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+     13:46:11.968 [main] WARN  o.h.v.m.ParameterMessageInterpolator - HV000184: ParameterMessageInterpolator has been chosen, EL interpolation will not be supported
+     13:46:13.581 [main] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+     13:46:15.216 [main] WARN  o.h.v.m.ParameterMessageInterpolator - HV000184: ParameterMessageInterpolator has been chosen, EL interpolation will not be supported
+     13:46:15.805 [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 
+     13:46:15.818 [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService  'mySimpleAsync'
+     13:46:15.900 [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 
+     13:46:15.900 [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService  'myAsync'
+     13:46:18.509 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.web.context.support.GenericWebApplicationContext@3da05287: startup date [Wed Sep 13 13:46:08 CST 2017]; root of context hierarchy
+     13:46:18.723 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+     13:46:18.725 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+     13:46:19.006 [main] INFO  o.s.w.s.h.BeanNameUrlHandlerMapping - Mapped URL path [/IHelloService] onto handler '/IHelloService'
+     13:46:19.007 [main] INFO  o.s.w.s.h.BeanNameUrlHandlerMapping - Mapped URL path [/ILeadsService] onto handler '/ILeadsService'
+     13:46:19.048 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+     13:46:19.049 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+     13:46:19.354 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+     13:46:20.569 [main] INFO  mssql.MssqlTest - Started MssqlTest in 13.035 seconds (JVM running for 15.112)
+     13:48:44.221 [Thread-2] INFO  o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@3da05287: startup date [Wed Sep 13 13:46:08 CST 2017]; root of context hierarchy
+     13:48:44.243 [Thread-2] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'myAsync'
+     13:48:44.244 [Thread-2] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'mySimpleAsync'
+     13:48:44.273 [Thread-2] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-1} closed
+     

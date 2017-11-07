@@ -42,8 +42,47 @@ public abstract class RedisRealm extends AuthenticationRealm {
     int expire=30*60;
     String prefixKey="t";
     String mode="0";        //---登录模式，0，互斥，1，允许多处登录
+    String tokenKey=WebCoreConstant.PrefixCookieKey+WebCoreConstant.SplitCode+"token";
 
-//    String splitCode="-";
+    String style="mvc";
+
+    public int getExpire() {
+        return expire;
+    }
+
+    public void setExpire(int expire) {
+        this.expire = expire;
+    }
+
+    public String getPrefixKey() {
+        return prefixKey;
+    }
+
+    public void setPrefixKey(String prefixKey) {
+        this.prefixKey = prefixKey;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getTokenKey() {
+        return tokenKey;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    //    String splitCode="-";
 //    String prefixCookieKey= YamlConfiguration.instance().getString("prefixCookie");
     /**
      * 将用户信息写入缓存
@@ -65,8 +104,13 @@ public abstract class RedisRealm extends AuthenticationRealm {
 
             RedisCacheManager.GetRedisCache().SetValue(redisKey,oldMap,expire);
             //---写入response
-            String tokenKey= generateToken(redisKey,mapKey);
-            CookieUtils.setCookie(response,WebCoreConstant.PrefixCookieKey+WebCoreConstant.SplitCode+"token",tokenKey);
+            String token= generateToken(redisKey,mapKey);
+            if(this.style=="mvc"){
+                CookieUtils.setCookie(response,this.tokenKey,token);
+            }else{
+                request.setAttribute(this.tokenKey,token);
+            }
+
         }catch (Exception ex){
             logger.error("用户信息写入缓存出错！",ex);
         }
@@ -108,8 +152,10 @@ public abstract class RedisRealm extends AuthenticationRealm {
      * @return
      */
     private String[] decryptToken(String token) throws Exception{
+        String[] reKeys=new String[2];
         if(StringUtils.isEmpty(token)){
-            throw new Exception("token is empty");
+            //throw new Exception("token is empty");
+            return reKeys;
         }
         String plainToken=EncrytHelper.decryptBase64(token);
         String[] keys=plainToken.split(WebCoreConstant.SplitCode);
@@ -117,7 +163,7 @@ public abstract class RedisRealm extends AuthenticationRealm {
             throw new Exception("token is wrong");
         }
 
-        String[] reKeys=new String[2];
+
         reKeys[0]=keys[0]+WebCoreConstant.SplitCode+keys[1];        //--redis里key
         reKeys[1]=keys[2];                          //--map中的key
 
@@ -132,6 +178,9 @@ public abstract class RedisRealm extends AuthenticationRealm {
     protected LoginInfo getCache(String token) {
         try{
             String[] keys=decryptToken(token);
+            if(StringUtils.isEmpty(keys[0])){
+                return new LoginInfo();
+            }
             Map<String,LoginInfo> map=getLoginInfosFromCache(keys[0]);
             LoginInfo info;
             if(map==null){
@@ -153,8 +202,12 @@ public abstract class RedisRealm extends AuthenticationRealm {
      * @return
      */
     public LoginInfo getLoginInfoFromRequest(){
-        String token=CookieUtils.getCookie(request,WebCoreConstant.PrefixCookieKey+WebCoreConstant.SplitCode+"token");
+        String tokenKey=WebCoreConstant.PrefixCookieKey+WebCoreConstant.SplitCode+"token";
+        String token=request.getHeader(tokenKey);
+        if(StringUtils.isEmpty(token)){
+            token=CookieUtils.getCookie(request,tokenKey);
+        }
+
         return getCache(token);
     }
-
 }

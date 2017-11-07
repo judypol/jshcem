@@ -13,6 +13,7 @@
  */
 package com.shcem.webcore.permission;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class LoginInfo {
     }
 
     public List<String> getPermissions() {
-        return permissions;
+        return permissions==null?new ArrayList<String>():permissions;
     }
 
     public void setPermissions(List<String> permissions) {
@@ -45,7 +46,7 @@ public class LoginInfo {
     }
 
     public List<String> getRoles() {
-        return roles;
+        return roles==null?new ArrayList<String>():roles;
     }
 
     public void setRoles(List<String> roles) {

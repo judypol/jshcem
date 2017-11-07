@@ -14,12 +14,9 @@
 package com.shcem.webcore.permission;
 
 import com.shcem.utils.CookieUtils;
-import com.shcem.utils.SpringContextHolder;
+import com.shcem.utils.StringUtils;
+import com.shcem.webcore.permission.exceptions.NoPermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
-
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -42,7 +39,11 @@ public class Subject {
 
     String tokenKey= WebCoreConstant.PrefixCookieKey+WebCoreConstant.SplitCode+"token";
 
-    public void login(String loginName,String password) throws Exception{
+    public String getTokenKey() {
+        return tokenKey;
+    }
+
+    public void login(String loginName, String password) throws Exception{
         LoginInfo info=realm.signIn(loginName,password);
     }
 
@@ -73,14 +74,19 @@ public class Subject {
     }
 
     /**
-     *判断是否有权限
+     *判断是否有权限,没有权限会抛出异常
      * @param permission
      * @return
      */
     public boolean checkPermission(String permission) throws Exception{
         List<String> permissions=getPermissions();
 
-        return permissions.contains(permission);
+        boolean flag=permissions.contains(permission);
+        if(flag){
+            return flag;
+        }else{
+            throw new NoPermissionException("您没有访问权限");
+        }
     }
 
     /**
@@ -91,7 +97,12 @@ public class Subject {
     public boolean checkPermissions(List<String> permission)throws Exception{
         List<String> permissions=getPermissions();
 
-        return permissions.containsAll(permission);
+        boolean flag= permissions.containsAll(permission);
+        if(flag){
+            return flag;
+        }else{
+            throw new NoPermissionException("您没有访问权限");
+        }
     }
 
     /**
@@ -102,7 +113,12 @@ public class Subject {
     public boolean checkRole(String role) throws Exception{
         List<String> roles=getRoles();
 
-        return roles.contains(role);
+        boolean flag= roles.contains(role);
+        if(flag){
+            return flag;
+        }else{
+            throw new NoPermissionException("您没有访问权限");
+        }
     }
 
     /**
@@ -113,16 +129,30 @@ public class Subject {
     public boolean checkRoles(List<String> roles) throws Exception{
         List<String> allRoles=getRoles();
 
-        return allRoles.containsAll(roles);
+        boolean flag= allRoles.containsAll(roles);
+        if(flag){
+            return flag;
+        }else{
+            throw new NoPermissionException("您没有访问权限");
+        }
     }
 
     /**
-     *
+     *获取用户信息
      * @return
      * @throws Exception
      */
     public LoginInfo getLoginInfo() throws Exception{
-        String token= CookieUtils.getCookie(this.request,tokenKey);
+        String token="";
+        token=request.getHeader(tokenKey);          //---从请求头中获取token值，如果没有则从cookie中获取
+        if(StringUtils.isEmpty(token)){
+            token= CookieUtils.getCookie(this.request,tokenKey);
+        }
+
+        if(StringUtils.isEmpty(token)){
+            return null;
+        }
+
         LoginInfo info=realm.getLoginInfo(token);
         return info;
     }

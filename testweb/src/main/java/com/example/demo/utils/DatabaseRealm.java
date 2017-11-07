@@ -35,7 +35,7 @@ public class DatabaseRealm extends RedisRealm {
         LoginInfo info=new LoginInfo();
         info.setLoginName(loginName);
         List<String> permissions=new ArrayList<>();
-        permissions.add("com.example.demo.controller.index");
+        permissions.add("com.example.demo.controller.HomeController.index");
         info.setPermissions(permissions);
         //info.setPermissions();
         return info;

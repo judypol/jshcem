@@ -3,4 +3,5 @@ common:
    tradeservice:
       url: http://www.tradeservice.shcem.com
       name: tradeservice
+      MidTierUrl: http://192.168.60.204:5412/shcem
       #logback: c:/mltp/logback.xml

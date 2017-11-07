@@ -13,6 +13,7 @@
  */
 package com.shcem.webcore.permission;
 
+import com.shcem.webcore.permission.exceptions.NoPermissionException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.ServletOutputStream;
@@ -49,8 +50,8 @@ public class PermissionCheck {
         Subject subject=SecurityUtils.buildSubject();
         try{
             return subject.checkPermission(className+"."+methodName);
-        }catch (Exception ex){
-            throw new Exception("认证权限时出错了。",ex);
+        }catch (NoPermissionException ex){
+            throw ex;
         }
     }
 
