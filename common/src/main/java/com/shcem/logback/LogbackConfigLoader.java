@@ -29,12 +29,13 @@ import java.io.IOException;
  * @version 1.0
  */
 public class LogbackConfigLoader {
+    private static Logger logger=LoggerFactory.getLogger(LogbackConfigLoader.class);
     public static void load () throws IOException, JoranException {
         String externalConfigFileLocation= YamlConfiguration.instance().getString("logback");
         if(StringUtils.isEmpty(externalConfigFileLocation)){        //如果没有配置，则直接返回
             return;
         }
-        System.out.println("logback xml is "+externalConfigFileLocation);
+        logger.info("logback xml is "+externalConfigFileLocation);
 
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 
@@ -52,7 +53,6 @@ public class LogbackConfigLoader {
                     configurator.setContext(lc);
                     lc.reset();
                     configurator.doConfigure(externalConfigFileLocation);
-                    //StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
                 }
             }
         }

@@ -24,7 +24,7 @@ import java.rmi.server.ExportException;
  * Created by lizhihua on 2017/2/16.
  */
 public class MidTierRequest {
-    private Logger logger = LoggerFactory.getLogger(MidTierRequest.class);
+    private Logger logger = LoggerFactory.getLogger("controller");
     @Autowired
     private HttpServletRequest request;
     private static CloseableHttpClient client=HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
@@ -43,17 +43,19 @@ public class MidTierRequest {
      * @return
      */
     public ResponseData sendPost(RequestData requestData){
-        logger.debug("call post method start");
+        logger.info("call post method start,params:"+JSON.toJSONString(requestData));
         long startTime= System.currentTimeMillis();
         RequestConfig requestConfig=RequestConfig.DEFAULT;
-        //CloseableHttpClient client= HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
 
         String resultStr = null;
         String url=YamlConfiguration.instance().getString(SystemDefine.MidTierUrl);
 
+        logger.info("midterUrl--"+url);
+
         HttpPost method = new HttpPost(url);
         String param=requestDataString(requestData);
 
+        logger.info("params:"+param);
         try {
             //解决中文乱码问题
             StringEntity entity = new StringEntity(param, "utf-8");
@@ -86,9 +88,15 @@ public class MidTierRequest {
         if(resultStr==null)
             return null;
         long endTime=System.currentTimeMillis();
-        logger.debug("call post method end");
+        logger.info("call post method end result:"+resultStr);
         return JSON.parseObject(resultStr,ResponseData.class);
     }
+
+    /**
+     * 请求的json字符串
+     * @param data
+     * @return
+     */
     private String requestDataString(RequestData data)
     {
         JSONObject jsonObject=new JSONObject();
@@ -96,6 +104,11 @@ public class MidTierRequest {
 
         return jsonObject.toJSONString();
     }
+
+    /**
+     * 设置请求头部
+     * @param method
+     */
     private void setHeaders(HttpPost method)
     {
         if(request!=null) {
@@ -124,6 +137,8 @@ public class MidTierRequest {
         }
         method.addHeader(SystemDefine.REQUEST_APP_NAME,YamlConfiguration.instance().getString(SystemDefine.AppName));
         method.addHeader(SystemDefine.REQUEST_AUTH_APP,YamlConfiguration.instance().getString(SystemDefine.AuthApp));
+
+        logger.info("the http header:"+JSON.toJSONString(method.getAllHeaders()));
     }
     /**
      * 取得开发模式

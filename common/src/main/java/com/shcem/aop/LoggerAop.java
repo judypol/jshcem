@@ -72,7 +72,7 @@ public class LoggerAop {
                 result=pjp.proceed(pars);
             }
             long endTime=System.currentTimeMillis();
-            setLog(logHandler.level(),logger,clsName+"-"+method.getName()+" End and cost "+(endTime-beginTime)+"s",clsName,method.getName());
+            setLog(logHandler.level(),logger,clsName+"-"+method.getName()+" End and cost "+(endTime-beginTime)+"ms",clsName,method.getName());
         }catch (Exception ex){
             logger.error("调用"+clsName+"-"+method+"方法出现了异常.",ex);
         }
