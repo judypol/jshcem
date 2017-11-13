@@ -3,6 +3,7 @@ package com.shcem.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.shcem.constants.SystemDefine;
+import com.shcem.utils.SpringContextHolder;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -33,7 +34,7 @@ public class MidTierRequest {
      * **/
     public static ResponseData Post(RequestData requestData)
     {
-        MidTierRequest midTierRequest=new MidTierRequest();
+        MidTierRequest midTierRequest= SpringContextHolder.GetBean(MidTierRequest.class);
         return midTierRequest.sendPost(requestData);
     }
 
@@ -130,7 +131,9 @@ public class MidTierRequest {
 
             String clientIp = (String) request.getAttribute(SystemDefine.REQUEST_CLIENT_IP);
             method.addHeader(SystemDefine.REQUEST_CLIENT_IP, clientIp);
-            method.addHeader(SystemDefine.REQUEST_AUTHKEY, authKey);
+            if(!StringUtils.isEmpty(authKey)){
+                method.addHeader(SystemDefine.REQUEST_AUTHKEY, authKey);
+            }
 
             method.addHeader(SystemDefine.REQUEST_MEM_ID, userCode);
             method.addHeader(SystemDefine.REQUEST_MEM_NAME, userCode);

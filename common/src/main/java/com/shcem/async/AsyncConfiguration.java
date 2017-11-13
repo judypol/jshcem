@@ -1,5 +1,7 @@
 package com.shcem.async;
 
+import com.shcem.common.MidTierRequest;
+import com.shcem.utils.SpringContextHolder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -43,5 +45,13 @@ public class AsyncConfiguration {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
+    }
+    @Bean
+    public SpringContextHolder springContextHolder(){
+        return  new SpringContextHolder();
+    }
+    @Bean
+    public MidTierRequest midTierRequest(){
+        return new MidTierRequest();
     }
 }
