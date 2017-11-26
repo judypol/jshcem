@@ -1,5 +1,7 @@
 package com.shcem.aop;
 
+import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -9,6 +11,16 @@ import org.springframework.context.annotation.Bean;
  * Created by judysen on 2017/9/10.
  */
 public class AopDefaultConfiguration {
+    @Value("${loggerAop.package}")
+    private String pointcut;
+
+    @Bean
+    public AspectJExpressionPointcutAdvisor loggerAopPointcutAdvisor() {
+        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
+        advisor.setExpression(pointcut);
+        advisor.setAdvice(new LoggerAdvice());
+        return advisor;
+    }
     @Bean
     public DistributionLockAop distributionLockAop(){
         return new DistributionLockAop();
