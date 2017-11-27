@@ -47,6 +47,15 @@ public class SystemDefine {
     public final static String REQUEST_REQUESTID = "RequestId";
     public final static String REQUEST_AUTHKEY="Authkeyid";
     public final static String REQUEST_AUTH_APP="AuthApp";
+    public final static String KAFKA_ZIPKIN_PROPERTY = "/kafka_zipkin.properties";
+/**
+* Zipkin参数
+ */
+    public final static String HEADER_TRACEID = "TraceId";
+    public final static String HEADER_SPANID = "SpanId";
+    public final static String HEADER_PARENTID = "ParentId";
+    public final static String HEADER_SPANNAME = "SpanName";
+    public final static String HEADER_HANDLE = "Handle";
 
     public final static String LogUrl ="logUrl";
     public final static String LogBuffer="logBuffer";
@@ -76,5 +85,37 @@ public class SystemDefine {
     public final static String DatecenterId="datecenterId";
 
     public final static String ACTIVITI_PROPERITES_FILE="";
+    /**
+     * trace 的常量定义
+     */
+    public final static String TRACELOG_TYPE_S = "SEND BOTH";
+    public final static String TRACELOG_TYPE_S_SERVER = "SEND SERVER";
+    public final static String TRACELOG_TYPE_S_CLIENT = "SEND CLIENT";
+    public final static String TRACELOG_TYPE_R = "RECEIVE BOTH";
+    public final static String TRACELOG_TYPE_R_SERVER = "RECEIVE SERVER";
+    public final static String TRACELOG_TYPE_R_CLIENT = "RECEIVE CLIENT";
+
+    public final static String TRACE_CUR_HANDLE_SVC = "Service";
+    public final static String TRACE_CUR_HANDLE_CMP = "Component";
+    public final static String TRACE_CUR_HANDLE_DAO = "Dao";
+
+    public final static String TRACETASK_SEND = "SEND_BOTH";
+    public final static String TRACETASK_SEND_SERVER = "SEND_SERVER";
+    public final static String TRACETASK_SEND_CLIENT = "SEND_CLIENT";
+    public final static String TRACETASK_RECEIVE = "RECEIVE_BOTH";
+    public final static String TRACETASK_RECEIVE_SERVER = "RECEIVE_SERVER";
+    public final static String TRACETASK_RECEIVE_CLIENT = "RECEIVE_CLIENT";
+    public final static String TRACETASK_CLOSE = "CLOSE";
+
+    public final static String TRACEQUEUE_SVC_PUT = "Svc_Put";
+    public final static String TRACEQUEUE_SVC_GET = "Svc_Get";
+    public final static String TRACEQUEUE_CMP_PUT = "Cmp_Put";
+    public final static String TRACEQUEUE_CMP_GET = "Cmp_Get";
+    public final static String TRACEQUEUE_DAO_PUT = "Dao_Put";
+    public final static String TRACEQUEUE_DAO_GET = "Dao_Get";
+
+    public final static String RND_SVC = "RNDSVC";
+    public final static String RND_CMP = "RNDCMP";
+    public final static String RND_DAO = "RNDDAO";
 }
 

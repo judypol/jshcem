@@ -1,5 +1,5 @@
 group 'com.shcem'
-version '1.0.3'
+version '1.0.4'
 
 apply plugin: 'java'
 
@@ -19,4 +19,8 @@ dependencies {
     compile group: 'net.sf.oval', name: 'oval', version: '1.87'
     compile group: 'org.mybatis', name: 'mybatis', version: '3.4.5'
     compile group: 'com.alibaba', name: 'druid', version: '1.1.2'
+    compile group: 'com.google.code.gson', name: 'gson', version:'2.2.+'
+    compile group: 'io.zipkin.brave', name: 'brave-core', version:'4.2.0'
+    compile group: 'io.zipkin.brave', name: 'brave-spancollector-kafka', version:'4.2.0'
+    compile group: 'io.zipkin.reporter', name: 'zipkin-sender-kafka08', version:'1.1.1_Local'
 }

@@ -44,24 +44,9 @@ public class HessianServiceExporter extends org.springframework.remoting.caucho.
 	
 	@SuppressWarnings("rawtypes")
 	protected void handleHessianHeader(HttpServletRequest request) {
-		
-//		HessianHeaderContext context = HessianHeaderContext.getContext();
-//		Enumeration enumeration = request.getHeaderNames();
-//
-//		while (enumeration.hasMoreElements()) {
-//
-//			String name = enumeration.nextElement().toString();
-//			String value = request.getHeader(name);
-//			context.addHeader(name, value);
-//		}
+
 		ServerContext serverContext=ServerContext.currentContext();
 		serverContext.setRequest(request);
-		serverContext.setAppName(request.getHeader(SystemDefine.REQUEST_APP_NAME));
-		serverContext.setClientIP(request.getHeader(SystemDefine.REQUEST_CLIENT_IP));
-		serverContext.setMemberID(request.getHeader(SystemDefine.REQUEST_MEM_ID));
-		serverContext.setMemberName(request.getHeader(SystemDefine.REQUEST_MEM_NAME));
-		serverContext.setMode(request.getHeader(SystemDefine.REQUEST_MODE));
-		serverContext.setRequestId(request.getHeader(SystemDefine.REQUEST_REQUESTID));
 
 	}
 

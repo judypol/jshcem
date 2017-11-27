@@ -49,8 +49,6 @@ public class DatabaseRegistrar implements ImportBeanDefinitionRegistrar, Resourc
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
-//        AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(
-//                annotationMetadata.getAnnotationAttributes(EnableDatabase.class.getName()));
         try{
             if(!this.registerBean(registry)){               //--加载app.yaml配置文件下的数据库地址
                 this.registerBeanInClassPath(registry);     //--加载默认路径下的配置文件--config/datasource.xml
