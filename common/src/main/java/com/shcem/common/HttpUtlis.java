@@ -80,6 +80,31 @@ public class HttpUtlis {
     }
 
     /**
+     * post请求，指定encode编码
+     * @param url
+     * @param map
+     * @param encode
+     * @return
+     * @throws Exception
+     */
+    public String postByForm(String url,Map<String,String> map,String encode) throws Exception{
+        String postType="application/x-www-form-urlencoded;charset="+encode;
+        MediaType FormPostType=MediaType.parse(postType);
+        StringBuilder sb=new StringBuilder();
+        for(String key :map.keySet()){
+            sb.append(key+"="+map.get(key)+"&");
+        }
+        RequestBody body = RequestBody.create(FormPostType, sb.toString());
+
+        Request request=new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Response response=client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    /**
      * 上传文件
      * @param url
      * @param fileName

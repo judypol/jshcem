@@ -14,15 +14,27 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableCommon
 @EnableLogbackFile
 //@ComponentScan(basePackages = {"com.example.demo","com.shcem.webcore"})
-public class TestwebApplication extends SpringBootServletInitializer {
+//public class TestwebApplication extends SpringBootServletInitializer {
+//
+//	public static void main(String[] args) {
+//		SpringApplication.run(TestwebApplication.class, args);
+//	}
+//
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//		builder.sources(this.getClass());
+//		return super.configure(builder);
+//	}
+//}
+public class TestwebApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TestwebApplication.class, args);
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		builder.sources(this.getClass());
-		return super.configure(builder);
-	}
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//		builder.sources(this.getClass());
+//		return super.configure(builder);
+//	}
 }

@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StudentEntity>
-    <id>4</id>
-    <name>lisi</name>
-    <age>23</age>
-    <birthday>1999-01-23</birthday>
-    <grade>一年级</grade>
+    <student>
+        <id>4</id>
+        <name>lisi</name>
+        <age>23</age>
+        <birthday>1999-01-23</birthday>
+        <grade>一年级</grade>
+    </student>
+    <student>
+        <id>5</id>
+        <name>lisi</name>
+        <age>23</age>
+        <birthday>1999-01-23</birthday>
+        <grade>一年级</grade>
+    </student>
+    <student>
+        <id>6</id>
+        <name>lisi</name>
+        <age>23</age>
+        <birthday>1999-01-23</birthday>
+        <grade>一年级</grade>
+    </student>
 </StudentEntity>

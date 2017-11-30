@@ -27,20 +27,20 @@ public class HomeController {
     @Autowired
     HttpServletRequest request;
     @RequestMapping("index")
-    @Permission
-    @LogHandler(level= LoggerLevel.Warn,loggerName = LoggerName.Service)
+    //@Permission
+    //@LogHandler(level= LoggerLevel.Warn,loggerName = LoggerName.Service)
     public ModelAndView index(String name){
         ModelAndView modelAndView=new ModelAndView("/home/index");
         return modelAndView;
     }
     @RequestMapping("login")
-    @Anonymous
+    //@Anonymous
     public ModelAndView login() throws Exception{
         SecurityUtils.buildSubject().login("lisi","ss");
         return new ModelAndView("/home/login");
     }
     @RequestMapping("signIn")
-    @Anonymous
+    //@Anonymous
     public String restLogin() throws Exception{
         SecurityUtils.buildSubject().login("lisi","ss");
         String token=request.getAttribute(SecurityUtils.buildSubject().getTokenKey()).toString();
@@ -48,7 +48,7 @@ public class HomeController {
         return "ss";
     }
     @RequestMapping("info")
-    @Anonymous
+    //@Anonymous
     public @ResponseBody LoginInfo getRestLogin() throws Exception{
         LoginInfo info=SecurityUtils.buildSubject().getLoginInfo();
         return info;

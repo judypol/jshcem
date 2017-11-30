@@ -13,7 +13,7 @@ import com.example.demo.utils.*;
 /**
  * Created by judysen on 2017/9/9.
  */
-@EnableAuthorization
+//@EnableAuthorization
 @Configuration
 public class Config {
     @Bean

@@ -141,6 +141,7 @@ public class JaxbMapper {
 				jaxbContext = JAXBContext.newInstance(clazz, CollectionWrapper.class);
 				jaxbContexts.putIfAbsent(clazz, jaxbContext);
 			} catch (JAXBException ex) {
+				System.out.println(ex);
 //				throw new HttpMessageConversionException("Could not instantiate JAXBContext for class [" + clazz
 //						+ "]: " + ex.getMessage(), ex);
 			}

@@ -1,6 +1,8 @@
 rootProject.name = 'jshcem'
+
 include('common')
 include('gsm')
 include('testDomo')
 include('tradeservice')
 include('webcore')
+include('testweb')

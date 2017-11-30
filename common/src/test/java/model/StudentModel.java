@@ -13,12 +13,15 @@
  */
 package model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 /**
  * @author lizhihua
  * @version 1.0
  */
+//@XmlRootElement(name="student")
 public class StudentModel {
     String id;
     String name;

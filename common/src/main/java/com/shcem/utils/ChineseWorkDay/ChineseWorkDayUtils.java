@@ -35,7 +35,7 @@ public class ChineseWorkDayUtils {
         if(chineseWorkDayUtils==null){
             String file= YamlConfiguration.instance().getString(SystemDefine.WORKDAYFILE);
             if(StringUtils.isEmpty(file)){
-                throw new Exception("请在App.config中设置workdayfile");
+                throw new Exception("请在App.yaml中设置workdayfile");
             }
             try{
                 chineseWorkDayUtils=new ChineseWorkDayUtils();
@@ -94,14 +94,18 @@ public class ChineseWorkDayUtils {
     public Date nextChineseWorkDay(Date currentDay,int next) throws Exception{
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(currentDay);
-        //calendar.add(calendar.DATE,next);
+        int step=1;
+        if(next<0){
+            step=-1;
+            next=-next;
+        }
         int index=0;
         int tempNext=0;
         while(tempNext<next){
             if(index>200+next){
                 throw new Exception("workjobday configuration is wrong");
             }
-            calendar.add(calendar.DATE,1);
+            calendar.add(calendar.DATE,step);
             Date date=calendar.getTime();
             if(IsChineseWorkDay(date)){
                 tempNext++;
