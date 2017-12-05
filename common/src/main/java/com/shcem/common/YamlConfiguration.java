@@ -2,6 +2,7 @@ package com.shcem.common;
 
 import com.alibaba.fastjson.JSON;
 import com.shcem.utils.DateUtils;
+import com.shcem.utils.FileUtils;
 import org.ho.yaml.Yaml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,16 @@ public class YamlConfiguration {
     Logger logger= LoggerFactory.getLogger(YamlConfiguration.class);
     String platformName;
     String projectName;
-    HashMap yamlMap;
+    HashMap<String,String> yamlMap;
     public YamlConfiguration() {
         try{
-            yamlMap=getConfig();
+            yamlMap=getCommonConfiguration();
+            logger.debug(JSON.toJSONString(yamlMap));
+            if(yamlMap!=null&&!yamlMap.isEmpty()){
+                for(String key:yamlMap.keySet()){
+                    System.setProperty(key,String.valueOf(yamlMap.get(key)));
+                }
+            }
         }catch (Exception ex){
             logger.error("get the yaml configuration in classpath is error",ex);
             yamlMap=new HashMap();
@@ -96,7 +103,21 @@ public class YamlConfiguration {
             throw ex;
         }
     }
-
+//    private String getCommonConfigPath(){
+//        String config="app.yaml";
+//        if(new File(config).exists()){
+//            return config;
+//        }
+//        config="config/app.yaml";
+//        if(new File(config).exists()){
+//            return config;
+//        }
+//        if (OSCheck.isWindows()) {
+//            config = "C:\\mltp\\mltp.yaml";
+//        } else {
+//            config = "/etc/mltp/mltp.yaml";
+//        }
+//    }
     /**
      * 获取共通的配置文件
      * @return
@@ -104,12 +125,8 @@ public class YamlConfiguration {
      */
     private HashMap getCommonConfiguration() throws Exception{
         HashMap<?,?> appCongiMap=readClassPathConfiguration();
-        String otherconfig = "";
-        if (OSCheck.isWindows()) {
-            otherconfig = "C:\\mltp\\mltp.yaml";
-        } else {
-            otherconfig = "/etc/mltp/mltp.yaml";
-        }
+        String otherconfig = "app.yaml";
+
         File file=new File(otherconfig);
         if(!file.exists()){
             logger.warn("not set common config in {}",otherconfig);
@@ -152,9 +169,21 @@ public class YamlConfiguration {
      * @throws Exception
      */
     public HashMap getConfig() throws Exception{
-        HashMap map=getCommonConfiguration();
-        logger.debug(JSON.toJSONString(map));
-        return map;
+        //HashMap map=getCommonConfiguration();
+        logger.debug(JSON.toJSONString(yamlMap));
+        return yamlMap;
+    }
+    public void add(Map<String,Object> map){
+        for(String key:map.keySet()){
+            String val=String.valueOf(map.get(key));
+            yamlMap.put(key,val);
+            System.setProperty(key,val);
+        }
+
+    }
+    public void add(String key,String val){
+        yamlMap.put(key,val);
+        System.setProperty(key,val);
     }
 
     /**

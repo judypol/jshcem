@@ -2,3 +2,5 @@ test:
    testweb:
       redis.host: 192.168.60.107:6379
       redis.model: 0
+      spring.configCenter.namespace: cirpc/dnet/dev
+      spring.configCenter.zkurl: localhost:2181

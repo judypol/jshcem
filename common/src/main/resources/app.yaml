@@ -4,4 +4,8 @@ common:
       url: http://www.tradeservice.shcem.com
       name: tradeservice
       MidTierUrl: http://192.168.60.204:5412/shcem
+      redis.mode: 0
+      redis.host: 192.168.60.204:6369
+      spring.configCenter.zkurl: localhost:2181
+      spring.configCenter.namespace: cirpc/dnet/dev
       #logback: c:/mltp/logback.xml

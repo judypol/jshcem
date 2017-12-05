@@ -29,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class TestwebApplication {
 
 	public static void main(String[] args) {
+		System.out.println(System.getProperty("spring.configCenter.namespace"));
 		SpringApplication.run(TestwebApplication.class, args);
 	}
 

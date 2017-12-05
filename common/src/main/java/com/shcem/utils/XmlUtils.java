@@ -1,11 +1,13 @@
 package com.shcem.utils;
 
 import com.shcem.mapper.JaxbMapper;
+import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
+import java.io.*;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * Created by Administrator on 2017/11/26 0026.
@@ -27,7 +29,14 @@ public class XmlUtils {
 
         XmlEntity mapO=map.get(filename);
         if(mapO==null||mapO.getModifyDate()<modifiedDate){
-            String xml=FileUtils.readFileToString(file).replace("\r\n","").replace("\\s+","");
+            BOMInputStream bomInputStream=new BOMInputStream(new FileInputStream(file));
+            BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(bomInputStream));
+
+            StringBuilder sb=new StringBuilder();
+            bufferedReader.lines().forEach(l->sb.append(l));
+
+            String xml=sb.toString();
+            //String xml=FileUtils.readFileToString(file).replace("\r\n","").replace("\\s+","");
 
             mapO=new XmlEntity();
             mapO.setModifyDate(modifiedDate);

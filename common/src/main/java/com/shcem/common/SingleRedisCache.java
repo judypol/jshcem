@@ -130,11 +130,25 @@ public class SingleRedisCache implements IRedisCache {
      * redis设置一个值，
      *
      * @param key
-     * @param value 默认为30天过期
+     * @param value
      */
     public void SetValue(String key, Object value) throws Exception {
-        long expire = 2592000L;
-        this.SetValue(key, value, expire);
+        Jedis jedis=jedisPool.getResource();
+        Long expireTime=1800L;
+        try {
+            if(jedis.exists(key)){
+                expireTime=jedis.ttl(key);
+            }
+            String jsonString = serialiseObject(value);
+            jedis.set(key, jsonString);
+            jedis.expire(key,expireTime.intValue());
+        } catch (Exception e) {
+            throw new Exception("SetValue--Exception", e);
+        }finally {
+            jedis.close();
+        }
+//        long expire = 2592000L;
+//        this.SetValue(key, value, expire);
     }
 
     /**
