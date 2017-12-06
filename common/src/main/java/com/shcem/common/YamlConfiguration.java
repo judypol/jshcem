@@ -203,7 +203,7 @@ public class YamlConfiguration {
      */
     public String getString(String key,String defaultValue){
         if(yamlMap.containsKey(key)){
-            return yamlMap.get(key).toString();
+            return String.valueOf(yamlMap.get(key));
         }else{
             return defaultValue;
         }

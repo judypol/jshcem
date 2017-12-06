@@ -8,4 +8,5 @@ common:
       redis.host: 192.168.60.204:6369
       spring.configCenter.zkurl: localhost:2181
       spring.configCenter.namespace: cirpc/dnet/dev
+      birthday: 2017-05-12 17:12:56
       #logback: c:/mltp/logback.xml

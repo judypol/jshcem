@@ -268,4 +268,28 @@ public class StreamUtils {
 		return new ByteArrayOutputStream();
 	}
 
+	/**
+	 * 将inputStream转为outputStream
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	public static ByteArrayOutputStream inputStream2OutputStream(InputStream in) throws Exception{
+		ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+		int ch;
+		while ((ch = in.read()) != -1) {
+			swapStream.write(ch);
+		}
+		return swapStream;
+	}
+
+	/**
+	 *将outputstream转换为inputStream
+	 * @param os
+	 * @return
+	 */
+	public static ByteArrayInputStream outputStream2InputStream(ByteArrayOutputStream os){
+		ByteArrayInputStream swapStream = new ByteArrayInputStream(os.toByteArray());
+		return swapStream;
+	}
 }
