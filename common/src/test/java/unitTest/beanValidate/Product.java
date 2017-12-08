@@ -14,6 +14,7 @@
 package unitTest.beanValidate;
 
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -24,6 +25,7 @@ import javax.validation.constraints.Pattern;
 public class Product {
     @NotNull(message = "英文品名不能为空")
     private String CustomsName;
+    @NotBlank(message = "中文名不能空（）")
     private String CustomsCnName;
     @DecimalMin(value = "0", message = "申报价值不能小于0")
     private String DeclareValue;

@@ -37,6 +37,7 @@ public class beanValidateTest {
         Product product = new Product();
         product.setQuantity("1.0"); // 不合法的数量
         product.setDeclareValue("-1"); // 不合法的申报价值
+        product.setCustomsCnName("");
         products.add(product);
         order.setProductList(products);
 

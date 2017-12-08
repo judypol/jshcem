@@ -109,7 +109,7 @@ public abstract class DesEncryptBase {
      */
     public String encryptString(String data,String key) throws Exception{
         byte[] initKey=initKey(key);
-        byte[] source=data.getBytes("UTF-8");
+        byte[] source=data.getBytes();
         byte[] encrypt= encrypt(source,initKey);
 
         return encryptBASE64(encrypt);
@@ -123,7 +123,7 @@ public abstract class DesEncryptBase {
      * @throws Exception
      */
     private byte[] initKey(String seed) throws Exception {
-        byte[] keyBytes=seed.getBytes("UTF-8");
+        byte[] keyBytes=seed.getBytes();
 
         SecretKey key3=new SecretKeySpec(keyBytes, ALGORITHM_DES);
         return key3.getEncoded();

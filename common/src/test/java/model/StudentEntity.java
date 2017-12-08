@@ -13,6 +13,8 @@
  */
 package model;
 
+import org.dozer.Mapping;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -21,26 +23,28 @@ import java.util.Date;
  * @version 1.0
  */
 public class StudentEntity {
-    String id;
-    String name;
+    @Mapping("id")
+    String Id;
+    @Mapping("name")
+    String Name;
     int age;
     Date birthday;
     String grade;
 
     public String getId() {
-        return id;
+        return Id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.Id = id;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public int getAge() {
