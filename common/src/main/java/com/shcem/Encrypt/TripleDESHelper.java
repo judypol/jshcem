@@ -22,34 +22,59 @@ public class TripleDESHelper{
         return helper;
     }
 
-    protected final String ALGORITHM_DES = "DESede/CBC/PKCS5Padding";
+    protected final String ALGORITHM_DES = "DESede";
 
     protected TripleDESHelper() {
 
     }
 
-
-    public String decryptString(String data, String key) throws Exception {
+    public byte[] decrypt(byte[] source,String key) throws Exception{
         SecretKey deskey=new SecretKeySpec(build3DesKey(key),ALGORITHM_DES);
         Cipher cipher=Cipher.getInstance(ALGORITHM_DES);
         cipher.init(Cipher.DECRYPT_MODE,deskey);
 
-        byte[] src=data.getBytes("UTF-8");
-        byte[] desBytes=cipher.doFinal(src);
-
-        return Base64.encodeBase64String(desBytes);
+        byte[] desBytes=cipher.doFinal(source);
+        return desBytes;
     }
 
-    public String encryptString(String data, String key) throws Exception {
+    /**
+     * 解密字符串
+     * 加密字符串必须是Base64编码过
+     * * 返回UTF-8字符
+     * @param data
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public String decryptString(String data, String key) throws Exception {
+        byte[] desBytes=this.decrypt(Base64.decodeBase64(data),key);
+
+        return new String(desBytes,"UTF-8");
+    }
+
+    public byte[] encrypt(byte[] source,String key) throws Exception{
         SecretKey deskey=new SecretKeySpec(build3DesKey(key),"DESede");
         Cipher c1=Cipher.getInstance(ALGORITHM_DES);
-        IvParameterSpec iv = new IvParameterSpec(Base64.decodeBase64("QgAZ/DV7dpA="));
 
-        c1.init(Cipher.ENCRYPT_MODE,deskey,iv);
-        byte[] src=data.getBytes("UTF-16LE");
-        byte[] desBytes= c1.doFinal(src);
+        c1.init(Cipher.ENCRYPT_MODE,deskey);
+        byte[] desBytes= c1.doFinal(source);
 
-        return EncrytHelper.encryptBASE64(desBytes);
+        return desBytes;
+    }
+
+    /**
+     * 加密字符串
+     * 返回base64编码的字符串
+     * @param data
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public String encryptString(String data, String key) throws Exception {
+        byte[] source=data.getBytes("UTF-8");
+        byte[] bytes=this.encrypt(source,key);
+
+        return Base64.encodeBase64String(bytes);
     }
     public byte[] build3DesKey(String keyStr) throws UnsupportedEncodingException{
         byte[] key=new byte[24];

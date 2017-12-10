@@ -13,6 +13,7 @@
  */
 package com.shcem.utils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -26,5 +27,58 @@ public class ExceptionUtils {
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);
         return sw.toString(); // stack trace as a string
+    }
+    /**
+     * 将CheckedException转换为UncheckedException.
+     */
+    public static RuntimeException unchecked(Exception e) {
+        if (e instanceof RuntimeException) {
+            return (RuntimeException) e;
+        } else {
+            return new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 将ErrorStack转化为String.
+     */
+    public static String GetStackTraceAsString(Throwable e) {
+        if (e == null){
+            return "";
+        }
+        StringWriter stringWriter = new StringWriter();
+        e.printStackTrace(new PrintWriter(stringWriter));
+        return stringWriter.toString();
+    }
+
+    /**
+     * 判断异常是否由某些底层的异常引起.
+     */
+    public static boolean IsCausedBy(Exception ex, Class<? extends Exception>... causeExceptionClasses) {
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            for (Class<? extends Exception> causeClass : causeExceptionClasses) {
+                if (causeClass.isInstance(cause)) {
+                    return true;
+                }
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+
+    /**
+     * 在request中获取异常类
+     * @param request
+     * @return
+     */
+    public static Throwable GetThrowable(HttpServletRequest request){
+        Throwable ex = null;
+        if (request.getAttribute("exception") != null) {
+            ex = (Throwable) request.getAttribute("exception");
+        } else if (request.getAttribute("javax.servlet.error.exception") != null) {
+            ex = (Throwable) request.getAttribute("javax.servlet.error.exception");
+        }
+        return ex;
     }
 }
