@@ -13,8 +13,9 @@
  */
 package unitTest.beanValidate;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
+import net.sf.oval.constraint.NotEmpty;
+import net.sf.oval.constraint.NotNull;
 
 /**
  * @author lizhihua
@@ -25,7 +26,7 @@ public class Receiver {
     private String Country;
     private String CountryCode;
     @NotNull(message = "邮箱不能为空")
-    @org.hibernate.validator.constraints.Email(message = "邮箱格式不正确")
+    @net.sf.oval.constraint.Email(message = "邮箱不能为空")
     private String Email;
 
     public String getCountry() {

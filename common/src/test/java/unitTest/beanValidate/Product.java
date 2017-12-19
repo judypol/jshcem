@@ -13,10 +13,9 @@
  */
 package unitTest.beanValidate;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import net.sf.oval.constraint.NotBlank;
+import net.sf.oval.constraint.NotNull;
+
 
 /**
  * @author lizhihua
@@ -27,9 +26,9 @@ public class Product {
     private String CustomsName;
     @NotBlank(message = "中文名不能空（）")
     private String CustomsCnName;
-    @DecimalMin(value = "0", message = "申报价值不能小于0")
+//    @DecimalMin(value = "0", message = "申报价值不能小于0")
     private String DeclareValue;
-    @Pattern(regexp = "\\d", message = "数量不合法") // 正则验证
+//    @Pattern(regexp = "\\d", message = "数量不合法") // 正则验证
     private String Quantity;
 
     public String getCustomsName() {

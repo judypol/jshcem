@@ -13,11 +13,10 @@
  */
 package unitTest.beanValidate;
 
-import org.hibernate.validator.constraints.Length;
+import net.sf.oval.constraint.AssertValid;
+import net.sf.oval.constraint.Length;
+import net.sf.oval.constraint.NotNull;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -29,9 +28,9 @@ public class Order {
     //@Size(max = 11, message = "订单号长度不能超过11")
     @Length(max=11,message = "订单号长度不能超过11位")
     private String PlatformOrderID;
-    @Valid // 级联验证
+    @AssertValid
     private Receiver Receiver;
-    @Valid // 级联验证
+    @AssertValid
     private List<Product> ProductList;
 
     public String getPlatformOrderID() {

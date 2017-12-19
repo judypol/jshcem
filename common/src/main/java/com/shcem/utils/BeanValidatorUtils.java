@@ -13,11 +13,12 @@
  */
 package com.shcem.utils;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import java.util.Set;
+
+import net.sf.oval.ConstraintViolation;
+import net.sf.oval.Validator;
+
+import java.util.List;
+
 
 /**
  * java bean 验证
@@ -32,13 +33,14 @@ public class BeanValidatorUtils {
      * @return
      */
     public static <T> String beanValidator(T obj){
-        ValidatorFactory vf= Validation.buildDefaultValidatorFactory();
-        Validator validator=vf.getValidator();
-        Set<ConstraintViolation<T>> violations=validator.validate(obj);
+//        ValidatorFactory vf= Validation.buildDefaultValidatorFactory();
+//        Validator validator=vf.getValidator();
+        Validator validator=new Validator();
+        List<ConstraintViolation> violations=validator.validate(obj);
         StringBuilder sb=new StringBuilder();
-        for(ConstraintViolation<T> cv : violations){
-            sb.append(cv.getMessage()+"(" + cv.getPropertyPath()
-                    + "-->" + cv.getInvalidValue()+")");
+        for(ConstraintViolation cv : violations){
+            sb.append(cv.getMessage()+"("
+                     +cv.getInvalidValue()+")");
         }
         return sb.toString();
     }

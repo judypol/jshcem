@@ -3,6 +3,7 @@
  */
 package com.shcem.mapper;
 
+import com.shcem.utils.ExceptionUtils;
 import com.shcem.utils.Reflections;
 import com.shcem.utils.StringUtils;
 import org.springframework.util.Assert;
@@ -53,7 +54,7 @@ public class JaxbMapper {
 			createMarshaller(clazz, encoding).marshal(root, writer);
 			return writer.toString();
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtils.unchecked(e);
 		}
 	}
 
@@ -80,7 +81,7 @@ public class JaxbMapper {
 
 			return writer.toString();
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtils.unchecked(e);
 		}
 	}
 
@@ -93,7 +94,7 @@ public class JaxbMapper {
 			StringReader reader = new StringReader(xml);
 			return (T) createUnmarshaller(clazz).unmarshal(reader);
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtils.unchecked(e);
 		}
 	}
 
@@ -115,7 +116,7 @@ public class JaxbMapper {
 
 			return marshaller;
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtils.unchecked(e);
 		}
 	}
 
@@ -128,7 +129,7 @@ public class JaxbMapper {
 			JAXBContext jaxbContext = getJaxbContext(clazz);
 			return jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtils.unchecked(e);
 		}
 	}
 

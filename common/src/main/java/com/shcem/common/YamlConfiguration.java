@@ -126,7 +126,11 @@ public class YamlConfiguration {
     private HashMap getCommonConfiguration() throws Exception{
         HashMap<?,?> appCongiMap=readClassPathConfiguration();
         String otherconfig = "app.yaml";
-
+        if(OSCheck.isWindows()){
+            otherconfig="C:/mltp/mltp.yaml";
+        }else{
+            otherconfig="/etc/mltp/mltp.yaml";
+        }
         File file=new File(otherconfig);
         if(!file.exists()){
             logger.warn("not set common config in {}",otherconfig);
