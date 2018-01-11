@@ -25,17 +25,15 @@ import java.rmi.server.ExportException;
  * Created by lizhihua on 2017/2/16.
  */
 public class MidTierRequest {
-    private Logger logger = LoggerFactory.getLogger("controller");
-    @Autowired
-    private HttpServletRequest request;
+    private static Logger logger = LoggerFactory.getLogger("controller");
+    public static InheritableThreadLocal<HttpServletRequest> threadLocalRequest=new InheritableThreadLocal<>();
     private static CloseableHttpClient client=HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
     /**
      *服务调用
      * **/
     public static ResponseData Post(RequestData requestData)
     {
-        MidTierRequest midTierRequest= SpringContextHolder.GetBean(MidTierRequest.class);
-        return midTierRequest.sendPost(requestData);
+        return sendPost(requestData);
     }
 
     /**
@@ -43,7 +41,7 @@ public class MidTierRequest {
      * @param requestData
      * @return
      */
-    public ResponseData sendPost(RequestData requestData){
+    public static ResponseData sendPost(RequestData requestData){
         logger.info("call post method start,params:"+JSON.toJSONString(requestData));
         long startTime= System.currentTimeMillis();
         RequestConfig requestConfig=RequestConfig.DEFAULT;
@@ -98,7 +96,7 @@ public class MidTierRequest {
      * @param data
      * @return
      */
-    private String requestDataString(RequestData data)
+    private static String requestDataString(RequestData data)
     {
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("json",data);
@@ -110,8 +108,9 @@ public class MidTierRequest {
      * 设置请求头部
      * @param method
      */
-    private void setHeaders(HttpPost method)
+    private static void setHeaders(HttpPost method)
     {
+        HttpServletRequest request=threadLocalRequest.get();
         if(request!=null) {
             String url = request.getRequestURI();
             String requestId = (String) request.getAttribute("RequestId");
@@ -148,7 +147,7 @@ public class MidTierRequest {
      *
      * @return 开发模式
      */
-    protected String getMode() {
+    protected static String getMode() {
 
         String mode = SystemDefine.MODE_LOCAL;
         String sysMode = System.getProperty("mode");
