@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 public class ZKUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(ZKUtil.class);
-//    @Value("#{spring.configCenter.zkurl}")
-//    private static String zkUrl;
 
     public static synchronized String getZkUrl() {
         String zkUrl=System.getProperty("spring.configCenter.zkurl");

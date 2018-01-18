@@ -6,6 +6,8 @@ import com.google.common.eventbus.EventBus;
 import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
 
+import java.util.List;
+
 public class ConfigOption {
 
     private String nameSpace;
@@ -13,9 +15,12 @@ public class ConfigOption {
     private RetryPolicy retryPolicy;
     private boolean useRemote;
     private EventBus enventBus;
+    String childrenNode;
 
     public ConfigOption(String nameSpace,String zkUrls,RetryPolicy retryPolicy,boolean useRemote){
-        this.nameSpace= Preconditions.checkNotNull(nameSpace);
+        String namespaces= Preconditions.checkNotNull(nameSpace);
+        this.nameSpace=namespaces.substring(0,namespaces.lastIndexOf("/"));   //获取节点中的父节点作为namespace
+        this.childrenNode=namespaces.substring(namespaces.lastIndexOf("/")+1);
         this.zkUrls=Preconditions.checkNotNull(zkUrls);
         this.retryPolicy=Preconditions.checkNotNull(retryPolicy);
         this.useRemote=useRemote;
@@ -51,6 +56,10 @@ public class ConfigOption {
 
     public EventBus getEnventBus() {
         return this.enventBus;
+    }
+
+    public String getChildrenNode() {
+        return childrenNode;
     }
 
     @Override

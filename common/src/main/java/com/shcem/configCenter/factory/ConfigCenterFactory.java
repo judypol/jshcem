@@ -53,7 +53,6 @@ public class ConfigCenterFactory {
     }
 
     public ConfigCenterService getConfig(final String hosts, final String nameSpace) {
-
         Preconditions.checkNotNull(hosts);
         Preconditions.checkNotNull(nameSpace);
 

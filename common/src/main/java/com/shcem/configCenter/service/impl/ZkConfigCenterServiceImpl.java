@@ -49,16 +49,16 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
     }
 
     public void init() {
-        if (this.initFlag.get()){
+        if (this.initFlag.get()) {
             return;
         }
         synchronized (initLockObj) {
-            if (this.initFlag.get()){
+            if (this.initFlag.get()) {
                 return;
             }
             this.startClient();
             this.loadConfig();
-            this.wathPath(null);
+            //this.wathPath(null);
             this.initFlag.getAndSet(true);
         }
     }
@@ -73,14 +73,14 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
                         .connectionTimeoutMs(20000)
                         .build();
                 this.client.start();
-                logger.info("zkclient start " + configOption.getNameSpace());
+                logger.info("zkclient start，namespace is " + configOption.getNameSpace() + " the child is " + configOption.getChildrenNode());
 
             } catch (Throwable e) {
-                if(null!=this.client){
+                if (null != this.client) {
                     this.client.close();
                 }
                 logger.error("can not connet {} namespace {} error is:", new Object[]{configOption.getZkUrls(), configOption.getNameSpace(), e});
-                throw new RuntimeException("CuratorFrameworkFactory start error",e);
+                throw new RuntimeException("CuratorFrameworkFactory start error", e);
             }
 
         }
@@ -127,10 +127,9 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
 
     private void watchChildDataChange(List<String> children, String parentPath) throws Exception {
         if (children != null) {
-
             for (String child : children) {
                 String path;
-                if (StringUtils.isNotEmpty(parentPath)) {
+                if (StringUtils.isNotEmpty(parentPath) && parentPath.startsWith(this.configOption.getChildrenNode())) {
                     path = parentPath + "/" + child;
                 } else {
                     path = "/" + child;
@@ -151,6 +150,11 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
 
     }
 
+    /**
+     * 监控节点变化
+     *
+     * @return
+     */
     private Watcher getPathWatcher() {
         return new Watcher() {
             @Override
@@ -185,20 +189,30 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
                         }
 
                     } catch (Exception e) {
-                        logger.info("zk data changed error:",e);
+                        logger.info("zk data changed error:", e);
                     }
                 }
             }
         };
     }
 
+    /**
+     * 数据变化监控
+     *
+     * @param event
+     * @throws Exception
+     */
     private void postDataChangeEvent(WatchedEvent event) throws Exception {
         byte[] data = client.getData().forPath(event.getPath());
         String value = new String(data, Charsets.UTF_8);
-        String key = event.getPath().replace("/", "");
+        String key = event.getPath().substring(event.getPath().lastIndexOf("/")+1);//.replace("/", "");
         postDataChangeKeyValue(key, value);
     }
 
+    /**
+     * @param key
+     * @param value
+     */
     private void postDataChangeKeyValue(String key, String value) {
         this.config.put(key, value);
 
@@ -209,6 +223,11 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
         configOption.getEnventBus().post(dataChangeEvent);
     }
 
+    /**
+     * 节点移除
+     *
+     * @param path
+     */
     private void postRemovePath(String path) {
         if (StringUtils.isEmpty(path)) return;
         String key = path.replace("/", "");
@@ -221,8 +240,9 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
     private void loadConfig(String nodePath) {
 
         try {
+            boolean flag = false;
             if (StringUtils.isNotEmpty(nodePath)) {
-                loadData(nodePath);
+                flag = loadData(nodePath);
             }
             GetChildrenBuilder childrenBuilder = client.getChildren();
 
@@ -233,7 +253,6 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
                 } else {
                     children = childrenBuilder.watched().forPath(nodePath);
                 }
-
                 loadChildsConfig(children, nodePath);
             } catch (Exception e) {
                 throw Throwables.propagate(e);
@@ -249,13 +268,14 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
 
     private void loadChildsConfig(List<String> children, String parentPath) throws Exception {
         if (children != null) {
-
             for (String child : children) {
                 String path;
-                if (StringUtils.isNotEmpty(parentPath)) {
+                if (StringUtils.isNotEmpty(parentPath)&&parentPath.startsWith("/"+this.configOption.getChildrenNode())) {
                     path = parentPath + "/" + child;
-                } else {
+                } else if(StringUtils.isEmpty(parentPath)) {
                     path = "/" + child;
+                }else{
+                    return;
                 }
 
                 this.loadConfig(path);
@@ -263,17 +283,30 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
         }
     }
 
-    private void loadData(String path) throws Exception {
+    /**
+     * 获取节点下的数据
+     *
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    private boolean loadData(String path) throws Exception {
         GetDataBuilder getDataBuilder = client.getData();
         String key = getKeyFromNodePath(path);
         byte[] data = getDataBuilder.forPath(path);
-        String value = new String(data, Charsets.UTF_8);
-        this.config.put(key, value);
+        if (data != null) {
+            String value = new String(data, Charsets.UTF_8);
+            this.config.put(key, value);
+            watchPathDataChange(path);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private String getKeyFromNodePath(String nodePath) {
         if (StringUtils.isNotEmpty(nodePath)) {
-            return nodePath.replace("/", "");
+            return nodePath.substring(nodePath.lastIndexOf("/")+1);
         }
         return nodePath;
     }
@@ -283,13 +316,13 @@ public class ZkConfigCenterServiceImpl extends AbstractConfigCenterService imple
     @Override
     public void notify(DataChangeEvent event) {
         //to do something
-        Map<String,Object> map=event.getChangedData();
+        Map<String, Object> map = event.getChangedData();
         YamlConfiguration.instance().add(map);
     }
 
     @Override
     public void colse() {
-        if(null!=this.client) {
+        if (null != this.client) {
             this.client.close();
         }
     }

@@ -22,42 +22,49 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lizhihua
  * @version 1.0
  */
 public class ConfigCenterRegister {
-    private Logger logger= LoggerFactory.getLogger(ConfigCenterRegister.class);
+    private Logger logger = LoggerFactory.getLogger(ConfigCenterRegister.class);
     private String configNameSpaces;
+    //private List<String> configNamespaceList=new ArrayList<>();
 
     public ConfigCenterRegister() {
-        configNameSpaces=YamlConfiguration.instance().getString("spring.configCenter.namespace");
-        if(StringUtils.isEmpty(configNameSpaces)){
+        this.configNameSpaces = YamlConfiguration.instance().getString("spring.configCenter.namespace");
+        logger.debug("the configuration namespaces is "+this.configNameSpaces);
+        if (StringUtils.isEmpty(this.configNameSpaces)) {
             throw new RuntimeException("cont find the spring.configCenter.namespace");
         }
+        //String parentPath=configNameSpaces.substring(0,configNameSpaces.lastIndexOf('/'));
+        //configNamespaceList.add(configNameSpaces);
+        //configNamespaceList.add(parentPath);
     }
 
     @PostConstruct
     public void init() {
-        if (this.configNameSpaces != null) {
-            this.setSystemPropertiesFromConfigCenter();
-        }
+        //for(String namespace : this.configNamespaceList){
+        this.setSystemPropertiesFromConfigCenter(this.configNameSpaces);
+        //}
     }
 
     /**
      *
      */
-    private void setSystemPropertiesFromConfigCenter() {
-        if (StringUtils.isBlank(this.configNameSpaces)) {
+    private void setSystemPropertiesFromConfigCenter(String configNameSpaces) {
+        if (StringUtils.isBlank(configNameSpaces)) {
             return;
         }
-        ConfigCenterFactory.getInstance().setSystemNameSpace(this.configNameSpaces);
-        ConfigCenterService cc = ConfigCenterFactory.getInstance().getConfigCenterService(this.configNameSpaces);
-        try{
+        ConfigCenterFactory.getInstance().setSystemNameSpace(configNameSpaces);
+        ConfigCenterService cc = ConfigCenterFactory.getInstance().getConfigCenterService(configNameSpaces);
+        try {
             YamlConfiguration.instance().add(cc.getConfig());
-        }catch (Exception ex){
-            logger.error("YamlConfiguration.getConfig is error",ex);
+        } catch (Exception ex) {
+            logger.error("YamlConfiguration.getConfig is error", ex);
         }
     }
 }

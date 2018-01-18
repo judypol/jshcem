@@ -15,6 +15,7 @@ package unitTest;
 
 import com.shcem.common.YamlConfiguration;
 import com.shcem.configCenter.spring.AutoConfigCenter;
+import com.shcem.configCenter.spring.ConfigCenterRegister;
 import org.junit.Test;
 
 /**
@@ -25,13 +26,17 @@ import org.junit.Test;
 public class configCenter {
     @Test
     public void configCenterTest() throws Exception{
+        ConfigCenterRegister ccr=new ConfigCenterRegister();
+        ccr.init();
         Thread thread=new Thread(new runSpring());
         thread.start();
 
         Thread.sleep(80000);
 
-        System.out.println(System.getProperty("redis.url"));
-        System.out.println(YamlConfiguration.instance().getString("redis.url"));
+        System.out.println(System.getProperty("redis.model"));
+        System.out.println(YamlConfiguration.instance().getString("redis.model"));
+        System.out.println(System.getProperty("SystemConfig"));
+        System.out.println(YamlConfiguration.instance().getString("SystemConfig"));
     }
     public class runSpring implements Runnable{
         /**
@@ -53,8 +58,10 @@ public class configCenter {
             //ConfigCenterRegister register=new ConfigCenterRegister();
             //register.init();
 
-            System.out.println(System.getProperty("redis.url"));
-            System.out.println(YamlConfiguration.instance().getString("redis.url"));
+            System.out.println(System.getProperty("redis.model"));
+            System.out.println(YamlConfiguration.instance().getString("redis.model"));
+            System.out.println(System.getProperty("SystemConfig"));
+            System.out.println(YamlConfiguration.instance().getString("SystemConfig"));
         }
     }
 }
