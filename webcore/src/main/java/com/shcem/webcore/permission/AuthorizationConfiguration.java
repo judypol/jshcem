@@ -12,13 +12,26 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class AuthorizationConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     AuthorizationInterceptor authorizationInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(authorizationInterceptor)
+                .addPathPatterns("/**");
+                //.excludePathPatterns("/**/login","/**/signIn","/**/signOut","/**/register");
         super.addInterceptors(registry);
-        registry.addInterceptor(authorizationInterceptor);
     }
     @Bean
     public Subject getSubject(){
         return new Subject();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Bean
+    public AuthorizationInterceptor getAuthorizationInterceptor() {
+        return new AuthorizationInterceptor();
     }
 }

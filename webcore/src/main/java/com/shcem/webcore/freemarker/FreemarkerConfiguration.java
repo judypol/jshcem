@@ -1,7 +1,9 @@
 package com.shcem.webcore.freemarker;
 
+import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
@@ -26,15 +28,24 @@ public class FreemarkerConfiguration  {
         resolver.setSuffix(".ftl");
         resolver.setRequestContextAttribute("ctx");
         if(staticResource!=null){
-            TemplateHashModel hashModel =FreemarkerStaticModels.useStaticPackage(staticResource.getClass().getName());
-            HashMap<String,TemplateHashModel> hashModelHashMap=new HashMap<>();
-            hashModelHashMap.put("staticResource",hashModel);
-            resolver.setAttributesMap(hashModelHashMap);
+            //TemplateHashModel hashModel =FreemarkerStaticModels.useStaticPackage(staticResource.getClass().getName());
+            TemplateModel hashModel=FreemarkerStaticModels.useBean(staticResource);
+            if(hashModel!=null){
+                HashMap<String,TemplateModel> hashModelHashMap=new HashMap<>();
+                hashModelHashMap.put("sr",hashModel);
+                resolver.setAttributesMap(hashModelHashMap);
+            }
         }
         return resolver;
     }
+    @Bean
+    public PartialView partialView(){
+        return new PartialView();
+    }
     @Autowired(required = false)
     private IStaticResource staticResource;
+    @Autowired
+    private PartialView templateDirectiveModel;
     /**
      *
      * @return
@@ -47,9 +58,8 @@ public class FreemarkerConfiguration  {
         factory.setDefaultEncoding("UTF-8");
         factory.setTemplateLoaderPath("classpath:/templates");
         HashMap<String,Object> root=new HashMap<>();
+        root.put("partialView",templateDirectiveModel);
         factory.setFreemarkerVariables(root);
-
-
 
         FreeMarkerConfigurer configurer=new FreeMarkerConfigurer();
         configurer.setConfiguration(factory.createConfiguration());

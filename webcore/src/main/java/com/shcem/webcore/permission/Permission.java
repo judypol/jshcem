@@ -23,9 +23,33 @@ import java.lang.annotation.*;
  */
 @Documented
 @Inherited
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD,ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@Repeatable(Permissions.class)
 public @interface Permission {
+    /**
+     * 角色名
+     * @return
+     */
+    String role() default "";
+
+    /**
+     * 权限名
+     * @return
+     */
+    String permissionName() default "";
+
+    /**
+     * 操作名
+     * @return
+     */
+    String action() default "";
+
+    /**
+     * 权限类型
+     * @return
+     */
+    int permissionType() default -100;
 //    /**权限角色
 //     * */
 //    String[] roles() default {""};

@@ -21,5 +21,5 @@ import com.shcem.common.YamlConfiguration;
  */
 public class WebCoreConstant {
     public static String SplitCode="-";
-    public static String PrefixCookieKey= YamlConfiguration.instance().getString("prefixCookie");
+    public static String PrefixCookieKey= YamlConfiguration.instance().getString("prefixCookie","gy");
 }

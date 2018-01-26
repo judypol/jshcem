@@ -15,6 +15,9 @@ package com.shcem.webcore.interceptor;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -26,6 +29,7 @@ import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
 import com.shcem.utils.CookieUtils;
 import com.shcem.webcore.permission.*;
+import com.shcem.webcore.permission.authentication.AuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -42,8 +46,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author lizhihua
  * @version 1.0
  */
-@Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
+
 	Logger logger= LoggerFactory.getLogger("controller");
 	@Autowired
 	private PermissionCheck permissionCheck;
@@ -81,13 +85,30 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 				flag=true;
 			}
 			else{
+				List<Permission> permissionList=new ArrayList<>();
 				Permission auth = hm.getMethodAnnotation(Permission.class);
-				if (auth != null&&permissionCheck!=null) // 需要认证权限
+				if(auth==null){
+					Permissions permissions=hm.getMethodAnnotation(Permissions.class);
+					if(permissions!=null){
+						permissionList.addAll(Arrays.asList(permissions.value()));
+					}
+				}else{
+					permissionList.add(auth);
+				}
+
+				if (permissionList.size()!= 0 && permissionCheck!=null) // 需要认证权限
 				{
 					request.setAttribute("isAnonymous","false");
 					String className=hm.getMethod().getDeclaringClass().getName();
 					String methodName=hm.getMethod().getName();
-					flag= permissionCheck.process(className,methodName);
+					AuthenticationToken token=new AuthenticationToken();
+					token.setClassName(className);
+					token.setMethodName(methodName);
+					token.setRequest(request);
+					token.setResponse(response);
+					token.setPermissions(permissionList);
+
+					flag= permissionCheck.process(token);
 				} else {
 					flag=true;
 				}

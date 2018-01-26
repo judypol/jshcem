@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import com.shcem.annotation.LogHandler;
-import com.shcem.enums.LoggerLevel;
-import com.shcem.enums.LoggerName;
+import com.shcem.common.MidTierRequest;
+import com.shcem.common.RequestData;
 import com.shcem.webcore.permission.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by judysen on 2017/9/9.
  */
-@RestController
+@RestController(value="home")
 @RequestMapping("/home")
 public class HomeController {
     //@Autowired
@@ -27,7 +26,8 @@ public class HomeController {
     @Autowired
     HttpServletRequest request;
     @RequestMapping("index")
-    //@Permission
+    @Permission(role="123")
+    @Permission(role="456")
     //@LogHandler(level= LoggerLevel.Warn,loggerName = LoggerName.Service)
     public ModelAndView index(String name){
         ModelAndView modelAndView=new ModelAndView("/home/index");
@@ -36,8 +36,15 @@ public class HomeController {
     @RequestMapping("login")
     //@Anonymous
     public ModelAndView login() throws Exception{
-        SecurityUtils.buildSubject().login("lisi","ss");
-        return new ModelAndView("/home/login");
+        //SecurityUtils.buildSubject().login("lisi","ss");
+//        RequestData requestData=new RequestData();
+//        requestData.setMethodName("");
+//        requestData.setParams("");
+//        requestData.setServiceName("");
+//        MidTierRequest.Post(requestData);
+        ModelAndView view= new ModelAndView("/home/login");
+        view.addObject("p","{dds}");
+        return view;
     }
     @RequestMapping("signIn")
     //@Anonymous
@@ -53,4 +60,12 @@ public class HomeController {
         LoginInfo info=SecurityUtils.buildSubject().getLoginInfo();
         return info;
     }
+
+//    public ModelAndView parialView(String p1){
+//        ModelAndView view =new ModelAndView("/home/partialView");
+//        view.addObject("s1","s1");
+//        view.addObject("s2","s2");
+//        view.addObject("p1",p1);
+//        return view;
+//    }
 }

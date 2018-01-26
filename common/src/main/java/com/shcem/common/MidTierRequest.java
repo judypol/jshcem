@@ -14,8 +14,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -26,35 +28,35 @@ import java.rmi.server.ExportException;
  */
 public class MidTierRequest {
     private static Logger logger = LoggerFactory.getLogger("controller");
-    public static InheritableThreadLocal<HttpServletRequest> threadLocalRequest=new InheritableThreadLocal<>();
-    private static CloseableHttpClient client=HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
+    private static CloseableHttpClient client = HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
+
     /**
-     *服务调用
-     * **/
-    public static ResponseData Post(RequestData requestData)
-    {
+     * 服务调用
+     **/
+    public static ResponseData Post(RequestData requestData) {
         return sendPost(requestData);
     }
 
     /**
-     *发生一个post请求
+     * 发生一个post请求
+     *
      * @param requestData
      * @return
      */
-    public static ResponseData sendPost(RequestData requestData){
-        logger.info("call post method start,params:"+JSON.toJSONString(requestData));
-        long startTime= System.currentTimeMillis();
-        RequestConfig requestConfig=RequestConfig.DEFAULT;
+    public static ResponseData sendPost(RequestData requestData) {
+        logger.info("call post method start,params:" + JSON.toJSONString(requestData));
+        long startTime = System.currentTimeMillis();
+        RequestConfig requestConfig = RequestConfig.DEFAULT;
 
         String resultStr = null;
-        String url=YamlConfiguration.instance().getString(SystemDefine.MidTierUrl);
+        String url = YamlConfiguration.instance().getString(SystemDefine.MidTierUrl);
 
-        logger.info("midterUrl--"+url);
+        logger.info("midterUrl--" + url);
 
         HttpPost method = new HttpPost(url);
-        String param=requestDataString(requestData);
+        String param = requestDataString(requestData);
 
-        logger.info("params:"+param);
+        logger.info("params:" + param);
         try {
             //解决中文乱码问题
             StringEntity entity = new StringEntity(param, "utf-8");
@@ -64,7 +66,7 @@ public class MidTierRequest {
 
             setHeaders(method);
             CloseableHttpResponse result = client.execute(method);
-            try{
+            try {
                 /**请求发送成功，并得到响应**/
                 if (result.getStatusLine().getStatusCode() == 200) {
                     try {
@@ -75,73 +77,71 @@ public class MidTierRequest {
                         logger.error("post请求提交失败:" + url, e);
                     }
                 }
-            }catch (Exception ex) {
+            } catch (Exception ex) {
                 logger.error("post请求提交失败:" + url, ex);
-            }finally {
+            } finally {
                 result.close();
             }
         } catch (IOException e) {
             logger.error("post请求提交失败:" + url, e);
         }
 
-        if(resultStr==null)
+        if (resultStr == null)
             return null;
-        long endTime=System.currentTimeMillis();
-        logger.info("call post method end result:"+resultStr);
-        return JSON.parseObject(resultStr,ResponseData.class);
+        long endTime = System.currentTimeMillis();
+        logger.info("call post method end result:" + resultStr);
+        return JSON.parseObject(resultStr, ResponseData.class);
     }
 
     /**
      * 请求的json字符串
+     *
      * @param data
      * @return
      */
-    private static String requestDataString(RequestData data)
-    {
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("json",data);
+    private static String requestDataString(RequestData data) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("json", data);
 
         return jsonObject.toJSONString();
     }
 
     /**
      * 设置请求头部
+     *
      * @param method
      */
-    private static void setHeaders(HttpPost method)
-    {
-        HttpServletRequest request=threadLocalRequest.get();
-        if(request!=null) {
-            String url = request.getRequestURI();
-            String requestId = (String) request.getAttribute("RequestId");
-            method.setHeader("RequestId", requestId);       //
-            method.setHeader("UserAgent", request.getHeader("User-Agent"));
-            try {
-                method.setHeader("Referer", URLEncoder.encode(url, "utf-8"));
-            } catch (Exception e) {
-                logger.info("URLEncoder is error in setHeaders", e);
-            }
-
-            String authKey = YamlConfiguration.instance().getString(SystemDefine.AuthPrefix);//AppConfiguration.AppConfig().getProperty("auth.prefix");
-            String userCode = (String) request.getAttribute(SystemDefine.REQUEST_LOGIN_NAME);
-            if (!StringUtils.isEmpty(userCode)) {
-                authKey = authKey + userCode;
-            }
-
-            String clientIp = (String) request.getAttribute(SystemDefine.REQUEST_CLIENT_IP);
-            method.addHeader(SystemDefine.REQUEST_CLIENT_IP, clientIp);
-            if(!StringUtils.isEmpty(authKey)){
-                method.addHeader(SystemDefine.REQUEST_AUTHKEY, authKey);
-            }
-
-            method.addHeader(SystemDefine.REQUEST_MEM_ID, userCode);
-            method.addHeader(SystemDefine.REQUEST_MEM_NAME, userCode);
+    private static void setHeaders(HttpPost method) {
+        String requestId = MDC.get("RequestId");
+        method.setHeader("RequestId", requestId);       //
+        method.setHeader("UserAgent", MDC.get(SystemDefine.REQUEST_USERAGENT));
+        try {
+            method.setHeader("Referer", MDC.get(SystemDefine.REQUEST_REFERER));
+        } catch (Exception e) {
+            logger.info("URLEncoder is error in setHeaders", e);
         }
-        method.addHeader(SystemDefine.REQUEST_APP_NAME,YamlConfiguration.instance().getString(SystemDefine.AppName));
-        method.addHeader(SystemDefine.REQUEST_AUTH_APP,YamlConfiguration.instance().getString(SystemDefine.AuthApp));
 
-        logger.info("the http header:"+JSON.toJSONString(method.getAllHeaders()));
+        String authKey = YamlConfiguration.instance().getString(SystemDefine.AuthPrefix);
+        String userCode = MDC.get(SystemDefine.REQUEST_LOGIN_NAME);
+        if (!StringUtils.isEmpty(userCode)) {
+            authKey = authKey + userCode;
+        }
+
+        String clientIp = MDC.get(SystemDefine.REQUEST_CLIENT_IP);
+        method.addHeader(SystemDefine.REQUEST_CLIENT_IP, clientIp);
+        if (!StringUtils.isEmpty(authKey)) {
+            method.addHeader(SystemDefine.REQUEST_AUTHKEY, authKey);
+        }
+
+        method.addHeader(SystemDefine.REQUEST_MEM_ID, userCode);
+        method.addHeader(SystemDefine.REQUEST_MEM_NAME, userCode);
+
+        method.addHeader(SystemDefine.REQUEST_APP_NAME, YamlConfiguration.instance().getString(SystemDefine.AppName));
+        method.addHeader(SystemDefine.REQUEST_AUTH_APP, YamlConfiguration.instance().getString(SystemDefine.AuthApp));
+
+        logger.info("the http header:" + JSON.toJSONString(method.getAllHeaders()));
     }
+
     /**
      * 取得开发模式
      *

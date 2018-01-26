@@ -30,6 +30,7 @@ dependencies {
 	}
 	compile('org.springframework.boot:spring-boot-starter-undertow')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile project(":webcore")
 	compile project(':common')
+	compile project(":webcore")
+
 }

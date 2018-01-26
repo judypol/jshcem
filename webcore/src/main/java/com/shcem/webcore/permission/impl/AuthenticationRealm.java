@@ -13,14 +13,9 @@
  */
 package com.shcem.webcore.permission.impl;
 
-import com.shcem.utils.Encodes;
 import com.shcem.webcore.permission.IRealm;
 import com.shcem.webcore.permission.LoginInfo;
 import com.shcem.webcore.permission.exceptions.AuthenticationException;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * 需要自己实现的

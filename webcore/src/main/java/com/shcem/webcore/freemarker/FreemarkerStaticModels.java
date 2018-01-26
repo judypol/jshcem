@@ -6,6 +6,8 @@ import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.ext.beans.BeansWrapperConfiguration;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -41,11 +43,16 @@ public class FreemarkerStaticModels extends HashMap<String,Object> {
         }
         return FREEMARKER_STATIC_MODELS;
     }
+    static BeansWrapper wrapper = new BeansWrapperBuilder(Configuration.VERSION_2_3_23).build();
 
+    /**
+     * 使用静态
+     * @param packageName
+     * @return
+     */
     public static TemplateHashModel useStaticPackage(String packageName){
         try
         {
-            BeansWrapper wrapper = new BeansWrapperBuilder(Configuration.VERSION_2_3_23).build();
             TemplateHashModel staticModels = wrapper.getStaticModels();
             TemplateHashModel fileStatics = (TemplateHashModel) staticModels.get(packageName);
             return fileStatics;
@@ -55,5 +62,20 @@ public class FreemarkerStaticModels extends HashMap<String,Object> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 将一个bean转换为Freemarker调用
+     * @param resource
+     * @return
+     */
+    public static TemplateModel useBean(IStaticResource resource){
+        try{
+            TemplateModel model=wrapper.wrapAsAPI(resource);
+            return model;
+        }catch (TemplateModelException ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

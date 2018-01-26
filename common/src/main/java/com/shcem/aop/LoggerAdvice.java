@@ -1,11 +1,8 @@
 package com.shcem.aop;
 
-
-import com.shcem.annotation.LogHandler;
-import com.shcem.utils.StringUtils;
+import com.alibaba.fastjson.JSON;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +25,7 @@ public class LoggerAdvice implements MethodInterceptor {
         //logger.debug();
         Object result=null;
         try{
-            logger.info(clsName+"-"+method.getName()+" Start",clsName,method);
-
+            logger.info(clsName+"-"+method.getName()+" Start;params"+ JSON.toJSONString(methodInvocation.getArguments()));
             long beginTime = System.currentTimeMillis();
             result=methodInvocation.proceed();
             long endTime=System.currentTimeMillis();

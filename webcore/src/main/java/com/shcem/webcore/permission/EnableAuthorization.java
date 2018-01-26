@@ -12,7 +12,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Documented
 @Import(AuthorizationConfiguration.class)
-@ComponentScan("com.shcem.webcore")
 public @interface EnableAuthorization  {
 
 }

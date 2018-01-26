@@ -30,6 +30,7 @@ public class StudentEntity {
     int age;
     Date birthday;
     String grade;
+    static String s;
 
     public String getId() {
         return Id;
@@ -69,5 +70,13 @@ public class StudentEntity {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public static String getS() {
+        return s;
+    }
+
+    public static void setS(String s) {
+        StudentEntity.s = s;
     }
 }

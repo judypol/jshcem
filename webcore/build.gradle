@@ -1,11 +1,11 @@
 import org.gradle.api.tasks.compile.JavaCompile
 
 group 'com.shcem'
-version '1.0.4'
+version '1.0.12'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

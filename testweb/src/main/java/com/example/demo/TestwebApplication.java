@@ -3,6 +3,7 @@ package com.example.demo;
 import com.shcem.aop.EnableCommon;
 import com.shcem.logback.EnableLogbackFile;
 import com.shcem.webcore.freemarker.EnableFreemarker;
+import com.shcem.webcore.permission.EnableAuthorization;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFreemarker
 @EnableCommon
 @EnableLogbackFile
+@EnableAuthorization
 //@ComponentScan(basePackages = {"com.example.demo","com.shcem.webcore"})
 //public class TestwebApplication extends SpringBootServletInitializer {
 //
