@@ -15,7 +15,7 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 group 'com.shcem'
-version '2.0.19'
+version '2.0.21'
 
 //apply plugin: 'java'
 apply plugin: 'java'

@@ -14,6 +14,8 @@
 package unitTest;
 
 import com.shcem.Encrypt.TripleDESHelper;
+import com.shcem.utils.RandomCode;
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 
 /**
@@ -27,5 +29,12 @@ public class EncryptHelperTest {
 
         String src=TripleDESHelper.Instance().decryptString(des,"ShhjPwdKey");
         System.out.println(src);
+    }
+    @Test
+    public void generate3DesKey() throws Exception{
+        byte[] ss=RandomCode.Instance().RandomCoder(24).getBytes("UTF-8");
+        String bs= Base64.encodeBase64String(ss);
+
+        System.out.println(bs.length());
     }
 }
