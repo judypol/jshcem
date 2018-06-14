@@ -62,10 +62,18 @@ public interface IRedisCache {
      * @return
      */
     <T> T Get(String key,TypeReference<T> type);
-    /**获取redis中的所有key
+    /**获取redis中的所有key，默认的dbindex中
      * @param pattern 正则表达式
      * */
     Set<String> FindKeys(String pattern);
+
+    /**
+     * 获取redis中的所有的key
+     * @param pattern
+     * @param isAll
+     * @return
+     */
+    Set<String> FindKeys(String pattern,boolean isAll);
     /**设置key的过期时间
      * @param expire (以秒为单位)
      * @param key
@@ -77,4 +85,12 @@ public interface IRedisCache {
     /**正则表达式从RedisValues中查找
      * */
     Set<String> FindKeysByStringContent(String pattern);
+
+    /**
+     * 正则表达式从RedisValues中查找
+     * @param pattern
+     * @param isAll
+     * @return
+     */
+    Set<String> FindKeyByStringContent(String pattern,boolean isAll);
 }

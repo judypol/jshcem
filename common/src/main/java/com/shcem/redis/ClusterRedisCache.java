@@ -1,8 +1,9 @@
-package com.shcem.common;
+package com.shcem.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.shcem.common.IRedisCache;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
@@ -239,5 +240,29 @@ public class ClusterRedisCache implements IRedisCache {
                 queue.offer(jedisCluster);
             }
         }
+    }
+
+    /**
+     * 获取redis中的所有的key
+     *
+     * @param pattern
+     * @param isAll
+     * @return
+     */
+    @Override
+    public Set<String> FindKeys(String pattern, boolean isAll) {
+        return null;
+    }
+
+    /**
+     * 正则表达式从RedisValues中查找
+     *
+     * @param pattern
+     * @param isAll
+     * @return
+     */
+    @Override
+    public Set<String> FindKeyByStringContent(String pattern, boolean isAll) {
+        return null;
     }
 }

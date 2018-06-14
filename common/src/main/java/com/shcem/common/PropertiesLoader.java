@@ -35,10 +35,10 @@ public class PropertiesLoader {
      * 取出property，但以System的property优先，取不到返回空字符串
      */
     private String getValue(String key) {
-        String systemProperty = System.getProperty(key);
-        if (systemProperty != null) {
-            return systemProperty;
-        }
+//        String systemProperty = System.getProperty(key);
+//        if (systemProperty != null) {
+//            return systemProperty;
+//        }
         if (properties.containsKey(key)) {
             return properties.getProperty(key);
         }

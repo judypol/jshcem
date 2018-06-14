@@ -5,14 +5,12 @@ import com.shcem.utils.ObjectUtils;
 import com.shcem.utils.Reflections;
 import com.shcem.utils.excel.annotation.ExcelField;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -85,7 +83,17 @@ public class ExcelHelper {
         if(com.shcem.utils.StringUtils.isEmpty(sheetName)){
             sheetName="Sheet1";
         }
-        XSSFWorkbook wb = new XSSFWorkbook(is);
+        Workbook wb=null;
+        try{
+            wb=new XSSFWorkbook(is);
+        }catch (Exception ex){
+            wb=new HSSFWorkbook(is);
+        }
+
+        if(wb==null){
+            throw new Exception("输入的文件流不是Excel格式的");
+        }
+
         Sheet sheet=wb.getSheet(sheetName);
 
         this.sheet=sheet;
@@ -271,9 +279,42 @@ public class ExcelHelper {
         return cell;
     }
 
+    /**
+     * 将Excel表格导出到list对象
+     * @param filename
+     * @param sheetName
+     * @param cls
+     * @param startRowIndex
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
     public <T> List<T> Excel2List(String filename,String sheetName, Class<T> cls,int startRowIndex) throws Exception {
         FileInputStream is=new FileInputStream(filename);
-        XSSFWorkbook wb=new XSSFWorkbook(is);
+
+        return this.Excel2List(is,sheetName,cls,startRowIndex);
+    }
+
+    /**
+     *将Excel表格导出到list对象
+     * @param sheetName
+     * @param cls
+     * @param startRowIndex
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public <T> List<T> Excel2List(InputStream is,String sheetName,Class<T> cls,int startRowIndex) throws Exception{
+        Workbook wb=null;
+        try{
+            wb=new XSSFWorkbook(is);
+        }catch (Exception ex){
+            wb=new HSSFWorkbook(is);
+        }
+        if(wb==null){
+            throw new Exception("输入的文件流不是Excel格式");
+        }
+
         if(com.shcem.utils.StringUtils.isEmpty(sheetName)){
             sheetName="Sheet1";
         }

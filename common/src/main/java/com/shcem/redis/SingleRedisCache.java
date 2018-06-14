@@ -1,17 +1,17 @@
-package com.shcem.common;
+package com.shcem.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.shcem.common.IRedisCache;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
  */
 public class SingleRedisCache implements IRedisCache {
 
-    private static final BlockingQueue<Jedis> jedisPools = new LinkedBlockingQueue<Jedis>();
     private static int cnt = 0;
     private String host;
     private int database;
@@ -55,12 +54,13 @@ public class SingleRedisCache implements IRedisCache {
 
     private int MAX_TOTAL = 100;
     private int MAX_IDLE = 50;
+    private String DBIndex="0";             //默认的DBIndex
 
-    //JedisPool jedisPool;
     private static JedisPool jedisPool;
     //Jedis jedis;
 
-    public SingleRedisCache(String host, int port, int database, String password) {
+    public SingleRedisCache(String host, int port, String database, String password) {
+        this.DBIndex=database;
         if (jedisPool == null) {
             synchronized (this) {
                 if (jedisPool == null) {
@@ -73,20 +73,27 @@ public class SingleRedisCache implements IRedisCache {
                 }
             }
         }
-//        else {
-//            jedis = jedisPool.getResource();
-//        }
-
     }
 
-    private SingleRedisCache(String host, int port, int database) {
+    public SingleRedisCache(String host, int port, String database) {
         this(host, port, database, null);
     }
 
     public SingleRedisCache(String host, int port) {
-        this(host, port, 0);
+        this(host, port, "0");
     }
 
+    /**
+     * 生成新的key
+     * @param key
+     * @return
+     */
+    private String getKey(String key){
+        if(key.startsWith(this.DBIndex+":")){
+            return key;
+        }
+        return this.DBIndex+":"+key;
+    }
     /**
      * redis设置一个值，
      *
@@ -96,14 +103,14 @@ public class SingleRedisCache implements IRedisCache {
      **/
     public void SetValue(String key, Object value, long expire) throws Exception {
         Jedis jedis=jedisPool.getResource();
+        String newKey=getKey(key);
         try {
             String jsonString = serialiseObject(value);
-            if (this.HasKey(key)) {
-                this.DeleteKey(key);
+            if (this.HasKey(newKey)) {
+                this.DeleteKey(newKey);
             }
-            jedis.set(key, jsonString, "NX", "EX", expire);
+            jedis.set(newKey, jsonString, "NX", "EX", expire);
         } catch (Exception e) {
-            //System.out.println(e);
             throw new Exception("SetValue--Exception", e);
         }finally {
             jedis.close();
@@ -117,14 +124,6 @@ public class SingleRedisCache implements IRedisCache {
      */
     private String serialiseObject(Object value){
         return JSON.toJSONString(value);
-//        Class<?> cls=value.getClass();
-//        if(cls.equals(String.class)){
-//            return value.toString();
-//        }else if(cls.equals(ArrayList.class)) {
-//            return JSONArray.toJSONString(value);
-//        }else {
-//            return JSON.toJSONString(value);
-//        }
     }
     /**
      * redis设置一个值，
@@ -133,22 +132,21 @@ public class SingleRedisCache implements IRedisCache {
      * @param value
      */
     public void SetValue(String key, Object value) throws Exception {
+        String newKey=getKey(key);
         Jedis jedis=jedisPool.getResource();
         Long expireTime=1800L;
         try {
-            if(jedis.exists(key)){
-                expireTime=jedis.ttl(key);
+            if(jedis.exists(newKey)){
+                expireTime=jedis.ttl(newKey);
             }
             String jsonString = serialiseObject(value);
-            jedis.set(key, jsonString);
-            jedis.expire(key,expireTime.intValue());
+            jedis.set(newKey, jsonString);
+            jedis.expire(newKey,expireTime.intValue());
         } catch (Exception e) {
             throw new Exception("SetValue--Exception", e);
         }finally {
             jedis.close();
         }
-//        long expire = 2592000L;
-//        this.SetValue(key, value, expire);
     }
 
     /**
@@ -158,9 +156,10 @@ public class SingleRedisCache implements IRedisCache {
      * @param value
      */
     public long SetNX(String key, String value) throws Exception {
+        String newKey=getKey(key);
         Jedis jedis=jedisPool.getResource();
         try{
-            long index=jedis.setnx(key,value);
+            long index=jedis.setnx(newKey,value);
             return index;
         }catch (Exception ex){
             throw new Exception(ex);
@@ -175,9 +174,10 @@ public class SingleRedisCache implements IRedisCache {
      * @param key
      */
     public boolean HasKey(String key) {
+        String newKey=getKey(key);
         Jedis jedis=jedisPool.getResource();
         try {
-            boolean flag = jedis.exists(key);
+            boolean flag = jedis.exists(newKey);
             return flag;
         } catch (Exception e) {
             return false;
@@ -194,7 +194,13 @@ public class SingleRedisCache implements IRedisCache {
     public long HasKeys(String... keys) {
         Jedis jedis=jedisPool.getResource();
         try {
-            long ret = jedis.exists(keys);
+            int size=keys.length;
+            String[] newKeys= new String[keys.length];
+            for(int i=0;i<size;i++){
+                String newKey=getKey(keys[i]);
+                newKeys[i]=newKey;
+            }
+            long ret = jedis.exists(newKeys);
             return ret;
         } catch (Exception e) {
             return 0L;
@@ -210,9 +216,10 @@ public class SingleRedisCache implements IRedisCache {
      * @param key
      */
     public long DeleteKey(String key) {
+        String newKey=getKey(key);
         Jedis jedis=jedisPool.getResource();
         try {
-            return jedis.del(key);
+            return jedis.del(newKey);
         } catch (Exception e) {
             return 0L;
         }finally {
@@ -229,7 +236,11 @@ public class SingleRedisCache implements IRedisCache {
     public long DeleteKeys(String... keys) {
         Jedis jedis=jedisPool.getResource();
         try {
-            return jedis.del(keys);
+            String[] newKeys=new String[keys.length];
+            for(int i=0;i<keys.length;i++){
+                newKeys[i]=getKey(keys[i]);
+            }
+            return jedis.del(newKeys);
         } catch (Exception e) {
             return 0L;
         }finally {
@@ -243,9 +254,10 @@ public class SingleRedisCache implements IRedisCache {
      * @param key
      */
     public Object Get(String key) {
+        String newKey=getKey(key);
         Jedis jedis=jedisPool.getResource();
         try {
-            String val = jedis.get(key);
+            String val = jedis.get(newKey);
             Object obj = JSON.parse(val);
             return obj;
         } catch (Exception e) {
@@ -256,9 +268,10 @@ public class SingleRedisCache implements IRedisCache {
     }
 
     public JSONObject GetJSONObject(String key) {
+        String newKey=getKey(key);
         Jedis jedis=jedisPool.getResource();
         try {
-            String val = jedis.get(key);
+            String val = jedis.get(newKey);
             JSONObject jobj = JSON.parseObject(val);
             return jobj;
         } catch (Exception e) {
@@ -275,8 +288,9 @@ public class SingleRedisCache implements IRedisCache {
      */
     public <T> T Get(String key, Class<T> cls) {
         Jedis jedis=jedisPool.getResource();
+        String newKey=getKey(key);
         try {
-            String val = jedis.get(key);
+            String val = jedis.get(newKey);
             T obj = JSON.parseObject(val, cls);
             return obj;
         } catch (Exception e) {
@@ -296,7 +310,8 @@ public class SingleRedisCache implements IRedisCache {
     public <T> T Get(String key,TypeReference<T> type){
         Jedis jedis=jedisPool.getResource();
         try {
-            String val = jedis.get(key);
+            String newKey=getKey(key);
+            String val = jedis.get(newKey);
             T obj = JSON.parseObject(val,type);
             return obj;
         } catch (Exception e) {
@@ -306,28 +321,79 @@ public class SingleRedisCache implements IRedisCache {
         }
     }
 
-    /**
+    /**默认的dbindex中
      * 查找redis中的符合条件的Keys，通过key直接查找
      */
     public Set<String> FindKeys(String pattern) {
+        return this.FindKeys(pattern,false);
+    }
+
+    /**
+     *
+     * @param pattern
+     * @return
+     */
+    private Set<String> findKeysAll(String pattern){
         Jedis jedis=jedisPool.getResource();
+        String keysPattern=this.DBIndex+":*"+pattern+"*";
         try{
-            return jedis.keys(pattern);
+            return jedis.keys(keysPattern);
         }catch (Exception ex){
             return null;
         }finally {
             jedis.close();
         }
-
     }
-    /**正则表达式从RedisValues中查找
+    /**
+     * 获取redis中的所有的key
+     *
+     * @param pattern
+     * @param isAll
+     * @return
+     */
+    @Override
+    public Set<String> FindKeys(String pattern, boolean isAll) {
+        Set<String> allKeys=findKeysAll(pattern);
+        if(isAll){
+            return allKeys;
+        }else{
+            Set<String> keysInDbIndex=new HashSet<>();
+            for(String key:allKeys){
+                if(key.startsWith(this.DBIndex+":")){
+                    keysInDbIndex.add(key);
+                }
+            }
+            return keysInDbIndex;
+        }
+    }
+
+    /**
+     * 正则表达式从RedisValues中查找
      * */
     public Set<String> FindKeysByStringContent(String pattern){
+        return this.FindKeyByStringContent(pattern,false);
+    }
+    private String getString(String key){
+        Jedis jedis=jedisPool.getResource();
+        try{
+            return jedis.get(key);
+        }catch (Exception ex){
+            return null;
+        }finally {
+            jedis.close();
+        }
+    }
+    /**
+     *
+     * @param pattern
+     * @return
+     */
+    private Set<String> findKeyByStringContent(String pattern){
         Set<String> keys=new HashSet<String>();
-        Set<String> tKeys=FindKeys("*");//得到所有的key值
+        Set<String> tKeys=this.findKeysAll(this.DBIndex+":*");//得到所有的key值
         for (String key : tKeys){
             try{
-                Object val=this.Get(key);
+                Object val=this.getString(key);
                 if(val==null){
                     continue;
                 }
@@ -347,6 +413,28 @@ public class SingleRedisCache implements IRedisCache {
 
         return keys;
     }
+    /**
+     * 正则表达式从RedisValues中查找
+     *
+     * @param pattern
+     * @param isAll
+     * @return
+     */
+    @Override
+    public Set<String> FindKeyByStringContent(String pattern, boolean isAll) {
+        Set<String> allKeys=this.findKeyByStringContent(pattern);
+        if(isAll){
+            return allKeys;
+        }else{
+            Set<String> newAllKeys=new HashSet<>();
+            for(String key:allKeys){
+                if(key.startsWith(this.DBIndex+":")){
+                    newAllKeys.add(key);
+                }
+            }
+            return newAllKeys;
+        }
+    }
 
     /**
      * 设置key的过期时间
@@ -357,7 +445,8 @@ public class SingleRedisCache implements IRedisCache {
     public void SetExpire(String key, int expire) {
         Jedis jedis=jedisPool.getResource();
         try{
-            jedis.expire(key, expire);
+            String newKey=getKey(key);
+            jedis.expire(newKey, expire);
         }catch (Exception ex){
 
         }finally {

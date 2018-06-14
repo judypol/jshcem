@@ -1,5 +1,6 @@
 package com.shcem.configCenter.utils;
 
+import com.shcem.common.YamlConfiguration;
 import com.shcem.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +11,8 @@ public class ZKUtil {
     private final static Logger logger = LoggerFactory.getLogger(ZKUtil.class);
 
     public static synchronized String getZkUrl() {
-        String zkUrl=System.getProperty("spring.configCenter.zkurl");
-        if(StringUtils.isEmpty(zkUrl)){
-            zkUrl="localhost:2181";
-        }
+        String zkUrl= YamlConfiguration.instance().getString("spring.configCenter.zkurl","localhost:2181");
+
         return zkUrl;
     }
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PropertyUtil {
     static ConcurrentHashMap<String,PropertiesLoader> map=new ConcurrentHashMap<>();
-    public static PropertiesLoader create(String propertiesFile){
+    public synchronized static PropertiesLoader create(String propertiesFile){
         String encodePropertiesFile= Encodes.EncodeBase64(propertiesFile);
         if(map.containsKey(encodePropertiesFile)){
             return map.get(encodePropertiesFile);
