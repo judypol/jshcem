@@ -112,6 +112,15 @@ public class ConvertUtils {
     /**
      *
      * @param obj
+     * @param cls
+     * @return
+     */
+    public static Object convert2Type(Object obj,Class<?> cls){
+        return org.apache.commons.beanutils.ConvertUtils.convert(obj,cls);
+    }
+    /**
+     *
+     * @param obj
      * @param cls 目标类型
      * @param <T>
      * @return
