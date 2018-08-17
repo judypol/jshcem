@@ -24,6 +24,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-@Import({HessianServiceScannerRegister.class})
+@Import({HessianServiceScannerRegister.class,HessianServiceAdvice.class})
 public @interface EnableHessianServiceScanner {
 }

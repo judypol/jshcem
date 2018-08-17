@@ -44,7 +44,7 @@ public class ServerContext {
     private String AppName;
     private String Mode;
     private String RequestId;
-//zipkin--
+    //zipkin--
     private String TraceId;
     private String SpanId;
     private String ParentId;
