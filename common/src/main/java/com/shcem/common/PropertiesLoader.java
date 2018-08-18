@@ -27,6 +27,13 @@ public class PropertiesLoader {
         properties = loadProperties(resourcesRaths);
     }
 
+    /**
+     * 从字符串中解析
+     * @param propertiesContents
+     */
+    public PropertiesLoader(String propertiesContents){
+        properties=loadPropertiesFromString(propertiesContents);
+    }
     public Properties getProperties() {
         return properties;
     }
@@ -140,7 +147,24 @@ public class PropertiesLoader {
         return !StringUtils.isEmpty(value) ? Boolean.valueOf(value) : defaultValue;
     }
 
+    /**
+     * 从给定的properties字符串解析
+     * @param propertiesContents
+     * @return
+     */
+    protected Properties loadPropertiesFromString(String propertiesContents){
+        Properties props=new Properties();
+        try{
+            byte[] bytes=propertiesContents.getBytes("utf-8");
+            ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(bytes);
 
+            props.load(byteArrayInputStream);
+        }catch (Exception ex){
+            logger.error("解析properties内容时出错");
+
+        }
+        return props;
+    }
     /**
      * 载入多个文件，文件路径使用spring resource格式
      *
