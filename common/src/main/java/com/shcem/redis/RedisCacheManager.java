@@ -1,6 +1,11 @@
-package com.shcem.common;
+package com.shcem.redis;
 
+import com.shcem.common.IRedisCache;
+import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
+import com.shcem.redis.ClusterRedisCache;
+import com.shcem.redis.SingleRedisCache;
+import com.shcem.redis.config.RedisConfiguration;
 import redis.clients.jedis.HostAndPort;
 
 import java.util.HashSet;
@@ -19,23 +24,13 @@ public class RedisCacheManager {
      * */
     public synchronized static IRedisCache GetRedisCache() {
         IRedisCache cache = null;
-        Integer mode=0;
-        String redismodel=YamlConfiguration.instance().getString(SystemDefine.RedisMode);
-        if(!redismodel.equals("")){
-            mode=Integer.parseInt(redismodel);
-        }
-
-        String hosts = YamlConfiguration.instance().getString(SystemDefine.RedisHost);
-
-        if (hosts == null || hosts.equals("")){
-            System.out.println("没有找到redis.host配置");
-        }
+        RedisConfiguration redisConfiguration=new RedisConfiguration();
         try{
-            String[] hostes = hosts.split(",");
-            if (hostes.length == 1&&mode==0) {
+            String[] hostes = redisConfiguration.getHost().split(",");
+            if (hostes.length == 1&&redisConfiguration.getMode()==0) {
                 HostAndPort hostAndPort=GetHostAndPort(hostes[0]);
-                cache=new SingleRedisCache(hostAndPort.getHost(),hostAndPort.getPort());
-            } else if (hostes.length >= 3&&mode==1) {
+                cache=new SingleRedisCache(hostAndPort.getHost(),hostAndPort.getPort(),redisConfiguration.getDbIndex());
+            } else if (hostes.length >= 3&&redisConfiguration.getMode()==1) {
                 Set<HostAndPort> hostAndPorts=new HashSet<HostAndPort>();
                 for (String item:hostes){
                     HostAndPort hostAndPort=GetHostAndPort(item);

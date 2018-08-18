@@ -2,6 +2,7 @@ package com.shcem.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.shcem.Encrypt.EncrytHelper;
 import com.shcem.constants.SystemDefine;
 import com.shcem.utils.SpringContextHolder;
 import org.apache.http.HttpResponse;
@@ -134,7 +135,14 @@ public class MidTierRequest {
         }
 
         method.addHeader(SystemDefine.REQUEST_MEM_ID, userCode);
-        method.addHeader(SystemDefine.REQUEST_MEM_NAME, userCode);
+        String userName="";
+        try{
+            userName=EncrytHelper.encryptBase64(MDC.get(SystemDefine.REQUEST_MEM_NAME));
+        }catch (Exception ex){
+            userName="";
+        }
+
+        method.addHeader(SystemDefine.REQUEST_MEM_NAME, userName);
 
         method.addHeader(SystemDefine.REQUEST_APP_NAME, YamlConfiguration.instance().getString(SystemDefine.AppName));
         method.addHeader(SystemDefine.REQUEST_AUTH_APP, YamlConfiguration.instance().getString(SystemDefine.AuthApp));

@@ -15,7 +15,7 @@ package com.shcem.webcore.permission.impl;
 
 import com.alibaba.fastjson.TypeReference;
 import com.shcem.Encrypt.EncrytHelper;
-import com.shcem.common.RedisCacheManager;
+import com.shcem.redis.RedisCacheManager;
 import com.shcem.utils.CookieUtils;
 import com.shcem.utils.StringUtils;
 import com.shcem.webcore.permission.LoginInfo;

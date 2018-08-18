@@ -25,11 +25,11 @@ public class LoggerAdvice implements MethodInterceptor {
         //logger.debug();
         Object result=null;
         try{
-            logger.info(clsName+"-"+method.getName()+" Start;params"+ JSON.toJSONString(methodInvocation.getArguments()));
+            logger.info(clsName+"-"+method.getName()+" Start;\r\nparams"+ JSON.toJSONString(methodInvocation.getArguments()));
             long beginTime = System.currentTimeMillis();
             result=methodInvocation.proceed();
             long endTime=System.currentTimeMillis();
-            logger.info(clsName+"-"+method.getName()+" End and cost "+(endTime-beginTime)+"ms");
+            logger.info(clsName+"-"+method.getName()+" End and \r\n cost "+(endTime-beginTime)+"ms");
         }catch (Exception ex){
             logger.error("调用"+clsName+"-"+method+"方法出现了异常.",ex);
         }

@@ -1,7 +1,7 @@
 package com.shcem.DistributionLock;
 
 import com.shcem.common.IRedisCache;
-import com.shcem.common.RedisCacheManager;
+import com.shcem.redis.RedisCacheManager;
 
 import java.util.Random;
 

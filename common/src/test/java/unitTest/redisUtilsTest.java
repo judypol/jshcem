@@ -13,8 +13,14 @@
  */
 package unitTest;
 
-import com.shcem.common.RedisCacheManager;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.shcem.redis.RedisCacheManager;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author lizhihua
@@ -23,9 +29,29 @@ import org.junit.Test;
 public class redisUtilsTest {
     @Test
     public  void setValueWithExpire() throws Exception{
-        RedisCacheManager.GetRedisCache().SetValue("test1","test",180);
+        RedisCacheManager.GetRedisCache().SetValue("test1","test",18000);
         Thread.sleep(5000);
         RedisCacheManager.GetRedisCache().SetValue("test1","update");
-    }
 
+        System.out.println(RedisCacheManager.GetRedisCache().Get("test1"));
+    }
+    @Test
+    public void findKeys() throws Exception{
+        Set<String> keys=RedisCacheManager.GetRedisCache().FindKeys("test");
+        System.out.println(JSON.toJSONString(keys));
+    }
+    @Test
+    public void findByContents(){
+        Set<String> keys=RedisCacheManager.GetRedisCache().FindKeysByStringContent("upd");
+        System.out.println(JSON.toJSONString(keys));
+    }
+    @Test
+    public void getListValue() throws Exception{
+        List<String> names=new ArrayList<>();
+        names.add("1");
+        names.add("2");
+        RedisCacheManager.GetRedisCache().SetValue("list",names);
+        List<String> newNames=RedisCacheManager.GetRedisCache().Get("list", new TypeReference<List<String>>(){});
+        System.out.println(JSON.toJSONString(newNames));
+    }
 }

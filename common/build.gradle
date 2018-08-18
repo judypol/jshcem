@@ -15,7 +15,7 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 group 'com.shcem'
-version '2.0.19'
+version '2.0.26'
 
 //apply plugin: 'java'
 apply plugin: 'java'
@@ -63,4 +63,9 @@ dependencies {
     compile group: 'com.esotericsoftware', name: 'reflectasm', version: '1.11.3'
     // https://mvnrepository.com/artifact/net.sf.oval/oval
     compile group: 'net.sf.oval', name: 'oval', version: '1.90'
+    //PDF
+    // https://mvnrepository.com/artifact/org.apache.tika/tika-core
+//    compile group: 'org.apache.tika', name: 'tika-core', version: '1.18'
+// https://mvnrepository.com/artifact/org.apache.tika/tika-parsers
+//    compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.18'
 }

@@ -6,3 +6,5 @@ include('testDomo')
 include('tradeservice')
 include('webcore')
 include('testweb')
+include 'fadada-common'
+

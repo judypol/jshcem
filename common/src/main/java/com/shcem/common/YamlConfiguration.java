@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 同一配置文件读取类，
+ * 请使用YamlConfiguration.instance().getString()
  * Created by judysen on 2017/8/19.
  */
 public class YamlConfiguration {
@@ -28,11 +30,12 @@ public class YamlConfiguration {
         try{
             yamlMap=getCommonConfiguration();
             logger.debug(JSON.toJSONString(yamlMap));
-            if(yamlMap!=null&&!yamlMap.isEmpty()){
-                for(String key:yamlMap.keySet()){
-                    System.setProperty(key,String.valueOf(yamlMap.get(key)));
-                }
-            }
+            //移除System.setProperty,在jboss环境下，同一容器会共用
+//            if(yamlMap!=null&&!yamlMap.isEmpty()){
+//                for(String key:yamlMap.keySet()){
+//                    System.setProperty(key,String.valueOf(yamlMap.get(key)));
+//                }
+//            }
         }catch (Exception ex){
             logger.error("get the yaml configuration in classpath is error",ex);
             yamlMap=new HashMap();
@@ -181,13 +184,13 @@ public class YamlConfiguration {
         for(String key:map.keySet()){
             String val=String.valueOf(map.get(key));
             yamlMap.put(key,val);
-            System.setProperty(key,val);
+//            System.setProperty(key,val);
         }
 
     }
     public void add(String key,String val){
         yamlMap.put(key,val);
-        System.setProperty(key,val);
+//        System.setProperty(key,val);
     }
 
     /**

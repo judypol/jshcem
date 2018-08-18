@@ -33,9 +33,7 @@ public class configCenter {
 
         Thread.sleep(80000);
 
-        System.out.println(System.getProperty("redis.model"));
         System.out.println(YamlConfiguration.instance().getString("redis.model"));
-        System.out.println(System.getProperty("SystemConfig"));
         System.out.println(YamlConfiguration.instance().getString("SystemConfig"));
     }
     public class runSpring implements Runnable{
@@ -58,9 +56,7 @@ public class configCenter {
             //ConfigCenterRegister register=new ConfigCenterRegister();
             //register.init();
 
-            System.out.println(System.getProperty("redis.model"));
             System.out.println(YamlConfiguration.instance().getString("redis.model"));
-            System.out.println(System.getProperty("SystemConfig"));
             System.out.println(YamlConfiguration.instance().getString("SystemConfig"));
         }
     }

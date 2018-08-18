@@ -29,7 +29,6 @@ public class Config {
     }
     @Bean
     public IRealm getDatabaseRealm(){
-        String namespace=System.getProperty("spring.configCenter.namespace");
         DatabaseRealm realm=new DatabaseRealm();
         realm.setStyle("rest");
         return realm;

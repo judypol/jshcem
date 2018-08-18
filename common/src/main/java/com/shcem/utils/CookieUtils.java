@@ -124,6 +124,6 @@ public class CookieUtils {
 				return cookie;
 			}
 		}
-		return new Cookie("","");
+		return new Cookie("testCookie","");
 	}
 }
