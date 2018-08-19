@@ -22,7 +22,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
-public @interface CacheClearHandler {
+public @interface CacheClearAnnotation {
     /**
      * 需要清除的key值
      * @return

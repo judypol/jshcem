@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.shcem.common.IRedisCache;
+import com.shcem.utils.StringUtils;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
@@ -52,13 +53,20 @@ public class SingleRedisCache implements IRedisCache {
         this.database = database;
     }
 
-    private int MAX_TOTAL = 100;
-    private int MAX_IDLE = 50;
+    private int MAX_TOTAL = 1000;
+    private int MAX_IDLE = 5;
     private String DBIndex="0";             //默认的DBIndex
 
     private static JedisPool jedisPool;
     //Jedis jedis;
 
+    /**
+     * 构造函数
+     * @param host
+     * @param port
+     * @param database
+     * @param password
+     */
     public SingleRedisCache(String host, int port, String database, String password) {
         this.DBIndex=database;
         if (jedisPool == null) {
@@ -68,17 +76,33 @@ public class SingleRedisCache implements IRedisCache {
                     redisConfig.setMaxTotal(MAX_TOTAL);
                     redisConfig.setMaxIdle(MAX_IDLE);
                     redisConfig.setTestOnBorrow(true);
-                    jedisPool = new JedisPool(redisConfig, host, port, 2000, null, 0);
+                    if(StringUtils.isNotEmpty(password)){
+                        jedisPool = new JedisPool(redisConfig, host, port, 2000, password, 0);
+                    }else{
+                        jedisPool = new JedisPool(redisConfig, host, port, 2000, null, 0);
+                    }
+
                     //jedis = jedisPool.getResource();
                 }
             }
         }
     }
 
+    /**
+     * 构造函数
+     * @param host
+     * @param port
+     * @param database
+     */
     public SingleRedisCache(String host, int port, String database) {
         this(host, port, database, null);
     }
 
+    /**
+     *
+     * @param host
+     * @param port
+     */
     public SingleRedisCache(String host, int port) {
         this(host, port, "0");
     }
@@ -93,6 +117,26 @@ public class SingleRedisCache implements IRedisCache {
             return key;
         }
         return this.DBIndex+":"+key;
+    }
+
+    /**
+     * 是否覆盖旧值
+     * @param key
+     * @param value
+     * @param expire
+     * @param replace
+     */
+    public void setValue(String key,Object value,long expire,boolean replace) throws Exception{
+        Jedis jedis=jedisPool.getResource();
+        String newKey=getKey(key);
+        try{
+            String jsonString=serialiseObject(value);
+            jedis.set(newKey,jsonString,"NX","EX",expire);
+        }catch (Exception ex){
+            throw new Exception("setValue--Exception",ex);
+        }finally {
+            jedis.close();
+        }
     }
     /**
      * redis设置一个值，

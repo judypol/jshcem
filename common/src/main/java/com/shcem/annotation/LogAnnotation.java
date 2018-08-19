@@ -26,7 +26,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
-public @interface LogHandler {
+public @interface LogAnnotation {
     /**
      * 日志级别,默认Debug级别
      * @return

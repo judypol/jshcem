@@ -27,7 +27,7 @@ sourceCompatibility = 1.8
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile('org.slf4j:slf4j-api:1.7.23')
-    compile('redis.clients:jedis:2.8.1')
+    compile('redis.clients:jedis:2.9.0')
     compile('com.alibaba:fastjson:1.2.24')
     compile('commons-codec:commons-codec:1.10')
     compile('io.netty:netty-all:4.0.30.Final')
@@ -68,4 +68,6 @@ dependencies {
 //    compile group: 'org.apache.tika', name: 'tika-core', version: '1.18'
 // https://mvnrepository.com/artifact/org.apache.tika/tika-parsers
 //    compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.18'
+    // https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
+    compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.5.2'
 }

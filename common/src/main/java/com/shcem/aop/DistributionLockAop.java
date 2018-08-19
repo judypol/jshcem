@@ -15,14 +15,13 @@ package com.shcem.aop;
 
 import com.shcem.DistributionLock.CacheLockException;
 import com.shcem.DistributionLock.DistributionRedisLock;
-import com.shcem.annotation.CacheLock;
+import com.shcem.annotation.CacheLockAnnotation;
 import com.shcem.utils.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -36,7 +35,7 @@ public class DistributionLockAop {
     /**
      * 定义拦截规则：CacheLock。
      */
-    @Pointcut("@annotation(com.shcem.annotation.CacheLock)")
+    @Pointcut("@annotation(com.shcem.annotation.CacheLockAnnotation)")
     public void distributionLockPointcut(){
 
     }
@@ -52,7 +51,7 @@ public class DistributionLockAop {
         String clsName=signature.getDeclaringTypeName();
         Object[] pars=pjp.getArgs();
 
-        CacheLock cacheLock = method.getAnnotation(CacheLock.class);
+        CacheLockAnnotation cacheLock = method.getAnnotation(CacheLockAnnotation.class);
         //RedisCacheKeyGenerator keyGenerator=new RedisCacheKeyGenerator();
         String key=cacheLock.lockedKey();          //(String)keyGenerator.generate(signature.getDeclaringType(),method,pars);
         if(StringUtils.isEmpty(key)){

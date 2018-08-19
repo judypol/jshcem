@@ -17,7 +17,7 @@ import JShcem.Trade.dao.TLeadsMapper;
 import JShcem.Trade.dao.model.TLeads;
 import JShcem.Trade.service.ILeadsService;
 import com.alibaba.fastjson.JSON;
-import com.shcem.annotation.LogHandler;
+import com.shcem.annotation.LogAnnotation;
 import com.shcem.common.ResponseData;
 import com.shcem.enums.LoggerName;
 import com.shcem.hessian.HessianService;
@@ -44,7 +44,7 @@ public class LeadsService extends BaseServiceImpl implements ILeadsService {
         return JSON.toJSONStringWithDateFormat(tLeads,"yyyy-MM-dd HH:mm:ss");
     }
     @Override
-    @LogHandler(loggerName = LoggerName.Service)
+    @LogAnnotation(loggerName = LoggerName.Service)
     public String getLeadsList(){
         Pageable pageable=new Pageable();
         pageable.setPageSize(10);

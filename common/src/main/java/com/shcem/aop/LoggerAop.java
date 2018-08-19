@@ -13,8 +13,7 @@
  */
 package com.shcem.aop;
 
-import com.shcem.annotation.LogHandler;
-import com.shcem.common.YamlConfiguration;
+import com.shcem.annotation.LogAnnotation;
 import com.shcem.enums.LoggerLevel;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -23,8 +22,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -38,7 +35,7 @@ public class LoggerAop {
     /**
      * 定义拦截规则：拦截LogHandler注解的方法。
      */
-    @Pointcut("execution(* *(..)) && @annotation(com.shcem.annotation.LogHandler)")
+    @Pointcut("execution(* *(..)) && @annotation(com.shcem.annotation.LogAnnotation)")
     public void logMethodPointcut(){
 
     }
@@ -53,7 +50,7 @@ public class LoggerAop {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
 
         Method method = signature.getMethod();          //获取被拦截的方法
-        LogHandler logHandler=method.getAnnotation(LogHandler.class);
+        LogAnnotation logHandler=method.getAnnotation(LogAnnotation.class);
         if(logHandler==null){
             return null;
         }

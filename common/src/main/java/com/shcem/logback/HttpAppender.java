@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * logback日appender，需要在配置文件中配置。
+ * logback,appender，需要在配置文件中配置。
  * 采用批量上传日志信息到服务器，默认是10条发送一次，可以在app.yaml文件中配置logCount数值
  * 远程URL也需要在app.yaml文件中配置logUrl
  * @author lizhihua

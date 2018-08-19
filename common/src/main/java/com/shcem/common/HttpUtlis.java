@@ -1,19 +1,19 @@
 package com.shcem.common;
 
 import okhttp3.*;
+import org.apache.commons.collections.MapUtils;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 使用OkHttp来对http进行基本的操作，包括get，post，uploadfile
  * Created by judysen on 2017/8/12.
  */
 public class HttpUtlis {
-    static OkHttpClient client = new OkHttpClient();
+    static OkHttpClient client = new OkHttpClient()
+            .newBuilder().readTimeout(60, TimeUnit.SECONDS).build();
 
     public synchronized static HttpUtlis Instance(){
         return new HttpUtlis();
@@ -42,10 +42,14 @@ public class HttpUtlis {
      * @return String
      * @throws Exception
      */
-    public String postByJson(String url,String json) throws Exception{
+    public String postByJson(String url,String json,Map<String,String> headers) throws Exception{
         RequestBody body = RequestBody.create(JSON, json);
+
+        Headers.Builder builder=setHeader(headers);
+
         Request request = new Request.Builder()
                 .url(url)
+                .headers(builder.build())
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
@@ -53,16 +57,34 @@ public class HttpUtlis {
     }
 
     /**
+     * 填充Headers.Builder
+     * @param headers
+     * @return
+     */
+    private Headers.Builder setHeader(Map<String,String> headers){
+        Headers.Builder builder=new Headers.Builder();
+
+        if(MapUtils.isNotEmpty(headers)){
+            for(Map.Entry<String,String> entry: headers.entrySet()){
+                builder.add(entry.getKey(),entry.getValue());
+            }
+        }
+        builder.add("user-agent","com.shcem.common");
+        return builder;
+    }
+    /**
      *
      * @param url
      * @param map
      * @return String
      * @throws Exception
      */
-    public String postByForm(String url, Map<String,String> map) throws Exception{
+    public String postByForm(String url, Map<String,String> map,Map<String,String> headers) throws Exception{
         if(map==null){
             throw new Exception("参数map不能为null");
         }
+        Headers.Builder builder=setHeader(headers);
+
         FormBody.Builder formBodyBuilder=new FormBody.Builder();
         Iterator<Map.Entry<String, String>> entries = map.entrySet().iterator();
         while (entries.hasNext()){
@@ -72,6 +94,7 @@ public class HttpUtlis {
 
         Request request=new Request.Builder()
                 .url(url)
+                .headers(builder.build())
                 .post(formBodyBuilder.build())
                 .build();
 
@@ -87,9 +110,13 @@ public class HttpUtlis {
      * @return
      * @throws Exception
      */
-    public String postByForm(String url,Map<String,String> map,String encode) throws Exception{
+    public String postByForm(String url,Map<String,String> map,String encode,Map<String,String> headers) throws Exception{
         String postType="application/x-www-form-urlencoded;charset="+encode;
+
         MediaType FormPostType=MediaType.parse(postType);
+
+        Headers.Builder builder=setHeader(headers);
+
         StringBuilder sb=new StringBuilder();
         for(String key :map.keySet()){
             sb.append(key+"="+map.get(key)+"&");
@@ -98,6 +125,7 @@ public class HttpUtlis {
 
         Request request=new Request.Builder()
                 .url(url)
+                .headers(builder.build())
                 .post(body)
                 .build();
         Response response=client.newCall(request).execute();
@@ -112,13 +140,16 @@ public class HttpUtlis {
      * @return
      * @throws Exception
      */
-    public String uploadFile(String url,String fileName,byte[] content) throws Exception{
+    public String uploadFile(String url,String fileName,byte[] content,Map<String,String> headers) throws Exception{
         RequestBody fileBody=RequestBody.create(getMediaType(fileName),content);
         RequestBody body=new MultipartBody.Builder().addFormDataPart("file",fileName,fileBody)
                 .build();
 
+        Headers.Builder builder=setHeader(headers);
+
         Request request=new Request.Builder()
                 .url(url)
+                .headers(builder.build())
                 .post(body)
                 .build();
 

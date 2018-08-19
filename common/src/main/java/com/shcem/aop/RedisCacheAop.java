@@ -14,8 +14,8 @@
 package com.shcem.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.shcem.annotation.CacheClearHandler;
-import com.shcem.annotation.CachedHandler;
+import com.shcem.annotation.CacheClearAnnotation;
+import com.shcem.annotation.CacheAnnotation;
 import com.shcem.common.IRedisCache;
 import com.shcem.redis.RedisCacheManager;
 import com.shcem.utils.StringUtils;
@@ -40,13 +40,13 @@ public class RedisCacheAop {
     /**
      * 定义拦截规则：拦截CachedHandler注解的方法
      */
-    @Pointcut("@annotation(com.shcem.annotation.CachedHandler)")
+    @Pointcut("@annotation(com.shcem.annotation.CacheAnnotation)")
     public void cacheMethodPointcut(){}
 
     /**
      * 定义拦截规则：拦截CacheClearHandler注解的方法
      */
-    @Pointcut("@annotation(com.shcem.annotation.CacheClearHandler)")
+    @Pointcut("@annotation(com.shcem.annotation.CacheClearAnnotation)")
     public void cacheClearMethodPointcut(){}
 
     /**
@@ -59,12 +59,12 @@ public class RedisCacheAop {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Object[] pars=pjp.getArgs();
         Object result=null;
-        CachedHandler cachedHandler =signature.getMethod().getAnnotation(CachedHandler.class);
+        CacheAnnotation cacheAnnotation =signature.getMethod().getAnnotation(CacheAnnotation.class);
         String cacheKey="";
         int cacheExpire=0;
-        if(cachedHandler!=null){
-            cacheKey=cachedHandler.key();
-            cacheExpire=cachedHandler.expire();
+        if(cacheAnnotation !=null){
+            cacheKey= cacheAnnotation.key();
+            cacheExpire= cacheAnnotation.expire();
         }
         logger.debug("cacheKey:{},expire:{}",cacheKey,cacheExpire);
         if(StringUtils.isNotEmpty(cacheKey)){
@@ -115,7 +115,7 @@ public class RedisCacheAop {
         Method method = signature.getMethod(); //获取被拦截的方法
         Object[] pars=pjp.getArgs();
 
-        CacheClearHandler cacheClearHandler=signature.getMethod().getAnnotation(CacheClearHandler.class);
+        CacheClearAnnotation cacheClearHandler=signature.getMethod().getAnnotation(CacheClearAnnotation.class);
         Object result=null;
         //---先执行方法---先从redis中删除key，再执行方法
         try{
