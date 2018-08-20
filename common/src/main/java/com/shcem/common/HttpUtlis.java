@@ -13,7 +13,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class HttpUtlis {
     static OkHttpClient client = new OkHttpClient()
-            .newBuilder().readTimeout(60, TimeUnit.SECONDS).build();
+            .newBuilder().readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60,TimeUnit.SECONDS)
+            .connectTimeout(60,TimeUnit.SECONDS).build();
 
     public synchronized static HttpUtlis Instance(){
         return new HttpUtlis();

@@ -84,7 +84,8 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      */
     private void sendKafka(String msg){
         try{
-            NettyLogClient.sendMsg(this.logUrl,msg);
+            HttpUtlis.Instance().postByJson(this.logUrl,msg,null);
+//            NettyLogClient.sendMsg(this.logUrl,msg);
         }catch (Exception ex){
             System.out.println(ex);
         }
