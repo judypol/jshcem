@@ -20,6 +20,7 @@ import com.shcem.common.PropertyUtil;
 import com.shcem.common.ResponseData;
 import com.shcem.constants.SystemDefine;
 import com.shcem.server.model.ServerContext;
+import com.shcem.utils.StringUtils;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import org.slf4j.Logger;
@@ -35,17 +36,8 @@ import java.util.Map;
  * @version 1.0
  */
 public class BaseServiceImpl {
-//    protected ThreadLocalCustomized<ResponseData> rtnData = new ThreadLocalCustomized<ResponseData>(){
-//        @Override
-//        protected ResponseData initialValue() {
-//            return new ResponseData();
-//        }
-//    };
-    //protected ResponseData rtnData=new ResponseData();
 
     protected final Logger log = LoggerFactory.getLogger("service");
-//    private String logdif = "";
-//    private Header header = null;
 
     /**
      * 设定ResultData
@@ -55,7 +47,7 @@ public class BaseServiceImpl {
      * @param data
      *            返回数据对象
      * @param args
-     *            可变追加信息
+     *            可变追加信息，一般为错误信息
      */
     protected ResponseData setResultData(String code, Object data, String... args) {
         ResponseData rtnData=new ResponseData();
@@ -70,7 +62,10 @@ public class BaseServiceImpl {
         String value = PropertyUtil.create("classpath:message.properties").getProperty(code);// PropertyConfigurer.getMessage(code);
         StringBuffer sbInfo = new StringBuffer(args.length + 1);
 
-        sbInfo.append(value);
+        if(StringUtils.isNotEmpty(value)){
+            sbInfo.append(value);
+        }
+
         for (int i = 0; i < args.length; i++) {
             sbInfo.append(args[i]);
         }
@@ -123,16 +118,11 @@ public class BaseServiceImpl {
 
     protected String getUserName() {
         // 使用 getUserId()，为了避免改代码中的 getUserName 方法
-        // HessianHeaderContext context = HessianHeaderContext.getContext();
-        // return context.getHeader(Constants.HEADER_MEM_NAME) == null ? "" :
-        // context.getHeader(Constants.HEADER_MEM_NAME);
+        String tmpUserName=ServerContext.currentContext().getMemberName();
         return getUserId();
     }
 
     protected String getMode() {
-//		HessianHeaderContext context = HessianHeaderContext.getContext();
-//		return context.getHeader(Constants.HEADER_MODE) == null ? "" : context
-//				.getHeader(Constants.HEADER_MODE);
         String mode =SystemDefine.MODE_LOCAL;
         String sysMode = System.getProperty(SystemDefine.REQUEST_MODE);
 
@@ -148,58 +138,6 @@ public class BaseServiceImpl {
 
         return mode;
     }
-
-    /**
-     * 调用Activiti的API
-     *
-     * @param postData
-     * @return
-     */
-//    protected JSONObject postActivitiApi(String postData) {
-//
-//        PropertyUtil propUtil = new PropertyUtil();
-//        Properties clientProperty = propUtil
-//                .getProperties(Constants.ACTIVITI_PROPERITES_FILE);
-//
-//        // 取得中央代理服务器的信息
-//        String ipaddress = clientProperty.getProperty(getMode()
-//                + "_activitiapi_IP");
-//        String strPort = clientProperty.getProperty("activitiapi_port");
-//
-//        int port;
-//        try {
-//            port = Integer.parseInt(strPort);
-//        } catch (NumberFormatException e1) {
-//            // default port;
-//            port = 5420;
-//        }
-//
-//        /**
-//         * 取得数据 Start
-//         */
-//        NettyClient ntc = new NettyClient(ipaddress, port, postData,
-//                "/activitiapi");
-//        String response = null;
-//        try {
-//            Map<String, String> m = ntc.httpPost();
-//            response = m.get("response");
-//        } catch (Exception e) {
-//            return setReturnData("10116", e.getMessage());
-//        }
-//        /**
-//         * 取得数据 End
-//         */
-//
-//        // 数据转换成JSON对象
-//        JSONObject jsoSource;
-//        try {
-//            jsoSource = new JSONObject(response);
-//        } catch (JSONException e) {
-//            return setReturnData("10116", e.getMessage());
-//        }
-//
-//        return jsoSource;
-//    }
 
     /**
      *
@@ -219,7 +157,10 @@ public class BaseServiceImpl {
         String value =PropertyUtil.create(ServiceContants.MESSAGE_FILE).getProperty(code);// PropertyConfigurer.getMessage(code);
         StringBuffer sbInfo = new StringBuffer(msg.length + 1);
 
-        sbInfo.append(value);
+        if(StringUtils.isNotEmpty(value)){
+            sbInfo.append(value);
+        }
+
         for (int i = 0; i < msg.length; i++) {
             sbInfo.append(msg[i]);
         }
@@ -227,27 +168,8 @@ public class BaseServiceImpl {
         result.put("INFO", sbInfo.toString());
         result.put("DATA", "none");
 
-        //HessianHeaderContext.close();
-
         return result;
     }
-
-//    protected PageInfo setPageInfo(Object obj) {
-//        try {
-//            Field field = obj.getClass().getSuperclass()
-//                    .getDeclaredField("page");
-//            field.setAccessible(true);
-//            Object page = field.get(obj);
-//            if (page != null && page instanceof PageInfo) {
-//                return (PageInfo) page;
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            e.getMessage();
-//        }
-//        return null;
-//    }
 
     /**
      * 获取参数实体
@@ -284,8 +206,6 @@ public class BaseServiceImpl {
 
         ResponseData responseData=new ResponseData();
         if (errors.size() > 0) {
-//			this.rtnData.get().setCODE(Constants.MSG_CODE_0027);
-//			this.rtnData.get().setINFO(errors.get(0));
             responseData=setResultData("对象验证失败", null, JSON.toJSONString(errors));
         }
 
@@ -309,43 +229,13 @@ public class BaseServiceImpl {
         }
         return errors;
     }
-    /**
-     * 日志开始
-     *
-     * @param className
-     *            类名
-     * @param methodName
-     *            方法名
-     * @param hierarchy
-     *            层级
-     */
-    protected void logStart(String className, String methodName,
-                            String hierarchy) {
-        this.log.debug(className + methodName + " " + hierarchy + " Start");
-    }
 
-    /**
-     * 日志结束
-     *
-     * @param className
-     *            类名
-     * @param methodName
-     *            方法名
-     * @param hierarchy
-     *            层级
-     */
-    protected void logEnd(String className, String methodName, String hierarchy) {
-        this.log.debug(className + methodName + " " + hierarchy + " End");
-    }
 
     /**
      * 获取请求ID
      * @return
      */
     protected String getRequestId() {
-//        HessianHeaderContext context = HessianHeaderContext.getContext();
-//        return context.getHeader(SystemDefine.REQUEST_REQUESTID) == null ? ""
-//                : context.getHeader(SystemDefine.REQUEST_REQUESTID);
         return ServerContext.currentContext().getRequestId();
     }
 }

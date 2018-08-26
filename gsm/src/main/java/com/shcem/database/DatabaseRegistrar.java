@@ -13,20 +13,13 @@
  */
 package com.shcem.database;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.shcem.common.YamlConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -36,9 +29,11 @@ import org.springframework.util.StringUtils;
 import java.io.File;
 
 /**
+ *
  * @author lizhihua
  * @version 1.0
  */
+@Deprecated()
 public class DatabaseRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
     Logger logger= LoggerFactory.getLogger(DatabaseRegistrar.class);
     private ResourceLoader resourceLoader;

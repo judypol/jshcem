@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoder ?????PatternLayoutEncoder -->
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n %X{Appname} %X{Mode} %X{Referer} %X{UserAgent} %X{RequestId}</pattern>
         </encoder>
@@ -14,12 +13,26 @@
         </encoder>
     </appender>
     <appender name="http" class="com.shcem.logback.HttpAppender">
+        <!--日志收集-->
         <logUrl>http://192.168.60.121:5454</logUrl>
         <logBuffer>5</logBuffer>
+        <!---->
         <logSys>WEBFT</logSys>
+        <!---->
         <logEnv>DEV</logEnv>
     </appender>
-
+    <appender name="email" class="com.shcem.logback.EmailAppender">
+        <!--邮件发送地址-->
+        <emailUrl>http://192.168.60.121:5454</emailUrl>
+        <!--主题-->
+        <subject>错误日志</subject>
+        <!--发送者-->
+        <sender>logback@shcem.com</sender>
+        <!--接收者可以多个，中间用英文;分割-->
+        <to>lizhihua@shcem.com</to>
+        <!--cc,可以多个，中间用英文;分割-->
+        <cc></cc>
+    </appender>
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE" />
