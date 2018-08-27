@@ -55,6 +55,13 @@ public class FadadaConstants {
 
 	// 合同归档接口
 	public final static String IF_CONTRACT_FILING = "com.shcem.common.fadada.baseservice.impl.ContractFilingImpl";
+	
+	
+	/*
+	 * 非公开接口
+	*/
+	// 合同推送接口
+	public final static String IF_PUSH_DOCS_TO_MOBILE = "com.shcem.common.fadada.baseservice.impl.PushDocsToMobileImpl";
 
 	/**
 	 * 服务扩展接口名
@@ -127,6 +134,8 @@ public class FadadaConstants {
 	public final static int DIFFER_EXTRA = 1;
 	// 企业接口
 	public final static int DIFFER_COMPANY = 2;
+	// 非公开接口
+	public final static int DIFFER_NOPUBLIC = 3;
 
 	/**
 	 * 证件类型

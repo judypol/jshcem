@@ -33,6 +33,7 @@ public class FadadaBaseServiceClient {
 	protected FddClientBase base;
 	protected FddClientExtra extra;
 	protected SyncCompanyAuto company;
+	protected NoPublicFddClientBase noPublicBase;
 	protected String appid;
 
 	/**
@@ -59,6 +60,8 @@ public class FadadaBaseServiceClient {
 			this.extra = new FddClientExtra(appid, secret, FadadaConstants.VERSION, url);
 		} else if (differ == FadadaConstants.DIFFER_COMPANY) {
 			this.company = new SyncCompanyAuto(appid, secret, FadadaConstants.VERSION, url);
+		}else if (differ==FadadaConstants.DIFFER_NOPUBLIC) {
+			this.noPublicBase=new NoPublicFddClientBase(appid, secret, FadadaConstants.VERSION, url);
 		}
 	}
 
