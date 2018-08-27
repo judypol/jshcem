@@ -94,7 +94,7 @@ public class PdfUtils {
         int pages=pdfDoc.getNumberOfPages();
         PdfAcroForm form=PdfAcroForm.getAcroForm(pdfDoc,true);
 
-        String inputStream = resourceLoader.getResource("/simsun.ttc").getFilename();
+        String inputStream = resourceLoader.getResource("classpath:/simsun.ttc").getFilename();
         PdfFont sysFont = PdfFontFactory.createFont(inputStream+",1", PdfEncodings.IDENTITY_H, false);
         Map<String, PdfFormField> fields=form.getFormFields();
         for(Map.Entry<String,PdfFormField> entry :fields.entrySet()){

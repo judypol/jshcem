@@ -15,7 +15,7 @@ public class StreamUtils {
 
 	final static int BUFFER_SIZE = 4096;
 	/**
-	 * 将InputStream转换成String
+	 * 将InputStream转换成String,默认utf-8
 	 * 
 	 * @param in
 	 *            InputStream
@@ -23,7 +23,7 @@ public class StreamUtils {
 	 * @throws Exception
 	 * 
 	 */
-	public static String InputStreamTOString(InputStream in) {
+	public static String inputStream2String(InputStream in) {
 
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 		byte[] data = new byte[BUFFER_SIZE];
@@ -53,7 +53,7 @@ public class StreamUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String InputStreamTOString(InputStream in, String encoding) {
+	public static String inputStream2String(InputStream in, String encoding) {
 		String string = null;
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 		byte[] data = new byte[BUFFER_SIZE];
@@ -75,13 +75,13 @@ public class StreamUtils {
 	}
 
 	/**
-	 * 将String转换成InputStream
+	 * 将String转换成InputStream,UTF-8
 	 * 
 	 * @param in
 	 * @return
 	 * @throws Exception
 	 */
-	public static InputStream StringTOInputStream(String in) throws Exception {
+	public static InputStream string2InputStream(String in) throws Exception {
 
 		ByteArrayInputStream is = new ByteArrayInputStream(in.getBytes("UTF-8"));
 		return is;
@@ -94,10 +94,10 @@ public class StreamUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] StringTObyte(String in) {
+	public static byte[] string2byte(String in) {
 		byte[] bytes = null;
 		try {
-			bytes = InputStreamTOByte(StringTOInputStream(in));
+			bytes = inputStream2Byte(string2InputStream(in));
 		} catch (IOException e) {
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,7 +113,7 @@ public class StreamUtils {
 	 * @return byte[]
 	 * @throws IOException
 	 */
-	public static byte[] InputStreamTOByte(InputStream in) throws IOException {
+	public static byte[] inputStream2Byte(InputStream in) throws IOException {
 
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 		byte[] data = new byte[BUFFER_SIZE];
@@ -132,7 +132,7 @@ public class StreamUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static InputStream ByteTOInputStream(byte[] in) throws Exception {
+	public static InputStream byte2InputStream(byte[] in) throws Exception {
 
 		ByteArrayInputStream is = new ByteArrayInputStream(in);
 		return is;
@@ -145,13 +145,13 @@ public class StreamUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String byteTOString(byte[] in) {
+	public static String byte2String(byte[] in) {
 
 		String result = null;
 		InputStream is = null;
 		try {
-			is = ByteTOInputStream(in);
-			result = InputStreamTOString(is, "UTF-8");
+			is = byte2InputStream(in);
+			result = inputStream2String(is, "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -168,7 +168,7 @@ public class StreamUtils {
 
 		String is = null;
 		try {
-			is = byteTOString(StringTObyte(in));
+			is = byte2String(string2byte(in));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -197,10 +197,11 @@ public class StreamUtils {
 	/**
 	 * 根据文件路径创建文件输入流处理
 	 * 以字节为单位（非 unicode ）
+	 *
 	 * @param filepath
 	 * @return
 	 */
-	public static FileInputStream GetFileInputStream(String filepath) {
+	public static FileInputStream getFileInputStream(String filepath) {
 		FileInputStream fileInputStream = null;
 		try {
 			fileInputStream = new FileInputStream(filepath);
@@ -216,7 +217,7 @@ public class StreamUtils {
 	 * @param file
 	 * @return
 	 */
-	public static FileInputStream GetFileInputStream(File file) {
+	public static FileInputStream getFileInputStream(File file) {
 		FileInputStream fileInputStream = null;
 		try {
 			fileInputStream = new FileInputStream(file);
@@ -233,7 +234,7 @@ public class StreamUtils {
 	 * @param append true:文件以追加方式打开,false:则覆盖原文件的内容
 	 * @return
 	 */
-	public static FileOutputStream GetFileOutputStream(File file,boolean append) {
+	public static FileOutputStream getFileOutputStream(File file, boolean append) {
 		FileOutputStream fileOutputStream = null;
 		try {
 			fileOutputStream = new FileOutputStream(file,append);
@@ -261,11 +262,8 @@ public class StreamUtils {
 		return fileOutputStream;
 	}
 
-	public static File GetFile(String filepath) {
+	public static File getFile(String filepath) {
 		return new File(filepath);
-	}
-	public static ByteArrayOutputStream GetByteArrayOutputStream() {
-		return new ByteArrayOutputStream();
 	}
 
 	/**

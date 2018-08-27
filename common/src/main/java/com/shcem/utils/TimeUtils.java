@@ -13,6 +13,7 @@ import java.util.Date;
  * @author
  * @version
  */
+@Deprecated
 public class TimeUtils {
 	
 	public static String toTimeString(long time) {

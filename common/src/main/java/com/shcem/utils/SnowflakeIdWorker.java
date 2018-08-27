@@ -158,21 +158,4 @@ public class SnowflakeIdWorker {
         return worker;
     }
 
-    //==============================Test=============================================
-    /** 测试 */
-    public static void main(String[] args) {
-        //SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1);
-        SnowflakeIdWorker idWorker=SnowflakeIdWorker.Instance();
-        for (int i = 0; i < 1000; i++) {
-//            try{
-//                Thread.sleep(50);
-//            }catch (Exception ex){
-//
-//            }
-
-            long id = idWorker.nextId();
-            //System.out.println(Long.toBinaryString(id));
-            System.out.println(id);
-        }
-    }
 }

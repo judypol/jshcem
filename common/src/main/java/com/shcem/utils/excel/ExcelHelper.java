@@ -11,7 +11,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -200,7 +199,7 @@ public class ExcelHelper {
             if (cell != null){
                 if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
                     if(HSSFDateUtil.isCellDateFormatted(cell)){
-                        val= DateUtils.FormatDate(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
+                        val= DateUtils.formatDate(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
                     }else{
                         val = cell.getNumericCellValue();
                     }

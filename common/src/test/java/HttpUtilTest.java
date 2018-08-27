@@ -41,7 +41,7 @@ public class HttpUtilTest {
         map.put("AtTime","");
         map.put("ExNo","");
 
-        String response=HttpUtlis.Instance().postByForm(url,map,"gb2312");
+        String response=HttpUtlis.Instance().postByForm(url,map,null);
 
         System.out.println(response);
     }

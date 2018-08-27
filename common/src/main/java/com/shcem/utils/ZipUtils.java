@@ -224,30 +224,4 @@ public class ZipUtils {
             bos.close();
         }
     }
-
-    public static void main(String[] args)
-    {
-        String zipPath = "d:\\ziptest\\zipPath";
-        String dir = "d:\\ziptest\\rawfiles";
-        String zipFileName = "test.zip";
-        try
-        {
-            zip(dir, zipPath, zipFileName);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        String zipFilePath = "D:\\ziptest\\zipPath\\test.zip";
-        String unzipFilePath = "D:\\ziptest\\zipPath";
-        try
-        {
-            unzip(zipFilePath, unzipFilePath, true);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

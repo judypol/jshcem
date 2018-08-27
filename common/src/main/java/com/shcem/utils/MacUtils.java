@@ -27,7 +27,7 @@ public class MacUtils {
 	 * 
 	 * @return mac地址
 	 */
-	public static String GetUnixMACAddress() {
+	public static String getUnixMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
 		Process process = null;
@@ -78,7 +78,7 @@ public class MacUtils {
 	 * 
 	 * @return mac地址
 	 */
-	public static String GetLinuxMACAddress() {
+	public static String getLinuxMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
 		Process process = null;
@@ -120,7 +120,7 @@ public class MacUtils {
 		
 		// 取不到，试下Unix取发
 		if (mac == null){
-			return GetUnixMACAddress();
+			return getUnixMACAddress();
 		}
 
 		return mac;
@@ -131,7 +131,7 @@ public class MacUtils {
 	 * 
 	 * @return mac地址
 	 */
-	public static String GetWindowsMACAddress() {
+	public static String getWindowsMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
 		Process process = null;
@@ -188,37 +188,17 @@ public class MacUtils {
 		return mac;
 	}
 
-	public static String GetMac(){
+	public static String getMac(){
 		String os = GetOSName();
 		String mac;
 		if (os.startsWith("windows")) {
-			mac = GetWindowsMACAddress();
+			mac = getWindowsMACAddress();
 		} else if (os.startsWith("linux")) {
-			mac = GetLinuxMACAddress();
+			mac = getLinuxMACAddress();
 		} else {
-			mac = GetUnixMACAddress();
+			mac = getUnixMACAddress();
 		}
 		return mac == null ? "" : mac;
-	}
-	
-	/**
-	 * 测试用的main方法.
-	 * 
-	 * @param argc 运行参数.
-	 */
-	public static void main(String[] argc) {
-		String os = GetOSName();
-		System.out.println("os: " + os);
-		if (os.startsWith("windows")) {
-			String mac = GetWindowsMACAddress();
-			System.out.println("mac: " + mac);
-		} else if (os.startsWith("linux")) {
-			String mac = GetLinuxMACAddress();
-			System.out.println("mac: " + mac);
-		} else {
-			String mac = GetUnixMACAddress();
-			System.out.println("mac: " + mac);
-		}
 	}
 
 }

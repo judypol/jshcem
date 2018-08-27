@@ -42,7 +42,7 @@ public class ExceptionUtils {
     /**
      * 将ErrorStack转化为String.
      */
-    public static String GetStackTraceAsString(Throwable e) {
+    public static String getStackTraceAsString(Throwable e) {
         if (e == null){
             return "";
         }
@@ -54,7 +54,7 @@ public class ExceptionUtils {
     /**
      * 判断异常是否由某些底层的异常引起.
      */
-    public static boolean IsCausedBy(Exception ex, Class<? extends Exception>... causeExceptionClasses) {
+    public static boolean isCausedBy(Exception ex, Class<? extends Exception>... causeExceptionClasses) {
         Throwable cause = ex.getCause();
         while (cause != null) {
             for (Class<? extends Exception> causeClass : causeExceptionClasses) {
@@ -72,7 +72,7 @@ public class ExceptionUtils {
      * @param request
      * @return
      */
-    public static Throwable GetThrowable(HttpServletRequest request){
+    public static Throwable getThrowable(HttpServletRequest request){
         Throwable ex = null;
         if (request.getAttribute("exception") != null) {
             ex = (Throwable) request.getAttribute("exception");

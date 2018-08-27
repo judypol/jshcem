@@ -56,20 +56,14 @@ public class EmailAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
         model.setLevel(loggingEvent.getLevel().levelStr);
         Date date=new Date(loggingEvent.getTimeStamp());
-        model.setLogDate(DateUtils.FormatDate(date,"yyyy-MM-dd HH:mm:ss SSS"));
+        model.setLogDate(DateUtils.formatDate(date,"yyyy-MM-dd HH:mm:ss SSS"));
         model.setMessage(loggingEvent.getMessage());
         StringBuilder sb=new StringBuilder();
         if(loggingEvent.getThrowableProxy()!=null){
-            sb.append(loggingEvent.getThrowableProxy().getMessage()+"\\r\\n");
+            sb.append(loggingEvent.getThrowableProxy().getMessage()+"<br/>");
             StackTraceElementProxy[] traceElementProxies =loggingEvent.getThrowableProxy().getStackTraceElementProxyArray();
-            int index=0;
-            for(int i=traceElementProxies.length-1;i>-1;i--){
-                if(index>9){
-                    break;
-                }
-                StackTraceElementProxy stackTraceElementProxy=traceElementProxies[i];
-                sb.append(stackTraceElementProxy.getSTEAsString()+"\\r\\n");
-                index++;
+            for(StackTraceElementProxy stackTraceElementProxy : traceElementProxies){
+                sb.append(stackTraceElementProxy.getSTEAsString()+"<br/>");
             }
             model.setException(sb.toString());
         }

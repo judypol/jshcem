@@ -25,8 +25,6 @@ import com.shcem.utils.DateUtils;
 import org.slf4j.MDC;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -123,7 +121,7 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
         model.setLevel(loggingEvent.getLevel().levelStr);
         Date date=new Date(loggingEvent.getTimeStamp());
-        model.setLogDate(DateUtils.FormatDate(date,"yyyy-MM-dd HH:mm:ss SSS"));
+        model.setLogDate(DateUtils.formatDate(date,"yyyy-MM-dd HH:mm:ss SSS"));
         model.setMessage(loggingEvent.getMessage());
         StringBuilder sb=new StringBuilder();
         if(loggingEvent.getThrowableProxy()!=null){

@@ -17,12 +17,12 @@ public class FileSizeHelper {
 	public static long ONE_TB = ONE_GB * (long)1024;
 	public static long ONE_PB = ONE_TB * (long)1024;
 
-	public static String GetHumanReadableFileSize(Long fileSize) {
+	public static String getHumanReadableFileSize(Long fileSize) {
 		if(fileSize == null) return null;
-		return GetHumanReadableFileSize(fileSize.longValue());
+		return getHumanReadableFileSize(fileSize.longValue());
 	}
 
-	public static String GetHumanReadableFileSize(long fileSize) {
+	public static String getHumanReadableFileSize(long fileSize) {
 		if(fileSize < 0) {
 			return String.valueOf(fileSize);
 		}

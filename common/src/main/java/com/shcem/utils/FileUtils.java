@@ -32,8 +32,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param descFileName 目标文件名
 	 * @return 如果复制成功，则返回true，否则返回false
 	 */
-	public static boolean CopyFile(String srcFileName, String descFileName) {
-		return FileUtils.CopyFileCover(srcFileName, descFileName, false);
+	public static boolean copyFile(String srcFileName, String descFileName) {
+		return FileUtils.copyFileCover(srcFileName, descFileName, false);
 	}
 
 	/**
@@ -43,8 +43,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param coverlay 如果目标文件已存在，是否覆盖
 	 * @return 如果复制成功，则返回true，否则返回false
 	 */
-	public static boolean CopyFileCover(String srcFileName,
-			String descFileName, boolean coverlay) {
+	public static boolean copyFileCover(String srcFileName,
+										String descFileName, boolean coverlay) {
 		File srcFile = new File(srcFileName);
 		// 判断源文件是否存在
 		if (!srcFile.exists()) {
@@ -62,7 +62,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			// 如果目标文件存在，并且允许覆盖
 			if (coverlay) {
 				logger.debug("目标文件已存在，准备删除!");
-				if (!FileUtils.DelFile(descFileName)) {
+				if (!FileUtils.delFile(descFileName)) {
 					logger.debug("删除目标文件 " + descFileName + " 失败!");
 					return false;
 				}
@@ -129,8 +129,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param descDirName 目标目录名
 	 * @return 如果复制成功返回true，否则返回false
 	 */
-	public static boolean CopyDirectory(String srcDirName, String descDirName) {
-		return FileUtils.CopyDirectoryCover(srcDirName, descDirName,
+	public static boolean copyDirectory(String srcDirName, String descDirName) {
+		return FileUtils.copyDirectoryCover(srcDirName, descDirName,
 				false);
 	}
 
@@ -141,8 +141,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param coverlay 如果目标目录存在，是否覆盖
 	 * @return 如果复制成功返回true，否则返回false
 	 */
-	public static boolean CopyDirectoryCover(String srcDirName,
-			String descDirName, boolean coverlay) {
+	public static boolean copyDirectoryCover(String srcDirName,
+											 String descDirName, boolean coverlay) {
 		File srcDir = new File(srcDirName);
 		// 判断源目录是否存在
 		if (!srcDir.exists()) {
@@ -165,7 +165,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			if (coverlay) {
 				// 允许覆盖目标目录
 				logger.debug("目标目录已存在，准备删除!");
-				if (!FileUtils.DelFile(descDirNames)) {
+				if (!FileUtils.delFile(descDirNames)) {
 					logger.debug("删除目录 " + descDirNames + " 失败!");
 					return false;
 				}
@@ -189,7 +189,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		for (int i = 0; i < files.length; i++) {
 			// 如果是一个单个文件，则直接复制
 			if (files[i].isFile()) {
-				flag = FileUtils.CopyFile(files[i].getAbsolutePath(),
+				flag = FileUtils.copyFile(files[i].getAbsolutePath(),
 						descDirName + files[i].getName());
 				// 如果拷贝文件失败，则退出循环
 				if (!flag) {
@@ -198,7 +198,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 			// 如果是子目录，则继续复制目录
 			if (files[i].isDirectory()) {
-				flag = FileUtils.CopyDirectory(files[i]
+				flag = FileUtils.copyDirectory(files[i]
 						.getAbsolutePath(), descDirName + files[i].getName());
 				// 如果拷贝目录失败，则退出循环
 				if (!flag) {
@@ -223,16 +223,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileName 被删除的文件名
 	 * @return 如果删除成功，则返回true，否是返回false
 	 */
-	public static boolean DelFile(String fileName) {
+	public static boolean delFile(String fileName) {
  		File file = new File(fileName);
 		if (!file.exists()) {
 			logger.debug(fileName + " 文件不存在!");
 			return true;
 		} else {
 			if (file.isFile()) {
-				return FileUtils.DeleteFile(fileName);
+				return FileUtils.deleteFile(fileName);
 			} else {
-				return FileUtils.DeleteDirectory(fileName);
+				return FileUtils.deleteDirectory(fileName);
 			}
 		}
 	}
@@ -244,7 +244,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileName 被删除的文件名
 	 * @return 如果删除成功，则返回true，否则返回false
 	 */
-	public static boolean DeleteFile(String fileName) {
+	public static boolean deleteFile(String fileName) {
 		File file = new File(fileName);
 		if (file.exists() && file.isFile()) {
 			if (file.delete()) {
@@ -267,7 +267,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param dirName 被删除的目录所在的文件路径
 	 * @return 如果目录删除成功，则返回true，否则返回false
 	 */
-	public static boolean DeleteDirectory(String dirName) {
+	public static boolean deleteDirectory(String dirName) {
 		String dirNames = dirName;
 		if (!dirNames.endsWith(File.separator)) {
 			dirNames = dirNames + File.separator;
@@ -283,7 +283,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		for (int i = 0; i < files.length; i++) {
 			// 删除子文件
 			if (files[i].isFile()) {
-				flag = FileUtils.DeleteFile(files[i].getAbsolutePath());
+				flag = FileUtils.deleteFile(files[i].getAbsolutePath());
 				// 如果删除文件失败，则退出循环
 				if (!flag) {
 					break;
@@ -291,7 +291,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 			// 删除子目录
 			else if (files[i].isDirectory()) {
-				flag = FileUtils.DeleteDirectory(files[i]
+				flag = FileUtils.deleteDirectory(files[i]
 						.getAbsolutePath());
 				// 如果删除子目录失败，则退出循环
 				if (!flag) {
@@ -385,7 +385,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 写入文件
 	 * @param fileName 要写入的文件
 	 */
-	public static void WriteToFile(String fileName, String content, boolean append) {
+	public static void writeToFile(String fileName, String content, boolean append) {
 		try {
 			FileUtils.write(new File(fileName), content, "utf-8", append);
 			logger.debug("文件 " + fileName + " 写入成功!");
@@ -398,7 +398,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 写入文件
 	 * @param fileName 要写入的文件
 	 */
-	public static void WriteToFile(String fileName, String content, String encoding, boolean append) {
+	public static void writeToFile(String fileName, String content, String encoding, boolean append) {
 		try {
 			FileUtils.write(new File(fileName), content, encoding, append);
 			logger.debug("文件 " + fileName + " 写入成功!");
@@ -413,8 +413,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileName 根目录下的待压缩的文件名或文件夹名，其中*或""表示跟目录下的全部文件
 	 * @param descFileName 目标zip文件
 	 */
-	public static void ZipFiles(String srcDirName, String fileName,
-			String descFileName) {
+	public static void zipFiles(String srcDirName, String fileName,
+								String descFileName) {
 		// 判断目录是否存在
 		if (srcDirName == null) {
 			logger.debug("文件压缩失败，目录 " + srcDirName + " 不存在!");
@@ -431,14 +431,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			ZipOutputStream zouts = new ZipOutputStream(new FileOutputStream(
 					descFile));
 			if ("*".equals(fileName) || "".equals(fileName)) {
-				FileUtils.ZipDirectoryToZipFile(dirPath, fileDir, zouts);
+				FileUtils.zipDirectoryToZipFile(dirPath, fileDir, zouts);
 			} else {
 				File file = new File(fileDir, fileName);
 				if (file.isFile()) {
-					FileUtils.ZipFilesToZipFile(dirPath, file, zouts);
+					FileUtils.zipFilesToZipFile(dirPath, file, zouts);
 				} else {
 					FileUtils
-							.ZipDirectoryToZipFile(dirPath, file, zouts);
+							.zipDirectoryToZipFile(dirPath, file, zouts);
 				}
 			}
 			zouts.close();
@@ -455,7 +455,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param zipFileName 需要解压的ZIP文件
 	 * @param descFileName 目标文件
 	 */
-	public static boolean UnZipFiles(String zipFileName, String descFileName) {
+	public static boolean unZipFiles(String zipFileName, String descFileName) {
 		String descFileNames = descFileName;
 		if (!descFileNames.endsWith(File.separator)) {
 			descFileNames = descFileNames + File.separator;
@@ -511,13 +511,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileDir 文件信息
 	 * @param zouts 输出流
 	 */
-	public static void ZipDirectoryToZipFile(String dirPath, File fileDir, ZipOutputStream zouts) {
+	public static void zipDirectoryToZipFile(String dirPath, File fileDir, ZipOutputStream zouts) {
 		if (fileDir.isDirectory()) {
 			File[] files = fileDir.listFiles();
 			// 空的文件夹
 			if (files.length == 0) {
 				// 目录信息
-				ZipEntry entry = new ZipEntry(GetEntryName(dirPath, fileDir));
+				ZipEntry entry = new ZipEntry(getEntryName(dirPath, fileDir));
 				try {
 					zouts.putNextEntry(entry);
 					zouts.closeEntry();
@@ -531,10 +531,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				if (files[i].isFile()) {
 					// 如果是文件，则调用文件压缩方法
 					FileUtils
-							.ZipFilesToZipFile(dirPath, files[i], zouts);
+							.zipFilesToZipFile(dirPath, files[i], zouts);
 				} else {
 					// 如果是目录，则递归调用
-					FileUtils.ZipDirectoryToZipFile(dirPath, files[i],
+					FileUtils.zipDirectoryToZipFile(dirPath, files[i],
 							zouts);
 				}
 			}
@@ -547,7 +547,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param file 文件
 	 * @param zouts 输出流
 	 */
-	public static void ZipFilesToZipFile(String dirPath, File file, ZipOutputStream zouts) {
+	public static void zipFilesToZipFile(String dirPath, File file, ZipOutputStream zouts) {
 		FileInputStream fin = null;
 		ZipEntry entry = null;
 		// 创建复制缓冲区
@@ -558,7 +558,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				// 创建一个文件输入流
 				fin = new FileInputStream(file);
 				// 创建一个ZipEntry
-				entry = new ZipEntry(GetEntryName(dirPath, file));
+				entry = new ZipEntry(getEntryName(dirPath, file));
 				// 存储信息到压缩文件
 				zouts.putNextEntry(entry);
 				// 复制字节到压缩文件
@@ -581,7 +581,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param file entry文件名
 	 * @return
 	 */
-	private static String GetEntryName(String dirPath, File file) {
+	private static String getEntryName(String dirPath, File file) {
 		String dirPaths = dirPath;
 		if (!dirPaths.endsWith(File.separator)) {
 			dirPaths = dirPaths + File.separator;
@@ -601,7 +601,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param returnFileName 带验证的文件名
 	 * @return 返回文件类型
 	 */
-	public static String GetContentType(String returnFileName) {
+	public static String getContentType(String returnFileName) {
 		String contentType = "application/octet-stream";
 		if (returnFileName.lastIndexOf(".") < 0)
 			return contentType;
@@ -729,8 +729,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param response 响应对象
 	 * @return 返回错误信息，无错误信息返回null
 	 */
-	public static String DownFile(File file, HttpServletRequest request, HttpServletResponse response){
-		 return DownFile(file, request, response, null);
+	public static String downFile(File file, HttpServletRequest request, HttpServletResponse response){
+		 return downFile(file, request, response, null);
 	}
 	
 	/**
@@ -741,7 +741,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileName 指定下载的文件名
 	 * @return 返回错误信息，无错误信息返回null
 	 */
-	public static String DownFile(File file, HttpServletRequest request, HttpServletResponse response, String fileName){
+	public static String downFile(File file, HttpServletRequest request, HttpServletResponse response, String fileName){
 		String error  = null;
 		if (file != null && file.exists()) {
 			if (file.isFile()) {
@@ -826,7 +826,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		try {
 			response.addHeader("Content-Disposition", "attachment; filename=\"" + 
 					Encodes.urlEncode(StringUtils.isBlank(fileName) ? file.getName() : fileName) + "\"");
-			response.setContentType(GetContentType(file.getName())); // set the MIME type.
+			response.setContentType(getContentType(file.getName())); // set the MIME type.
 			response.addHeader("Content-Length", String.valueOf(contentLength));
 			os = response.getOutputStream();
 			out = new BufferedOutputStream(os);
@@ -901,7 +901,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param path 待修正的路径
 	 * @return 修正后的路径
 	 */
-	public static String Path(String path){
+	public static String path(String path){
 		String p = StringUtils.replace(path, "\\", "/");
 		p = StringUtils.join(StringUtils.split(p, "/"), "/");
 		if (!StringUtils.startsWithAny(p, "/") && StringUtils.startsWithAny(path, "\\", "/")){
@@ -922,7 +922,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param searchDirs 是否是搜索目录
 	 * @return 文件列表
 	 */
-	public static List<String> FindChildrenList(File dir, boolean searchDirs) {
+	public static List<String> findChildrenList(File dir, boolean searchDirs) {
 		List<String> files = new ArrayList<>();
 		for (String subFiles : dir.list()) {
 			File file = new File(dir + "/" + subFiles);
@@ -938,7 +938,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileName 文件名
 	 * @return 例如：test.jpg  返回：  jpg
 	 */
-	public static String GetFileExtension(String fileName) {
+	public static String getFileExtension(String fileName) {
 		if ((fileName == null) || (fileName.lastIndexOf(".") == -1) || (fileName.lastIndexOf(".") == fileName.length() - 1)) {
 			return null;
 		}
@@ -950,7 +950,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param fileName 文件名
 	 * @return 例如：d:\files\test.jpg  返回：d:\files\test
 	 */
-	public static String GetFileNameWithoutExtension(String fileName) {
+	public static String getFileNameWithoutExtension(String fileName) {
 		if ((fileName == null) || (fileName.lastIndexOf(".") == -1)) {
 			return null;
 		}

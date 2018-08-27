@@ -23,7 +23,7 @@
     </appender>
     <appender name="email" class="com.shcem.logback.EmailAppender">
         <!--邮件发送地址-->
-        <emailUrl>http://192.168.60.121:5454</emailUrl>
+        <emailUrl>http://fms.uat.shcem.com/mapi/Email/EmailSendWithCC</emailUrl>
         <!--主题-->
         <subject>错误日志</subject>
         <!--发送者-->
@@ -39,8 +39,10 @@
     </root>
     <logger name="controller" level="INFO">
         <appender-ref ref="http"/>
+        <appender-ref ref="email"/>
     </logger>
     <logger name="service" level="INFO">
         <appender-ref ref="http"/>
+        <appender-ref ref="email"/>
     </logger>
 </configuration>

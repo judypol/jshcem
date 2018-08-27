@@ -51,7 +51,7 @@ public class sendEmailTest {
         Map<String,String> sendBody=new HashMap<>();
         sendBody.put("sendBody", JSON.toJSONString(sendEmailBody));
 
-        String result= HttpUtlis.Instance().postByForm("http://fms.uat.shcem.com/mapi/email/EmailSendWithAttachment",sendBody);
+        String result= HttpUtlis.Instance().postByForm("http://fms.uat.shcem.com/mapi/email/EmailSendWithAttachment",sendBody,null);
         System.out.println(result);
     }
 

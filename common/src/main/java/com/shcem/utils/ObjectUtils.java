@@ -27,7 +27,7 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
      * @param annotation
      * @param object
      */
-    public static void AnnotationToObject(Object annotation, Object object) {
+    public static void annotationToObject(Object annotation, Object object) {
         if (annotation != null) {
             Class<?> annotationClass = annotation.getClass();
             if (null == object) {
@@ -56,7 +56,7 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
      * @param object
      * @return
      */
-    public static byte[] Serialize(Object object) {
+    public static byte[] serialize(Object object) {
         ObjectOutputStream oos = null;
         ByteArrayOutputStream baos = null;
         try {
@@ -78,7 +78,7 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
      * @param bytes
      * @return
      */
-    public static Object Unserialize(byte[] bytes) {
+    public static Object unserialize(byte[] bytes) {
         ByteArrayInputStream bais = null;
         try {
             if (bytes != null && bytes.length > 0) {

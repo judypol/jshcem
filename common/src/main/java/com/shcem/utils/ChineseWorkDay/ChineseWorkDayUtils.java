@@ -15,7 +15,6 @@ package com.shcem.utils.ChineseWorkDay;
 
 import com.alibaba.fastjson.JSON;
 import com.shcem.common.YamlConfiguration;
-import com.shcem.constants.Constants;
 import com.shcem.constants.SystemDefine;
 import com.shcem.utils.DateUtils;
 import com.shcem.utils.FileUtils;
@@ -78,9 +77,9 @@ public class ChineseWorkDayUtils {
         //Workday workday= JSON.parseObject(fileContext,Workday.class);
         boolean flag=false;
         if(!IsWorkDay(date)){
-            flag= workday.Workdays.contains(DateUtils.FormatDate(date,"yyyy-MM-dd"));
+            flag= workday.Workdays.contains(DateUtils.formatDate(date,"yyyy-MM-dd"));
         }else {
-            flag=!workday.Weekends.contains(DateUtils.FormatDate(date,"yyyy-MM-dd"));
+            flag=!workday.Weekends.contains(DateUtils.formatDate(date,"yyyy-MM-dd"));
         }
         return flag;
     }

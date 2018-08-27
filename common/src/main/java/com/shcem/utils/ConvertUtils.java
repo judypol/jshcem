@@ -17,7 +17,6 @@ import com.shcem.mapper.BeanMapper;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +94,7 @@ public class ConvertUtils {
      * @return
      */
     public static String Date2String(Date date,String format){
-        return DateUtils.FormatDate(date,format);
+        return DateUtils.formatDate(date,format);
     }
 
     /**

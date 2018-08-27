@@ -27,7 +27,7 @@ public class CurrencyFormat {
      * @param money
      * @return
      */
-    public static String MoneyRule(BigDecimal money) {
+    public static String moneyRule(BigDecimal money) {
         DecimalFormat d1 = new DecimalFormat("#,##0.00");
         return d1.format(money);
     }
@@ -37,7 +37,7 @@ public class CurrencyFormat {
      * @param quantity
      * @return
      */
-    public static String QuantityRule(BigDecimal quantity) {
+    public static String quantityRule(BigDecimal quantity) {
         DecimalFormat d1 = new DecimalFormat("#,##0");
         return d1.format(quantity);
     }
@@ -47,7 +47,7 @@ public class CurrencyFormat {
      * @param money
      * @return
      */
-    public static BigDecimal MoneySaveToDb(BigDecimal money) {
+    public static BigDecimal moneySaveToDb(BigDecimal money) {
         return money.setScale(2);
     }
 }
