@@ -76,16 +76,12 @@ public class DruidDataSourceProperties {
     public DruidDataSource build(){
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.configFromPropety(this.toProperties());
-        druidDataSource.setInitialSize(this.getInitialSize());
-        druidDataSource.setDbType(this.getDbType());
-        druidDataSource.setUrl(this.getUrl());
-        druidDataSource.setDriverClassName(this.getDriverClassName());
-        druidDataSource.setUsername(this.getUsername());
-        druidDataSource.setPassword(this.getPassword());
-        druidDataSource.setMinIdle(this.getMinIdle());
-        druidDataSource.setMaxActive(this.getMaxActive());
-        druidDataSource.setMaxWait(this.getMaxWait());
-        druidDataSource.setConnectProperties(this.getConnectionProperties());
+        druidDataSource.setDbType(this.dbType);
+        druidDataSource.setUrl(this.url);
+        druidDataSource.setDriverClassName(this.driverClassName);
+        druidDataSource.setUsername(this.username);
+        druidDataSource.setPassword(this.password);
+        druidDataSource.setConnectProperties(this.connectionProperties);
         return druidDataSource;
     }
 

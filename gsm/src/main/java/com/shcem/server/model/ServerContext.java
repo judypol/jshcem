@@ -1,5 +1,6 @@
 package com.shcem.server.model;
 
+import com.shcem.Encrypt.EncrytHelper;
 import com.shcem.constants.SystemDefine;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,7 @@ import java.util.Map;
  * Created by judysen on 2017/8/26.
  */
 public class ServerContext {
-    static InheritableThreadLocal<ServerContext> serverContextInheritableThreadLocal=new InheritableThreadLocal<>();
+    private static InheritableThreadLocal<ServerContext> serverContextInheritableThreadLocal=new InheritableThreadLocal<>();
     protected ServerContext(){
 
     }
@@ -19,7 +20,7 @@ public class ServerContext {
      *
      * @return
      */
-    public static ServerContext currentContext(){
+    public static synchronized ServerContext currentContext(){
         ServerContext serverContext=serverContextInheritableThreadLocal.get();
         if(serverContext==null){
             serverContext=new ServerContext();
@@ -52,14 +53,6 @@ public class ServerContext {
 
     HttpServletRequest request;
 
-
-    public static InheritableThreadLocal<ServerContext> getServerContextInheritableThreadLocal() {
-        return serverContextInheritableThreadLocal;
-    }
-
-    public static void setServerContextInheritableThreadLocal(InheritableThreadLocal<ServerContext> serverContextInheritableThreadLocal) {
-        ServerContext.serverContextInheritableThreadLocal = serverContextInheritableThreadLocal;
-    }
 
     public String getClientIP() {
         return ClientIP;
@@ -134,7 +127,13 @@ public class ServerContext {
         this.AppName=request.getHeader(SystemDefine.REQUEST_APP_NAME);
         this.ClientIP=request.getHeader(SystemDefine.REQUEST_CLIENT_IP);
         this.MemberID=request.getHeader(SystemDefine.REQUEST_MEM_ID);
-        this.MemberName=request.getHeader(SystemDefine.REQUEST_MEM_NAME);
+        String tmpMemebrName=request.getHeader(SystemDefine.REQUEST_MEM_NAME);
+        try{
+            this.MemberName= EncrytHelper.decryptBase64(tmpMemebrName);
+        }catch (Exception ex){
+            this.MemberName="";
+        }
+
         this.Mode=request.getHeader(SystemDefine.REQUEST_MODE);
         this.RequestId=request.getHeader(SystemDefine.REQUEST_REQUESTID);
 

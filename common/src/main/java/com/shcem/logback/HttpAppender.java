@@ -16,18 +16,19 @@ package com.shcem.logback;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
+import ch.qos.logback.core.status.ErrorStatus;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.shcem.common.HttpRequestUtils;
 import com.shcem.common.HttpUtlis;
-import com.shcem.common.YamlConfiguration;
 import com.shcem.constants.SystemDefine;
-import com.shcem.netty.NettyLogClient;
 import com.shcem.utils.DateUtils;
 import org.slf4j.MDC;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * logback,appender，需要在配置文件中配置。
@@ -37,14 +38,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @version 1.0
  */
 public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
-    private final ConcurrentLinkedQueue<ILoggingEvent> queue=new ConcurrentLinkedQueue<>();
     private static int count=0;
     private static List<HashMap<String,String>> msg=new ArrayList<>();
+    private static ExecutorService service= Executors.newFixedThreadPool(5);
 
-    String logUrl;
-    int logBuffer=10;
-    String logSys="WEBFT";
-    String logEnv="DEP";
+    private String logUrl;
+    private int logBuffer=10;
+    private String logSys="WEBFT";
+    private String logEnv="DEP";
 
     @Override
     public void doAppend(ILoggingEvent eventObject) {
@@ -53,17 +54,31 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     @Override
     protected void append(ILoggingEvent eventObject) {
+        if(!isStarted()) return;
+
+        try{
+            subAppend(eventObject);
+        }catch (Exception ex){
+            this.started = false;
+            addStatus(new ErrorStatus("IO failure in httpAppender", this, ex));
+        }
+    }
+
+    /**
+     * 具体的发送逻辑
+     * @param eventObject
+     */
+    private synchronized void  subAppend(ILoggingEvent eventObject){
         if(count==this.logBuffer){
             count=0;
 
-            //String msgString=JSON.toJSONString(msg);
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("log",msg);
             String sendMsg=jsonObject.toJSONString();
 
             msg.clear();
             //--发送给远程Http---
-            sendKafka(sendMsg);
+            sendKafka(sendMsg,this.logUrl);
         }
 
         if(eventObject instanceof ILoggingEvent){
@@ -77,18 +92,21 @@ public class HttpAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             count++;
         }
     }
-
     /**
-     *
+     *使用异步方式去发送
      * @param msg
      */
-    private void sendKafka(String msg){
-        try{
-            HttpUtlis.Instance().postByJson(this.logUrl,msg,null);
-//            NettyLogClient.sendMsg(this.logUrl,msg);
-        }catch (Exception ex){
-            System.out.println(ex);
-        }
+    private void sendKafka(String msg,String logUrl){
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    HttpUtlis.Instance().postByJson(logUrl,msg,null);
+                }catch (Exception ex){
+                    System.out.print(ex);
+                }
+            }
+        });
     }
     /**
      *

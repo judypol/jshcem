@@ -16,7 +16,6 @@ public class AsyncHttpClientUtils {
             .setConnectionPoolCleanerPeriod(100).setConnectionTtl(200);
     private static AsyncHttpClient asyncHttpClient=new DefaultAsyncHttpClient(builder.build());
     private AsyncHttpClientUtils(){
-
     }
 
     /**

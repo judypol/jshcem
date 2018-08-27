@@ -25,6 +25,9 @@ dependencies {
 //    compile group: 'com.itextpdf', name: 'itext-asian', version: '7.0.2'
 // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    compile group: 'org.springframework', name: 'spring-core', version: '4.3.18.RELEASE'
+
 }
 task sourceJar (type:Jar) {
     classifier = 'sources'

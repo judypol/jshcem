@@ -11,12 +11,16 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
 public class PdfUtils {
+    private static ResourceLoader resourceLoader=new DefaultResourceLoader();
     /**
      * 将html写入pdf文件
      * @param file
@@ -36,11 +40,11 @@ public class PdfUtils {
             return htmlStr;
         }
     }
-    private static ConverterProperties getConverterProperties(){
+    private static ConverterProperties getConverterProperties() throws IOException{
         ConverterProperties properties = new ConverterProperties();
         FontProvider font = new FontProvider();
         //font.addSystemFonts();
-        String inputStream = PdfUtils.class.getResource("/simsun.ttc").getFile();
+        String inputStream = resourceLoader.getResource("classpath:/simsun.ttc").getFilename();
         font.addFont(inputStream+",1");     //宋体
         properties.setFontProvider(font);
         return properties;
@@ -90,7 +94,7 @@ public class PdfUtils {
         int pages=pdfDoc.getNumberOfPages();
         PdfAcroForm form=PdfAcroForm.getAcroForm(pdfDoc,true);
 
-        String inputStream = PdfUtils.class.getResource("/simsun.ttc").getFile();
+        String inputStream = resourceLoader.getResource("/simsun.ttc").getFilename();
         PdfFont sysFont = PdfFontFactory.createFont(inputStream+",1", PdfEncodings.IDENTITY_H, false);
         Map<String, PdfFormField> fields=form.getFormFields();
         for(Map.Entry<String,PdfFormField> entry :fields.entrySet()){
