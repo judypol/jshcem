@@ -29,8 +29,8 @@ implements FadadaBaseService<PushdocsToMobileReq, PushdocsToMobileRes> {
 					res.setCode(FadadaConstants.CODE_BASEERROR);
 				} else {
 					// 执行请求
-					String response = this.noPublicBase.invokePushDocsToMobile(req.getContract_id(), req.getTransaction_id(), req.getDoc_title()
-							, req.getUser_names(), req.getUser_mobiles(), req.getUser_emails(), req.getSign_keywords(), req.getExpiration_time());
+					String response = this.noPublicBase.push_extsign_dkn(req.getContract_id(), req.getTransaction_id(), req.getDoc_title()
+							, req.getName(), req.getMobile(), req.getCompany_name());
 					res= JSON.parseObject(response,PushdocsToMobileRes.class);
 				}
 

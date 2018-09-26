@@ -4,9 +4,12 @@ import com.itextpdf.forms.PdfAcroForm;
 import com.itextpdf.forms.fields.PdfFormField;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.html2pdf.css.media.MediaDeviceDescription;
+import com.itextpdf.html2pdf.css.media.MediaType;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -29,8 +32,10 @@ public class PdfUtils {
      */
     public static void html2pdf(File file,String htmlStr) throws Exception{
         String html=getHtmlString(htmlStr);
-
-        HtmlConverter.convertToPdf(html,new PdfWriter(file),getConverterProperties());
+        PdfDocument pdfDocument=new PdfDocument(new PdfWriter(file));
+        PageSize pageSize = PageSize.A4;
+        pdfDocument.setDefaultPageSize(pageSize);
+        HtmlConverter.convertToPdf(html,pdfDocument,getConverterProperties());
 
     }
     private static String getHtmlString(String htmlStr) throws Exception{
@@ -46,6 +51,7 @@ public class PdfUtils {
         //font.addSystemFonts();
         String inputStream = resourceLoader.getResource("classpath:/simsun.ttc").getFilename();
         font.addFont(inputStream+",1");     //宋体
+
         properties.setFontProvider(font);
         return properties;
     }

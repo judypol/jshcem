@@ -30,13 +30,15 @@ public class NoPublicFddClientBase extends FddClient{
 		super(appId, secret, version, url);
 	}
 	
-	public String invokePushDocsToMobile(String contract_id, String transaction_id, String doc_title, String user_names, String user_mobiles, String user_emails, String sign_keywords, String expiration_time) {
+	public String push_extsign_dkn(String contract_id, String transaction_id, String doc_title, String name, String mobile, String company_name) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		try {
 			String timeStamp = HttpsUtil.getTimeStamp();
+			//String sort = "company_namecontract_iddoc_titlemobilenamesign_keywordtransaction_id";
+			String sort =company_name+contract_id+doc_title+mobile+name+transaction_id;
 			String msgDigest = "";
 			// Base64(SHA1(app_id+md5(transaction_id+timestamp)+S HA1(app_secret + contract_id )))
-			String sha1 = FddEncryptTool.sha1(super.getAppId() + FddEncryptTool.md5Digest(transaction_id + timeStamp) + FddEncryptTool.sha1(super.getSecret() + contract_id));
+			String sha1 = FddEncryptTool.sha1(super.getAppId() + FddEncryptTool.md5Digest(timeStamp) + FddEncryptTool.sha1(super.getSecret() + sort));
 			msgDigest = new String(FddEncryptTool.Base64Encode(sha1.getBytes()));
 
 			params.add(new BasicNameValuePair("app_id", super.getAppId()));
@@ -47,12 +49,10 @@ public class NoPublicFddClientBase extends FddClient{
 			params.add(new BasicNameValuePair("contract_id", contract_id));
 			params.add(new BasicNameValuePair("transaction_id", transaction_id));
 
-			params.add(new BasicNameValuePair("user_names", user_names));
-			params.add(new BasicNameValuePair("user_mobiles", user_mobiles));
-			params.add(new BasicNameValuePair("user_emails", user_emails));
-			params.add(new BasicNameValuePair("sign_keywords", sign_keywords));
-
-			params.add(new BasicNameValuePair("expiration_time", expiration_time));
+			params.add(new BasicNameValuePair("name", name));
+			params.add(new BasicNameValuePair("mobile", mobile));
+			params.add(new BasicNameValuePair("company_name", company_name));
+			//params.add(new BasicNameValuePair("sign_keyword", sign_keyword));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,6 +62,6 @@ public class NoPublicFddClientBase extends FddClient{
 	}
 	
 	public String getURLOfPushDocsToMobile() {
-		return super.getUrl() + "pushdocs2mobile.api";
+		return super.getUrl() + "push_extsign_dkn.api";
 	}
 }

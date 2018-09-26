@@ -5,6 +5,7 @@ import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.*;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,8 +15,10 @@ import java.util.Map;
 public class PDFTest {
     @Test
     public void pdf2html() throws Exception{
+        String htmlName="D:\\tmp\\提款申请书(法大大).html";
+        String htmlString= FileUtils.readFileToString(new File(htmlName),"UTF-8");
         File file=new File("demo1.pdf");
-        PdfUtils.html2pdf(file,"<h1>这是一个测试pdf2html</h1>");
+        PdfUtils.html2pdf(file,htmlString);
     }
     @Test
     public void manipulatePdf() throws Exception {
