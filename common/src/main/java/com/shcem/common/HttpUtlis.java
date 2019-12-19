@@ -1,5 +1,6 @@
 package com.shcem.common;
 
+import com.shcem.utils.StringUtils;
 import okhttp3.*;
 import org.apache.commons.collections.MapUtils;
 
@@ -18,6 +19,8 @@ public class HttpUtlis {
             .connectTimeout(60,TimeUnit.SECONDS).build();
 
     public synchronized static HttpUtlis Instance(){
+        client.dispatcher().setMaxRequests(200);
+        client.dispatcher().setMaxRequestsPerHost(10);
         return new HttpUtlis();
     }
     /**
@@ -68,7 +71,9 @@ public class HttpUtlis {
 
         if(MapUtils.isNotEmpty(headers)){
             for(Map.Entry<String,String> entry: headers.entrySet()){
-                builder.add(entry.getKey(),entry.getValue());
+                if(StringUtils.isNotEmpty(entry.getValue())){
+                    builder.add(entry.getKey(),entry.getValue());
+                }
             }
         }
         builder.add("user-agent","com.shcem.common");

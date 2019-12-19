@@ -16,6 +16,7 @@ import java.net.URLDecoder;
 /**
  * Created by lizhihua on 2017/2/16.
  */
+@Deprecated
 public class HttpRequestUtils {
     private static Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 

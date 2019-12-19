@@ -22,7 +22,13 @@ public class propertiesLoaderTest {
                 "testOnReturn=false\n" +
                 "poolPreparedStatements=false\n" +
                 "maxPoolPreparedStatementPerConnectionSize=200";
-        PropertiesLoader propertiesLoader=new PropertiesLoader(contents);
+        PropertiesLoader propertiesLoader=new PropertiesLoader(contents,true);
         System.out.print(propertiesLoader.getProperty("url"));
+    }
+    @Test
+    public void loaderFromUrl(){
+        String fileName="file:/C:/mltp/mobile.properties";
+        PropertiesLoader propertiesLoader=new PropertiesLoader(fileName);
+        System.out.println(propertiesLoader.getProperty("mobiles"));
     }
 }

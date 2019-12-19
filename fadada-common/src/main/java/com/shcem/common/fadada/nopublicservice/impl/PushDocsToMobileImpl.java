@@ -1,4 +1,4 @@
-package com.shcem.common.fadada.baseservice.impl;
+package com.shcem.common.fadada.nopublicservice.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.shcem.common.fadada.FadadaBaseService;

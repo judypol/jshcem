@@ -31,7 +31,7 @@ public class PropertiesLoader {
      * 从字符串中解析
      * @param propertiesContents
      */
-    public PropertiesLoader(String propertiesContents){
+    public PropertiesLoader(String propertiesContents,boolean isContentString){
         properties=loadPropertiesFromString(propertiesContents);
     }
     public Properties getProperties() {
@@ -173,25 +173,11 @@ public class PropertiesLoader {
      */
     protected Properties loadProperties(String[] resourcesRaths) {
         Properties props = new Properties();
+        ResourceLoader resourceLoader=new DefaultResourceLoader();
         for (String location : resourcesRaths) {
             logger.debug("Loading properties file from:" + location);
-            InputStream is = null;
             try {
-                if(location.startsWith("classpath")){
-                    URL appUrl= ResourceUtils.getURL(location);
-                    is=appUrl.openStream();
-                }else {
-                    File file=new File(location);
-                    if(file.exists()){
-                        is=new FileInputStream(file);
-                    }
-                }
-
-                if(is==null)
-                {
-                    continue;
-                }
-                //BufferedReader isr=new BufferedReader(new InputStreamReader(is,"utf-8"));
+                InputStream is=resourceLoader.getResource(location).getInputStream();
                 InputStreamReader isr=new InputStreamReader(is,"UTF-8");
                 props.load(isr);
             } catch (Exception e) {
@@ -199,14 +185,6 @@ public class PropertiesLoader {
                 logger.error("Could not load properties from path",e);
             } finally {
                 //IOUtils.closeQuietly(is);
-                try{
-                    if(is!=null)
-                    {
-                        is.close();
-                    }
-                }catch (IOException e){
-                    logger.info("resource close is failed");
-                }
             }
         }
         return props;

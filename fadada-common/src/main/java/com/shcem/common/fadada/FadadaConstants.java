@@ -57,11 +57,14 @@ public class FadadaConstants {
 	public final static String IF_CONTRACT_FILING = "com.shcem.common.fadada.baseservice.impl.ContractFilingImpl";
 	
 	
-	/*
+	/**
 	 * 非公开接口
-	*/
+	 */
 	// 合同推送接口
-	public final static String IF_PUSH_DOCS_TO_MOBILE = "com.shcem.common.fadada.baseservice.impl.PushDocsToMobileImpl";
+	public final static String IF_PUSH_DOCS_TO_MOBILE = "com.shcem.common.fadada.nopublicservice.impl.PushDocsToMobileImpl";
+	
+	// 合同撤销接口
+	public final static String IF_CANCELLATION_OF_CONTRACT = "com.shcem.common.fadada.nopublicservice.impl.CancellationOfContractImpl";
 
 	/**
 	 * 服务扩展接口名

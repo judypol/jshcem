@@ -13,6 +13,7 @@
  */
 package unitTest;
 
+import com.shcem.Encrypt.AESHelper;
 import com.shcem.Encrypt.TripleDESHelper;
 import com.shcem.utils.RandomCode;
 import org.apache.commons.codec.binary.Base64;
@@ -36,5 +37,14 @@ public class EncryptHelperTest {
         String bs= Base64.encodeBase64String(ss);
 
         System.out.println(bs.length());
+    }
+    @Test
+    public void generateAES() throws Exception{
+        String key=")O[NB]6,YF}+efcaj{+oESb9d8>Z'e9M";
+        String encryptString=AESHelper.Instance().encryptString("13818894125",key);
+        System.out.println(encryptString);
+
+        String plainString=AESHelper.Instance().decryptString(encryptString,key);
+        System.out.println(plainString);
     }
 }
