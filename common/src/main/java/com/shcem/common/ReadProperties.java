@@ -20,9 +20,9 @@ public class ReadProperties {
     public static synchronized PropertiesLoader AppConfig() {
         String otherconfig = "";
         if (OSCheck.isWindows()) {
-            otherconfig = "C:\\mltp\\mltp.config";
+            otherconfig = "file:/C:/mltp/mltp.config";
         } else {
-            otherconfig = "/etc/mltp/mltp.config";
+            otherconfig = "file:/etc/mltp/mltp.config";
         }
         Date tModifyDate = getFileDate(otherconfig);
         boolean flag= modifyDate.before(tModifyDate);

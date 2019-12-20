@@ -34,7 +34,7 @@ public class HessianServiceAdvice {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();          //获取被拦截的方法
         String clsName=signature.getDeclaringTypeName();
-        Object[] pars=pjp.getArgs();
+//        Object[] pars=pjp.getArgs();
         logger.debug(clsName+"."+method+" Start");
 
         Object result;
@@ -47,7 +47,6 @@ public class HessianServiceAdvice {
             responseData.setDATA(fe.getMessage());
             result= JSON.toJSONString(responseData);
         }catch (Exception ex){
-
             ResponseData responseData=new ResponseData();
             responseData.setCODE("44444");
             responseData.setINFO(ex.getMessage());

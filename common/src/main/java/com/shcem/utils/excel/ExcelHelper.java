@@ -11,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -289,8 +290,25 @@ public class ExcelHelper {
      */
     public <T> List<T> Excel2List(String filename,String sheetName, Class<T> cls,int startRowIndex) throws Exception {
         FileInputStream is=new FileInputStream(filename);
+        boolean flag07=false;
+        if("xlsx".equals(ext(filename).toLowerCase())){
+            flag07=true;
+        }
+        return this.Excel2List(is,sheetName,cls,startRowIndex,flag07);
+    }
 
-        return this.Excel2List(is,sheetName,cls,startRowIndex);
+    /**
+     * 获取文件扩展名
+     * @return
+     */
+    public String ext(String filename) {
+        int index = filename.lastIndexOf(".");
+
+        if (index == -1) {
+            return null;
+        }
+        String result = filename.substring(index + 1);
+        return result;
     }
 
     /**
@@ -298,17 +316,19 @@ public class ExcelHelper {
      * @param sheetName
      * @param cls
      * @param startRowIndex
+     * @param flag07
      * @param <T>
      * @return
      * @throws Exception
      */
-    public <T> List<T> Excel2List(InputStream is,String sheetName,Class<T> cls,int startRowIndex) throws Exception{
+    public <T> List<T> Excel2List(InputStream is,String sheetName,Class<T> cls,int startRowIndex,boolean flag07) throws Exception{
         Workbook wb=null;
-        try{
-            wb=new XSSFWorkbook(is);
-        }catch (Exception ex){
-            wb=new HSSFWorkbook(is);
+        if(flag07){
+            wb=new XSSFWorkbook(is);    //07版excel
+        }else{
+            wb=new HSSFWorkbook(is);    //03版excel
         }
+
         if(wb==null){
             throw new Exception("输入的文件流不是Excel格式");
         }

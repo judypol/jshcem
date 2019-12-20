@@ -379,7 +379,7 @@ public class SingleRedisCache implements IRedisCache {
      */
     private Set<String> findKeysAll(String pattern){
         Jedis jedis=jedisPool.getResource();
-        String keysPattern=this.DBIndex+":*"+pattern+"*";
+        String keysPattern=pattern;
         try{
             return jedis.keys(keysPattern);
         }catch (Exception ex){
@@ -397,7 +397,7 @@ public class SingleRedisCache implements IRedisCache {
      */
     @Override
     public Set<String> FindKeys(String pattern, boolean isAll) {
-        Set<String> allKeys=findKeysAll(pattern);
+        Set<String> allKeys=findKeysAll("*"+pattern+"*");
         if(isAll){
             return allKeys;
         }else{
@@ -434,7 +434,7 @@ public class SingleRedisCache implements IRedisCache {
      */
     private Set<String> findKeyByStringContent(String pattern){
         Set<String> keys=new HashSet<String>();
-        Set<String> tKeys=this.findKeysAll(this.DBIndex+":*");//得到所有的key值
+        Set<String> tKeys=this.findKeysAll("*");//得到所有的key值
         for (String key : tKeys){
             try{
                 Object val=this.getString(key);

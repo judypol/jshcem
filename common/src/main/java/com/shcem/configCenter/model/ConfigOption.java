@@ -1,12 +1,9 @@
 package com.shcem.configCenter.model;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
-
-import java.util.List;
 
 public class ConfigOption {
 
@@ -64,7 +61,8 @@ public class ConfigOption {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("connectStr", zkUrls).add("namespace", nameSpace).add("retryPolicy", retryPolicy).toString();
+        //return MoreObjects.toStringHelper(this).add("connectStr", zkUrls).add("namespace", nameSpace).add("retryPolicy", retryPolicy).toString();
+        return "";
     }
 
 }

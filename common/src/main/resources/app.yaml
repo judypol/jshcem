@@ -6,7 +6,7 @@ common:
       MidTierUrl: http://192.168.60.204:5412/shcem
       redis.mode: 0
       redis.host: 192.168.60.204:6369
-      redis.dbIndex: 2
+      redis.dbIndex: 5
       spring.configCenter.zkurl: localhost:2181
       spring.configCenter.namespace: mltp/dev/cwp
       birthday: 2017-05-12 17:12:56

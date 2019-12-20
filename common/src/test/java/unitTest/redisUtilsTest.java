@@ -33,16 +33,16 @@ public class redisUtilsTest {
         Thread.sleep(5000);
         RedisCacheManager.GetRedisCache().SetValue("test1","update");
 
-        System.out.println(RedisCacheManager.GetRedisCache().Get("test1"));
+        System.out.println(RedisCacheManager.GetRedisCache().Get("15000426301"));
     }
     @Test
     public void findKeys() throws Exception{
-        Set<String> keys=RedisCacheManager.GetRedisCache().FindKeys("test");
+        Set<String> keys=RedisCacheManager.GetRedisCache().FindKeys("15000426301");
         System.out.println(JSON.toJSONString(keys));
     }
     @Test
     public void findByContents(){
-        Set<String> keys=RedisCacheManager.GetRedisCache().FindKeysByStringContent("upd");
+        Set<String> keys=RedisCacheManager.GetRedisCache().FindKeysByStringContent("0210244");
         System.out.println(JSON.toJSONString(keys));
     }
     @Test

@@ -25,8 +25,10 @@ import java.net.URLEncoder;
 import java.rmi.server.ExportException;
 
 /**
+ * 请使用MidTierHandler方法
  * Created by lizhihua on 2017/2/16.
  */
+@Deprecated
 public class MidTierRequest {
     private static Logger logger = LoggerFactory.getLogger("controller");
     private static CloseableHttpClient client = HttpClientBuilder.create().setMaxConnTotal(200).setMaxConnPerRoute(200).build();
@@ -45,19 +47,19 @@ public class MidTierRequest {
      * @return
      */
     public static ResponseData sendPost(RequestData requestData) {
-        logger.info("call post method start,params:" + JSON.toJSONString(requestData));
+        logger.debug("call post method start,params:" + JSON.toJSONString(requestData));
         long startTime = System.currentTimeMillis();
         RequestConfig requestConfig = RequestConfig.DEFAULT;
 
         String resultStr = null;
         String url = YamlConfiguration.instance().getString(SystemDefine.MidTierUrl);
 
-        logger.info("midterUrl--" + url);
+        logger.debug("midterUrl--" + url);
 
         HttpPost method = new HttpPost(url);
         String param = requestDataString(requestData);
 
-        logger.info("params:" + param);
+        logger.debug("params:" + param);
         try {
             //解决中文乱码问题
             StringEntity entity = new StringEntity(param, "utf-8");
